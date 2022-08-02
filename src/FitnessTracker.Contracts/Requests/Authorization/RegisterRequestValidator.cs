@@ -1,8 +1,9 @@
 using FluentValidation;
 
-namespace FitnessTracker.Contracts.Requests.Dtos.Authorization;
+namespace FitnessTracker.Contracts.Requests.Authorization;
 
-public class RegisterRequestValidator: AbstractValidator<RegisterRequest> {
+public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
+{
     public RegisterRequestValidator()
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
@@ -15,6 +16,5 @@ public class RegisterRequestValidator: AbstractValidator<RegisterRequest> {
         RuleFor(x => x.Email).NotEmpty();
         RuleFor(x => x.Email).EmailAddress();
         RuleFor(x => x.Username).NotEmpty();
-
     }
 }

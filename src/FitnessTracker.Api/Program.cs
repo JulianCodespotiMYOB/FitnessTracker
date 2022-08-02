@@ -1,9 +1,10 @@
-using FluentValidation;
-using FitnessTracker.Application;
-using FitnessTracker.Contracts.Requests.Dtos.Authorization;
+using FitnessTracker.Application.Authorization;
+using FitnessTracker.Application.Features.Workouts.Commands;
+using FitnessTracker.Contracts.Requests.Authorization;
+using FitnessTracker.Contracts.Requests.Workout;
 using FitnessTracker.Infrastructure.Persistance.Migrations;
 using FitnessTracker.Interfaces;
-using IAuthorizationHandler = FitnessTracker.Interfaces.IAuthorizationHandler;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Singleton);
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
+builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
+builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
 
 var app = builder.Build();
