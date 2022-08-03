@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "17e21fee-bcb2-49b3-b300-653acdc3bbab": {
+      "ProjectGuid": "17e21fee-bcb2-49b3-b300-653acdc3bbab",
+      "DisplayName": "FitnessTracker.Api",
+      "ColorIndex": 0
+    },
+    "26972ea7-8fb9-4da8-a06c-ad5badaf3a38": {
+      "ProjectGuid": "26972ea7-8fb9-4da8-a06c-ad5badaf3a38",
+      "DisplayName": "FitnessTracker.Application",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
