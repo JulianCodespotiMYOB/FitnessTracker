@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitnessTracker.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("Users")]
 public class WorkoutController : ControllerBase
 {
     private readonly ILogger logger;
@@ -18,9 +18,10 @@ public class WorkoutController : ControllerBase
         this.workoutService = workoutService;
     }
 
-    [HttpPost("Record")]
+    [HttpPost("{userId}/Workouts")]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
+        int userId,
         [FromServices] IValidator<RecordWorkoutRequest> validator
     )
     {
@@ -28,11 +29,29 @@ public class WorkoutController : ControllerBase
 
         if (!validationResult.IsValid)
         {
-            logger.LogError($"Invalid request: {validationResult.ToString()}");
+            logger.LogError($"Invalid request: {validationResult}");
             return BadRequest(validationResult.Errors);
         }
-
-        var recordWorkoutResponse = await workoutService.RecordWorkout(request);
+        var recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
         return Ok(recordWorkoutResponse.Value);
+    }
+    
+    [HttpGet("{userId}/Workout")]
+    public async Task<IActionResult> GetWorkout(
+        int userId,
+        int workoutId
+    )
+    {
+        var getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
+        return Ok(getWorkoutResponse.Value);
+    }
+    
+    [HttpGet("{userId}/Workouts")]
+    public async Task<IActionResult> GetWorkouts(
+        int userId
+    )
+    {
+        var getWorkoutsResponse = await workoutService.GetWorkouts(userId);
+        return Ok(getWorkoutsResponse.Value);
     }
 }

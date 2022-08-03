@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Domain\FitnessTracker.Domain.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Domain\FitnessTracker.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Mapster" Version="7.3.0"/>
+        <PackageReference Include="Mapster" Version="7.3.0" />
     </ItemGroup>
 
     <PropertyGroup>

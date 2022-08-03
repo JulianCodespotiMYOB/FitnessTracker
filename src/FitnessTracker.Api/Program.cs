@@ -10,14 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen((c) =>
+{
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+});
 
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Singleton);
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
 builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
 builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, UserHandler>();
+
 
 var app = builder.Build();
 
