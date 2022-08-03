@@ -5,6 +5,7 @@ using FitnessTracker.Contracts.Responses.Workout;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Excercises.Workout;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -77,5 +78,60 @@ public class WorkoutHandler : IWorkoutService
             Workout = workout
         };
         return Result<GetWorkoutResponse>.Success(response);
+    }
+
+    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
+    {
+        var userResult = await UserHelper.GetUserFromDatabase(userId, applicationDbContext, logger);
+        if (userResult.IsSuccess is false)
+        {
+            return Result<UpdateWorkoutResponse>.Failure("User not found");
+        }
+        var user = userResult.Value;
+        
+        var workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
+        if (workout is null)
+        {
+            return Result<UpdateWorkoutResponse>.Failure("Workout not found");
+        }
+        
+        user.Workouts.Remove(workout);
+        
+        request.Workout.Id = workoutId;
+        user.Workouts.Add(request.Workout);
+        await applicationDbContext.SaveChangesAsync();
+
+        var response = new UpdateWorkoutResponse
+        {
+            Id = request.Workout.Id
+        };
+
+        return Result<UpdateWorkoutResponse>.Success(response);
+    }
+    
+    public async Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId)
+    {
+        var userResult = await UserHelper.GetUserFromDatabase(userId, applicationDbContext, logger);
+        if (userResult.IsSuccess is false)
+        {
+            return Result<DeleteWorkoutResponse>.Failure("User not found");
+        }
+        var user = userResult.Value;
+        
+        var workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
+        if (workout is null)
+        {
+            return Result<DeleteWorkoutResponse>.Failure("Workout not found");
+        }
+        
+        user.Workouts.Remove(workout);
+        await applicationDbContext.SaveChangesAsync();
+
+        var response = new DeleteWorkoutResponse
+        {
+            Id = workoutId
+        };
+
+        return Result<DeleteWorkoutResponse>.Success(response);
     }
 }

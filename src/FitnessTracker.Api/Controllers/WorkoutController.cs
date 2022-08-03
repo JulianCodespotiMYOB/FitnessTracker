@@ -33,6 +33,10 @@ public class WorkoutController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
         var recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
+        if (recordWorkoutResponse.IsSuccess is false)
+        {
+            return BadRequest(recordWorkoutResponse.Error);
+        }
         return Ok(recordWorkoutResponse.Value);
     }
     
@@ -43,6 +47,11 @@ public class WorkoutController : ControllerBase
     )
     {
         var getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
+        if (getWorkoutResponse.IsSuccess is false)
+        {
+            return BadRequest(getWorkoutResponse.Error);
+        }
+        
         return Ok(getWorkoutResponse.Value);
     }
     
@@ -52,6 +61,47 @@ public class WorkoutController : ControllerBase
     )
     {
         var getWorkoutsResponse = await workoutService.GetWorkouts(userId);
+        if (getWorkoutsResponse.IsSuccess is false)
+        {
+            return BadRequest(getWorkoutsResponse.Error);
+        }
         return Ok(getWorkoutsResponse.Value);
+    }
+    
+    [HttpPut("{userId}/Workouts/{workoutId}")]
+    public async Task<IActionResult> UpdateWorkout(
+        int userId,
+        int workoutId,
+        [FromBody] UpdateWorkoutRequest request,
+        [FromServices] IValidator<UpdateWorkoutRequest> validator
+    )
+    {
+        var validationResult = await validator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            logger.LogError($"Invalid request: {validationResult}");
+            return BadRequest(validationResult.Errors);
+        }
+        var updateWorkoutResponse = await workoutService.UpdateWorkout(request, workoutId, userId);
+        if (updateWorkoutResponse.IsSuccess is false)
+        {
+            return BadRequest(updateWorkoutResponse.Error);
+        }
+        return Ok(updateWorkoutResponse.Value);
+    }
+    
+    [HttpDelete("{userId}/Workouts/{workoutId}")]
+    public async Task<IActionResult> DeleteWorkout(
+        int userId,
+        int workoutId
+    )
+    {
+        var deleteWorkoutResponse = await workoutService.DeleteWorkout(workoutId, userId);
+        if (deleteWorkoutResponse.IsSuccess is false)
+        {
+            return BadRequest(deleteWorkoutResponse.Error);
+        }
+        return Ok(deleteWorkoutResponse.Value);
     }
 }

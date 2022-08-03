@@ -19,6 +19,7 @@ builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(Servi
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
 builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
+builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutRequestValidator>();
 builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, UserHandler>();
 
