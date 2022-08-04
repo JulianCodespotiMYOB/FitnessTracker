@@ -41,16 +41,10 @@ public class UserController : ControllerBase
     {
         var validationResult = await validator.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(validationResult.Errors);
-        }
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
         var registerResponse = await authorizationHandler.RegisterAsync(request.Adapt<RegistrationParameters>());
-        if (!registerResponse.IsSuccess)
-        {
-            return BadRequest(registerResponse.Error);
-        }
+        if (!registerResponse.IsSuccess) return BadRequest(registerResponse.Error);
 
         return Ok(registerResponse.Value);
     }

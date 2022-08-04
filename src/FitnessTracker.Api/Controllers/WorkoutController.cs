@@ -32,14 +32,12 @@ public class WorkoutController : ControllerBase
             logger.LogError($"Invalid request: {validationResult}");
             return BadRequest(validationResult.Errors);
         }
+
         var recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
-        if (recordWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(recordWorkoutResponse.Error);
-        }
+        if (recordWorkoutResponse.IsSuccess is false) return BadRequest(recordWorkoutResponse.Error);
         return Ok(recordWorkoutResponse.Value);
     }
-    
+
     [HttpGet("{userId}/Workout")]
     public async Task<IActionResult> GetWorkout(
         int userId,
@@ -47,27 +45,21 @@ public class WorkoutController : ControllerBase
     )
     {
         var getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
-        if (getWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(getWorkoutResponse.Error);
-        }
-        
+        if (getWorkoutResponse.IsSuccess is false) return BadRequest(getWorkoutResponse.Error);
+
         return Ok(getWorkoutResponse.Value);
     }
-    
+
     [HttpGet("{userId}/Workouts")]
     public async Task<IActionResult> GetWorkouts(
         int userId
     )
     {
         var getWorkoutsResponse = await workoutService.GetWorkouts(userId);
-        if (getWorkoutsResponse.IsSuccess is false)
-        {
-            return BadRequest(getWorkoutsResponse.Error);
-        }
+        if (getWorkoutsResponse.IsSuccess is false) return BadRequest(getWorkoutsResponse.Error);
         return Ok(getWorkoutsResponse.Value);
     }
-    
+
     [HttpPut("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> UpdateWorkout(
         int userId,
@@ -83,14 +75,12 @@ public class WorkoutController : ControllerBase
             logger.LogError($"Invalid request: {validationResult}");
             return BadRequest(validationResult.Errors);
         }
+
         var updateWorkoutResponse = await workoutService.UpdateWorkout(request, workoutId, userId);
-        if (updateWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(updateWorkoutResponse.Error);
-        }
+        if (updateWorkoutResponse.IsSuccess is false) return BadRequest(updateWorkoutResponse.Error);
         return Ok(updateWorkoutResponse.Value);
     }
-    
+
     [HttpDelete("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> DeleteWorkout(
         int userId,
@@ -98,10 +88,7 @@ public class WorkoutController : ControllerBase
     )
     {
         var deleteWorkoutResponse = await workoutService.DeleteWorkout(workoutId, userId);
-        if (deleteWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(deleteWorkoutResponse.Error);
-        }
+        if (deleteWorkoutResponse.IsSuccess is false) return BadRequest(deleteWorkoutResponse.Error);
         return Ok(deleteWorkoutResponse.Value);
     }
 }

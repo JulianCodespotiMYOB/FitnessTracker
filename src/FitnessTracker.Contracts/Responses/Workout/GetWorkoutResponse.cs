@@ -1,6 +1,6 @@
-using FitnessTracker.Models.Excercises.Workout;
+namespace FitnessTracker.Contracts.Responses.Workout;
 
 public class GetWorkoutResponse
 {
-    public Workout Workout { get; set; }
+    public Models.Fitness.Workout.Workout Workout { get; set; }
 }

@@ -1,5 +1,5 @@
 using FitnessTracker.Application.Authorization;
-using FitnessTracker.Application.Features.Workouts.Commands;
+using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Requests.Workout;
 using FitnessTracker.Infrastructure.Persistance.Migrations;
@@ -10,10 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen((c) =>
-{
-    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-});
+builder.Services.AddSwaggerGen(c => { c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); });
 
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Singleton);
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
