@@ -1,7 +1,11 @@
 using FitnessTracker.Contracts.Requests.Authorization;
+using FitnessTracker.Contracts.Responses;
+using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
+using FitnessTracker.Models.Common;
 using FluentValidation;
+using FluentValidation.Results;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +16,9 @@ namespace FitnessTracker.Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IAuthorizationHandler authorizationHandler;
-    private readonly ILogger logger;
 
-    public UserController(ILogger<UserController> logger,
-        IAuthorizationHandler authorizationHandler)
+    public UserController(IAuthorizationHandler authorizationHandler)
     {
-        this.logger = logger;
         this.authorizationHandler = authorizationHandler;
     }
 
@@ -25,12 +26,17 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request,
         [FromServices] IValidator<LoginRequest> validator)
     {
-        var validationResult = await validator.ValidateAsync(request);
+        ValidationResult validationResult = await validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
-        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
-        var loginResponse = await authorizationHandler.LoginAsync(request.Adapt<LoginParameters>());
-        if (!loginResponse.IsSuccess) return BadRequest(loginResponse.Error);
+        Result<LoginResponse> loginResponse = await authorizationHandler.LoginAsync(request.Adapt<LoginParameters>());
+        if (!loginResponse.IsSuccess)
+        {
+            return BadRequest(new ErrorResponse(loginResponse.Error));
+        }
 
         return Ok(loginResponse.Value);
     }
@@ -39,17 +45,16 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterRequest request,
         [FromServices] IValidator<RegisterRequest> validator)
     {
-        var validationResult = await validator.ValidateAsync(request);
-
+        ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
-            return BadRequest(validationResult.Errors);
+            return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        var registerResponse = await authorizationHandler.RegisterAsync(request.Adapt<RegistrationParameters>());
+        Result<RegisterResponse> registerResponse = await authorizationHandler.RegisterAsync(request.Adapt<RegistrationParameters>());
         if (!registerResponse.IsSuccess)
         {
-            return BadRequest(registerResponse.Error);
+            return BadRequest(new ErrorResponse(registerResponse.Error));
         }
 
         return Ok(registerResponse.Value);

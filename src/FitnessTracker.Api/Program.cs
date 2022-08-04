@@ -8,6 +8,16 @@ using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(opts =>
+{
+    opts.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin();
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen((c) =>
@@ -35,4 +45,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors();
 app.Run();
