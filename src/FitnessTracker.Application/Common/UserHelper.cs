@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Contracts.Responses.Workout;
-using FitnessTracker.Interfaces;
+﻿using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,8 @@ namespace FitnessTracker.Application.Common;
 
 public class UserHelper
 {
-    public static async Task<Result<User>> GetUserFromDatabase(int userId, IApplicationDbContext context, ILogger logger)
+    public static async Task<Result<User>> GetUserFromDatabase(int userId, IApplicationDbContext context,
+        ILogger logger)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -18,7 +18,7 @@ public class UserHelper
             logger.LogError($"User with id {userId} not found");
             return Result<User>.Failure("User not found");
         }
-        
+
         return Result<User>.Success(user);
     }
 }

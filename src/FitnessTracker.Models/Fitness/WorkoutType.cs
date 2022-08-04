@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Excercises;
+namespace FitnessTracker.Models.Fitness;
 
 public enum WorkoutType
 {

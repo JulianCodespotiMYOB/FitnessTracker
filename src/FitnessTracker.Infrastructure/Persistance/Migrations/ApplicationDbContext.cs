@@ -1,9 +1,9 @@
 using System.Reflection;
+using AutoBogus;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Excercises.Data;
-using FitnessTracker.Models.Excercises.Excercise;
-using FitnessTracker.Models.Excercises.Workout;
+using FitnessTracker.Models.Fitness.Workout;
+using FitnessTracker.Models.WorkoutBuddy;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Infrastructure.Persistance.Migrations;
@@ -24,32 +24,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             FirstName = "John",
             LastName = "Doe",
             Id = 1,
-            Workouts = new List<Workout>
-            {
-                new()
-                {
-                    Id = 1,
-                    Time = 100,
-                    Activities = new List<Activity>
-                    {
-                        new()
-                        {
-                            Id = 1,
-                            Excercise = new Excercise
-                            {
-                                Description = "Bench Press",
-                                Name = "Bench Press"
-                            },
-                            Data = new StrengthData
-                            {
-                                Reps = 10,
-                                Sets = 3,
-                                Weight = 100
-                            }
-                        }
-                    }
-                }
-            }
+            Workouts = new AutoFaker<Workout>().Generate(3),
+            WorkoutBuddy = new AutoFaker<WorkoutBuddy>()
         });
         context.SaveChangesAsync();
     }

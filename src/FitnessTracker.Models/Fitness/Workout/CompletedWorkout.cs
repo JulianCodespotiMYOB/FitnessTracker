@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Excercises.Workout;
+namespace FitnessTracker.Models.Fitness.Workout;
 
 public class CompletedWorkout : Workout
 {

@@ -11,5 +11,4 @@ public interface IWorkoutService
     public Task<Result<GetWorkoutResponse>> GetWorkout(int workoutId, int userId);
     public Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int userId, int workoutId);
     public Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId);
-
 }

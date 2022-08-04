@@ -12,11 +12,11 @@ public class Result<T>
 
     public static Result<T> Success(T value)
     {
-        return new() {Value = value};
+        return new Result<T> {Value = value};
     }
 
     public static Result<T> Failure(string? error)
     {
-        return new() {Error = error};
+        return new Result<T> {Error = error};
     }
 }

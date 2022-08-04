@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Excercises.Workout;
+using FitnessTracker.Models.Fitness.Workout;
 
 namespace FitnessTracker.Models.Authorization;
 
@@ -10,5 +10,6 @@ public class User
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public List<Workout> Workouts { get; set; } = new List<Workout>();
+    public List<Workout> Workouts { get; set; } = new();
+    public WorkoutBuddy.WorkoutBuddy WorkoutBuddy { get; set; } = new();
 }

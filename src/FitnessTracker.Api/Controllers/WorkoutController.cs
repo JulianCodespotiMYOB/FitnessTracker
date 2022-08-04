@@ -40,7 +40,7 @@ public class WorkoutController : ControllerBase
         }
         return Ok(recordWorkoutResponse.Value);
     }
-    
+
     [HttpGet("{userId}/Workout")]
     public async Task<IActionResult> GetWorkout(
         int userId,
@@ -55,7 +55,7 @@ public class WorkoutController : ControllerBase
         
         return Ok(getWorkoutResponse.Value);
     }
-    
+
     [HttpGet("{userId}/Workouts")]
     public async Task<IActionResult> GetWorkouts(
         int userId
@@ -69,7 +69,7 @@ public class WorkoutController : ControllerBase
 
         return Ok(getWorkoutsResponse.Value);
     }
-    
+
     [HttpPut("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> UpdateWorkout(
         int userId,
@@ -92,7 +92,7 @@ public class WorkoutController : ControllerBase
 
         return Ok(updateWorkoutResponse.Value);
     }
-    
+
     [HttpDelete("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> DeleteWorkout(
         int userId,
