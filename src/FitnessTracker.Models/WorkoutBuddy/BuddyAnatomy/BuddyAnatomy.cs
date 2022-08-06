@@ -6,5 +6,5 @@ public class BuddyAnatomy
 {
     public int Id { get; set; }
     public MuscleGroup MuscleGroup { get; set; }
-    public int Level { get; set; } = 0;
+    public int Level { get; set; } = 1;
 }

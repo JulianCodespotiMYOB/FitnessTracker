@@ -57,9 +57,9 @@ public class UserHandler : IAuthorizationHandler
         }
 
         var buddy = new WorkoutBuddy() {
-            Name = registrationParameters.Name,
-            Description = registrationParameters.Description,
-            IconUrl = registrationParameters.IconUrl,
+            Name = registrationParameters.BuddyName,
+            Description = registrationParameters.BuddyDescription,
+            IconId = registrationParameters.BuddyIconId,
         };
 
         var user = registrationParameters.Adapt<User>();

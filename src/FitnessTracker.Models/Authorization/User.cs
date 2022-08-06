@@ -10,6 +10,9 @@ public class User
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public decimal Height { get; set; }
+    public decimal Weight { get; set; }
+    public int Age { get; set; }
     public List<Workout> Workouts { get; set; } = new();
-    public WorkoutBuddy.WorkoutBuddy WorkoutBuddy { get; set; } = new();
+    public WorkoutBuddy.WorkoutBuddy WorkoutBuddy { get; set; }
 }
