@@ -2,6 +2,7 @@
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.WorkoutBuddy;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -46,8 +47,7 @@ public class UserHandler : IAuthorizationHandler
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        var userInDatabase =
-            await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == registrationParameters.Email);
+        var userInDatabase = await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == registrationParameters.Email);
 
         if (userInDatabase is not null)
         {
@@ -56,7 +56,15 @@ public class UserHandler : IAuthorizationHandler
             return Result<RegisterResponse>.Failure(message);
         }
 
+        var buddy = new WorkoutBuddy() {
+            Name = registrationParameters.Name,
+            Description = registrationParameters.Description,
+            IconUrl = registrationParameters.IconUrl,
+        };
+
         var user = registrationParameters.Adapt<User>();
+        user.WorkoutBuddy = buddy;
+
         await applicationDbContext.Users.AddAsync(user);
         await applicationDbContext.SaveChangesAsync();
 

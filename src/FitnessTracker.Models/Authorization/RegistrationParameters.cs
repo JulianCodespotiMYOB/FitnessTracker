@@ -6,5 +6,8 @@ public record RegistrationParameters(
     string ConfirmPassword,
     string Email,
     string FirstName,
-    string LastName
+    string LastName,
+    string Name,
+    string Description,
+    string IconUrl
 );
