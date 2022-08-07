@@ -10,7 +10,6 @@ public class UserHelper
 {
     public static async Task<Result<User>> GetUserFromDatabase(int userId, IApplicationDbContext context, ILogger logger)
     {
-        await context.Users.ForEachAsync(u => Console.WriteLine(u.Id));
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
