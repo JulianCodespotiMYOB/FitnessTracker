@@ -1,12 +1,11 @@
 using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Muscles;
 using Microsoft.Extensions.Logging;
-using System;
 
-namespace FitnessTracker.Application.Features.Workouts;
+namespace FitnessTracker.Application.Features.Exercises;
 
 public class ExerciseHandler : IExerciseService
 {
@@ -21,7 +20,7 @@ public class ExerciseHandler : IExerciseService
 
     public Result<GetExercisesResponse> GetExercises()
     {
-        Result<IEnumerable<Exercise>> result = exerciseRepository.LoadExercises();
+        Result<IEnumerable<Exercise>> result = exerciseRepository.GetExercises();
 
         if (result.IsSuccess is false)
         {
@@ -30,19 +29,19 @@ public class ExerciseHandler : IExerciseService
         }
 
         List<Exercise> cleanedExercises = result.Value
-                .Where(x => x.PrimaryMuscleGroup != MuscleGroup.Unknown)
-                .Select(x => new Exercise()
-                {
-                    Id = x.Id,
-                    Type = x.Type,
-                    Name = x.Name
-                        .Split(' ')
-                        .Select(y => string.Concat(y[..1].ToUpper(), y.AsSpan(1)))
-                        .Aggregate((a, b) => string.Concat(a, " ", b)),
-                    Description = x.Description,
-                    PrimaryMuscleGroup = x.PrimaryMuscleGroup
-                })
-                .ToList();
+            .Where(x => x.PrimaryMuscleGroup != MuscleGroup.Unknown)
+            .Select(x => new Exercise
+            {
+                Id = x.Id,
+                Type = x.Type,
+                Name = x.Name
+                    .Split(' ')
+                    .Select(y => string.Concat(y[..1].ToUpper(), y.AsSpan(1)))
+                    .Aggregate((a, b) => string.Concat(a, " ", b)),
+                Description = x.Description,
+                PrimaryMuscleGroup = x.PrimaryMuscleGroup
+            })
+            .ToList();
 
         GetExercisesResponse response = new()
         {

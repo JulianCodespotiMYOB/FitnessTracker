@@ -1,14 +1,15 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FitnessTracker.Application.Authorization;
+using FitnessTracker.Application.Features.Exercises;
 using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Authorization;
-using FitnessTracker.Contracts.Requests.Workout;
+using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces;
 using FluentValidation;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(opts =>
 {
     opts.AddDefaultPolicy(builder =>
@@ -19,7 +20,8 @@ builder.Services.AddCors(opts =>
     });
 });
 
-builder.Services.AddControllers().AddJsonOptions(opts => {
+builder.Services.AddControllers().AddJsonOptions(opts =>
+{
     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 });
 
@@ -37,7 +39,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, UserHandler>();
 builder.Services.AddSingleton<IExerciseRepository, ExerciseRepository>();
 builder.Services.AddSingleton<IExerciseService, ExerciseHandler>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

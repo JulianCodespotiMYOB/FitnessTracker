@@ -1,4 +1,4 @@
-namespace FitnessTracker.Contracts.Responses.Workout;
+namespace FitnessTracker.Contracts.Responses.Workouts;
 
 public class UpdateWorkoutResponse
 {

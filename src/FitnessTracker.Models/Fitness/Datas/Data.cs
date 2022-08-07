@@ -1,8 +1,8 @@
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 
 namespace FitnessTracker.Models.Fitness.Datas;
 
-public abstract class Data
+public class Data
 {
     public int Id { get; set; }
     public ExerciseType Type { get; }

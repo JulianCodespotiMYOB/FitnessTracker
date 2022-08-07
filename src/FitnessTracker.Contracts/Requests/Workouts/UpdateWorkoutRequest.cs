@@ -1,6 +1,8 @@
 using FitnessTracker.Models.Fitness.Workouts;
 
-public class RecordWorkoutRequest
+namespace FitnessTracker.Contracts.Requests.Workouts;
+
+public class UpdateWorkoutRequest
 {
     public Workout Workout { get; set; }
 }

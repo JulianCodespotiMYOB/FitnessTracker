@@ -11,7 +11,6 @@ namespace FitnessTracker.Infrastructure.Persistance;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IApplicationDbContext context;
-    public DbSet<User> Users { get; set; }
 
     public ApplicationDbContext()
     {
@@ -30,6 +29,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         });
         context.SaveChangesAsync();
     }
+
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

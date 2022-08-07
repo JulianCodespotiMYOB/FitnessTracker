@@ -17,14 +17,11 @@ public class ExerciseController : ControllerBase
         this.exerciseService = exerciseService;
     }
 
-    [HttpGet()]
+    [HttpGet]
     public IActionResult GetExercises()
     {
         Result<GetExercisesResponse> exercisesResponse = exerciseService.GetExercises();
-        if (!exercisesResponse.IsSuccess)
-        {
-            return BadRequest(new ErrorResponse(exercisesResponse.Error));
-        }
+        if (!exercisesResponse.IsSuccess) return BadRequest(new ErrorResponse(exercisesResponse.Error));
 
         return Ok(exercisesResponse.Value);
     }

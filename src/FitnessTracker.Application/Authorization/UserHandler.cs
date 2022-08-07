@@ -22,7 +22,7 @@ public class UserHandler : IAuthorizationHandler
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
     {
-        var user = await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == loginParameters.Email);
+        User? user = await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == loginParameters.Email);
 
         if (user is null)
         {
@@ -38,7 +38,7 @@ public class UserHandler : IAuthorizationHandler
             return Result<LoginResponse>.Failure(message);
         }
 
-        var response = new LoginResponse
+        LoginResponse response = new()
         {
             User = user
         };
@@ -47,7 +47,8 @@ public class UserHandler : IAuthorizationHandler
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        var userInDatabase = await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == registrationParameters.Email);
+        User? userInDatabase =
+            await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == registrationParameters.Email);
 
         if (userInDatabase is not null)
         {
@@ -56,19 +57,20 @@ public class UserHandler : IAuthorizationHandler
             return Result<RegisterResponse>.Failure(message);
         }
 
-        var buddy = new WorkoutBuddy() {
+        WorkoutBuddy buddy = new()
+        {
             Name = registrationParameters.BuddyName,
             Description = registrationParameters.BuddyDescription,
-            IconId = registrationParameters.BuddyIconId,
+            IconId = registrationParameters.BuddyIconId
         };
 
-        var user = registrationParameters.Adapt<User>();
+        User user = registrationParameters.Adapt<User>();
         user.WorkoutBuddy = buddy;
 
         await applicationDbContext.Users.AddAsync(user);
         await applicationDbContext.SaveChangesAsync();
 
-        var response = new RegisterResponse
+        RegisterResponse response = new()
         {
             User = user
         };

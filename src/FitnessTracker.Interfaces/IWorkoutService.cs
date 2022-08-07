@@ -1,5 +1,5 @@
-using FitnessTracker.Contracts.Requests.Workout;
-using FitnessTracker.Contracts.Responses.Workout;
+using FitnessTracker.Contracts.Requests.Workouts;
+using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Models.Common;
 
 namespace FitnessTracker.Interfaces;

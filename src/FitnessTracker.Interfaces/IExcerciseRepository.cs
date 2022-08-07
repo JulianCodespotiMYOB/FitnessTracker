@@ -1,9 +1,9 @@
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 
 namespace FitnessTracker.Interfaces;
 
 public interface IExerciseRepository
 {
-    public Result<IEnumerable<Exercise>> LoadExercises();
+    public Result<IEnumerable<Exercise>> GetExercises();
 }

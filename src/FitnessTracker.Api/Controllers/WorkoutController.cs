@@ -1,6 +1,6 @@
-using FitnessTracker.Contracts.Requests.Workout;
+using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses;
-using FitnessTracker.Contracts.Responses.Workout;
+using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Common;
 using FluentValidation;
@@ -29,30 +29,22 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<RecordWorkoutResponse> recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
-        if (recordWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(new ErrorResponse(recordWorkoutResponse.Error));
-        }
+        if (recordWorkoutResponse.IsSuccess is false) return BadRequest(new ErrorResponse(recordWorkoutResponse.Error));
         return Ok(recordWorkoutResponse.Value);
     }
 
-    [HttpGet("{userId}/Workout")]
+    [HttpGet("{userId}/Workout/{workoutId}")]
     public async Task<IActionResult> GetWorkout(
         int userId,
         int workoutId
     )
     {
         Result<GetWorkoutResponse> getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
-        if (getWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(new ErrorResponse(getWorkoutResponse.Error));
-        }
-        
+        if (getWorkoutResponse.IsSuccess is false) return BadRequest(new ErrorResponse(getWorkoutResponse.Error));
+
         return Ok(getWorkoutResponse.Value);
     }
 
@@ -62,10 +54,7 @@ public class WorkoutController : ControllerBase
     )
     {
         Result<GetWorkoutsResponse> getWorkoutsResponse = await workoutService.GetWorkouts(userId);
-        if (getWorkoutsResponse.IsSuccess is false)
-        {
-            return BadRequest(new ErrorResponse(getWorkoutsResponse.Error));
-        }
+        if (getWorkoutsResponse.IsSuccess is false) return BadRequest(new ErrorResponse(getWorkoutsResponse.Error));
 
         return Ok(getWorkoutsResponse.Value);
     }
@@ -80,15 +69,11 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
-        Result<UpdateWorkoutResponse> updateWorkoutResponse = await workoutService.UpdateWorkout(request, workoutId, userId);
-        if (updateWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(new ErrorResponse(updateWorkoutResponse.Error));
-        }
+        Result<UpdateWorkoutResponse> updateWorkoutResponse =
+            await workoutService.UpdateWorkout(request, workoutId, userId);
+        if (updateWorkoutResponse.IsSuccess is false) return BadRequest(new ErrorResponse(updateWorkoutResponse.Error));
 
         return Ok(updateWorkoutResponse.Value);
     }
@@ -100,10 +85,7 @@ public class WorkoutController : ControllerBase
     )
     {
         Result<DeleteWorkoutResponse> deleteWorkoutResponse = await workoutService.DeleteWorkout(workoutId, userId);
-        if (deleteWorkoutResponse.IsSuccess is false)
-        {
-            return BadRequest(new ErrorResponse(deleteWorkoutResponse.Error));
-        }
+        if (deleteWorkoutResponse.IsSuccess is false) return BadRequest(new ErrorResponse(deleteWorkoutResponse.Error));
 
         return Ok(deleteWorkoutResponse.Value);
     }
