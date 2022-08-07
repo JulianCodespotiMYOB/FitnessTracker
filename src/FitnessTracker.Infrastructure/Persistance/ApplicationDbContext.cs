@@ -10,13 +10,13 @@ namespace FitnessTracker.Infrastructure.Persistance;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly IApplicationDbContext context;
+    public DbSet<User> Users { get; set; } = null!;
+
+    private readonly IApplicationDbContext context = null!;
 
     public ApplicationDbContext()
     {
-        context = this;
-
-        context.Users.Add(new User
+        Users.Add(new User
         {
             Email = "JohnDoe@gmail.com",
             Username = "johndoe",
@@ -27,9 +27,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             Workouts = new AutoFaker<Workout>().Generate(3),
             WorkoutBuddy = new AutoFaker<WorkoutBuddy>()
         });
-        context.SaveChangesAsync();
-    }
 
+<<<<<<< HEAD
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,10 +39,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             .WithOne(wb => wb.User)
             .HasForeignKey<WorkoutBuddy>(wb => wb.Id);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+=======
+        SaveChangesAsync();
+>>>>>>> 4bbf081f7934aed3b9edafe250c06a54fe041f66
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseInMemoryDatabase("FitnessDb");
+        optionsBuilder.UseInMemoryDatabase("FitnessInMemoryDB");
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 }
