@@ -16,7 +16,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public ApplicationDbContext()
     {
-        Users.Add(new User
+        context = this;
+        context.Users.Add(new User
         {
             Email = "JohnDoe@gmail.com",
             Username = "johndoe",
@@ -28,9 +29,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             WorkoutBuddy = new AutoFaker<WorkoutBuddy>()
         });
 
-<<<<<<< HEAD
-    public DbSet<User> Users { get; set; }
-
+        context.SaveChangesAsync();
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -39,9 +39,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             .WithOne(wb => wb.User)
             .HasForeignKey<WorkoutBuddy>(wb => wb.Id);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-=======
         SaveChangesAsync();
->>>>>>> 4bbf081f7934aed3b9edafe250c06a54fe041f66
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

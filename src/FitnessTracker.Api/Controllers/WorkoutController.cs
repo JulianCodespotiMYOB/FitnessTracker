@@ -28,18 +28,12 @@ public class WorkoutController : ControllerBase
     )
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
-<<<<<<< HEAD
 
-        if (!validationResult.IsValid)
-            return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-
-=======
         if (!validationResult.IsValid)
         {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
->>>>>>> 4bbf081f7934aed3b9edafe250c06a54fe041f66
         Result<RecordWorkoutResponse> recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
         return recordWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(recordWorkoutResponse.Error))
