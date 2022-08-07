@@ -23,6 +23,7 @@ builder.Services.AddCors(opts =>
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+    opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 builder.Services.AddEndpointsApiExplorer();

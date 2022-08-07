@@ -23,7 +23,7 @@ public class WorkoutController : ControllerBase
     [HttpPost("{userId}/Workouts")]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
-        int userId,
+        [FromRoute] int userId,
         [FromServices] IValidator<RecordWorkoutRequest> validator
     )
     {
@@ -36,10 +36,10 @@ public class WorkoutController : ControllerBase
         return Ok(recordWorkoutResponse.Value);
     }
 
-    [HttpGet("{userId}/Workout/{workoutId}")]
+    [HttpGet("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> GetWorkout(
-        int userId,
-        int workoutId
+        [FromRoute] int userId,
+        [FromRoute] int workoutId
     )
     {
         Result<GetWorkoutResponse> getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
@@ -50,7 +50,7 @@ public class WorkoutController : ControllerBase
 
     [HttpGet("{userId}/Workouts")]
     public async Task<IActionResult> GetWorkouts(
-        int userId
+        [FromRoute] int userId
     )
     {
         Result<GetWorkoutsResponse> getWorkoutsResponse = await workoutService.GetWorkouts(userId);
@@ -61,8 +61,8 @@ public class WorkoutController : ControllerBase
 
     [HttpPut("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> UpdateWorkout(
-        int userId,
-        int workoutId,
+        [FromRoute] int userId,
+        [FromRoute] int workoutId,
         [FromBody] UpdateWorkoutRequest request,
         [FromServices] IValidator<UpdateWorkoutRequest> validator
     )
@@ -80,8 +80,8 @@ public class WorkoutController : ControllerBase
 
     [HttpDelete("{userId}/Workouts/{workoutId}")]
     public async Task<IActionResult> DeleteWorkout(
-        int userId,
-        int workoutId
+        [FromRoute] int userId,
+        [FromRoute] int workoutId
     )
     {
         Result<DeleteWorkoutResponse> deleteWorkoutResponse = await workoutService.DeleteWorkout(workoutId, userId);
