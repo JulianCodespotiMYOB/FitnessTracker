@@ -21,8 +21,8 @@ public class ExerciseController : ControllerBase
     public IActionResult GetExercises()
     {
         Result<GetExercisesResponse> exercisesResponse = exerciseService.GetExercises();
-        if (!exercisesResponse.IsSuccess) return BadRequest(new ErrorResponse(exercisesResponse.Error));
-
-        return Ok(exercisesResponse.Value);
+        return !exercisesResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(exercisesResponse.Error))
+            : Ok(exercisesResponse.Value);
     }
 }
