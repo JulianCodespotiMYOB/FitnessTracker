@@ -28,12 +28,12 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
         Result<LoginResponse> loginResponse = await authorizationHandler.LoginAsync(request.Adapt<LoginParameters>());
-        if (!loginResponse.IsSuccess) return BadRequest(new ErrorResponse(loginResponse.Error));
-
-        return Ok(loginResponse.Value);
+        return !loginResponse.IsSuccess ? BadRequest(new ErrorResponse(loginResponse.Error)) : Ok(loginResponse.Value);
     }
 
     [HttpPost("Register")]
@@ -42,12 +42,14 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
         Result<RegisterResponse> registerResponse =
             await authorizationHandler.RegisterAsync(request.Adapt<RegistrationParameters>());
-        if (!registerResponse.IsSuccess) return BadRequest(new ErrorResponse(registerResponse.Error));
-
-        return Ok(registerResponse.Value);
+        return !registerResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(registerResponse.Error))
+            : Ok(registerResponse.Value);
     }
 }
