@@ -42,14 +42,15 @@ public class WorkoutHandler : IWorkoutService
     public async Task<Result<GetWorkoutsResponse>> GetWorkouts(int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabase(userId, applicationDbContext, logger);
-        if (userResult.IsSuccess is false) return Result<GetWorkoutsResponse>.Failure("User not found");
-        User? user = userResult.Value;
-        List<Workout> workouts = user.Workouts;
+        if (userResult.IsSuccess is false)
+        {
+            return Result<GetWorkoutsResponse>.Failure("User not found");
+        }
+
         GetWorkoutsResponse response = new()
         {
-            Workouts = workouts
+            Workouts = userResult.Value.Workouts
         };
-
         return Result<GetWorkoutsResponse>.Success(response);
     }
 
