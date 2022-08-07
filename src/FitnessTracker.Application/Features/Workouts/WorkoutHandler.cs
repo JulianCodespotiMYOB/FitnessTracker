@@ -3,6 +3,7 @@ using FitnessTracker.Application.Common;
 using FitnessTracker.Contracts.Requests.Workout;
 using FitnessTracker.Contracts.Responses.Workout;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using Microsoft.Extensions.Logging;
 
@@ -21,13 +22,18 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<RecordWorkoutResponse>> RecordWorkout(RecordWorkoutRequest request, int userId)
     {
-        var userResult = await UserHelper.GetUserFromDatabase(userId, applicationDbContext, logger);
-        if (userResult.IsSuccess is false) return Result<RecordWorkoutResponse>.Failure("User not found");
-        var user = userResult.Value;
+        Result<User> userResult = await UserHelper.GetUserFromDatabase(userId, applicationDbContext, logger);
+
+        if (userResult.IsSuccess is false) 
+        {
+            return Result<RecordWorkoutResponse>.Failure("User not found");
+        }
+
+        User user = userResult.Value;
         user.Workouts.Add(request.Workout);
         await applicationDbContext.SaveChangesAsync();
 
-        var response = new RecordWorkoutResponse
+        RecordWorkoutResponse response = new()
         {
             Id = request.Workout.Id
         };

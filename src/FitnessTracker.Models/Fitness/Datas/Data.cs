@@ -1,8 +1,9 @@
+using FitnessTracker.Models.Fitness.Exercises;
+
 namespace FitnessTracker.Models.Fitness.Datas;
 
-public class Data
+public abstract class Data
 {
     public int Id { get; set; }
-    public WorkoutType WorkoutType { get; }
-    public double CaloriesBurned { get; set; }
+    public ExerciseType Type { get; }
 }

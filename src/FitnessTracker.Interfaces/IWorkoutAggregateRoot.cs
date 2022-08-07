@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Fitness.Workout;
+using FitnessTracker.Models.Fitness.Workouts;
 
 namespace FitnessTracker.Interfaces;
 

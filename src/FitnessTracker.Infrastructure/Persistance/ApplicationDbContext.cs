@@ -2,11 +2,11 @@ using System.Reflection;
 using AutoBogus;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Fitness.Workout;
+using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.WorkoutBuddy;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Infrastructure.Persistance.Migrations;
+namespace FitnessTracker.Infrastructure.Persistance;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

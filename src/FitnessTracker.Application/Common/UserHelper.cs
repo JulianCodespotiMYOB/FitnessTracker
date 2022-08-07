@@ -8,10 +8,10 @@ namespace FitnessTracker.Application.Common;
 
 public class UserHelper
 {
-    public static async Task<Result<User>> GetUserFromDatabase(int userId, IApplicationDbContext context,
-        ILogger logger)
+    public static async Task<Result<User>> GetUserFromDatabase(int userId, IApplicationDbContext context, ILogger logger)
     {
-        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        await context.Users.ForEachAsync(u => Console.WriteLine(u.Id));
+        User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
         {
