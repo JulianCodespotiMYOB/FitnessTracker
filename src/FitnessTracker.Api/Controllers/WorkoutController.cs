@@ -41,7 +41,7 @@ public class WorkoutController : ControllerBase
         return Ok(recordWorkoutResponse.Value);
     }
 
-    [HttpGet("{userId}/Workout")]
+    [HttpGet("{userId}/Workout/{workoutId}")]
     public async Task<IActionResult> GetWorkout(
         int userId,
         int workoutId
