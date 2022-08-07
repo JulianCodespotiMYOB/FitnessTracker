@@ -3,6 +3,7 @@ using FitnessTracker.Application.Common;
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Workouts;
@@ -15,7 +16,7 @@ public class WorkoutHandler : IWorkoutService
     private readonly IApplicationDbContext applicationDbContext;
     private readonly ILogger logger;
 
-    public WorkoutHandler(IApplicationDbContext applicationDbContext, ILogger<UserHandler> logger)
+    public WorkoutHandler(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
     {
         this.applicationDbContext = applicationDbContext;
         this.logger = logger;

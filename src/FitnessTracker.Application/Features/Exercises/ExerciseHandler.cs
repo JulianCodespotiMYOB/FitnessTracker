@@ -1,5 +1,6 @@
 using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Muscles;

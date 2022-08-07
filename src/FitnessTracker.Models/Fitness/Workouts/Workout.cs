@@ -7,4 +7,5 @@ public class Workout
     public bool Completed { get; set; } = false;
     public bool Past { get; set; } = false;
     public DateTimeOffset Time { get; set; }
+    public WeightUnit WeightUnit { get; set; } = WeightUnit.Kilograms;
 }

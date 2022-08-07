@@ -1,20 +1,21 @@
 ﻿using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Authorization;
+using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.WorkoutBuddy;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Authorization;
 
-public class UserHandler : IAuthorizationHandler
+public class UserService : IAuthorizationService
 {
     private readonly IApplicationDbContext applicationDbContext;
     private readonly ILogger logger;
 
-    public UserHandler(IApplicationDbContext applicationDbContext, ILogger<UserHandler> logger)
+    public UserService(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
     {
         this.applicationDbContext = applicationDbContext;
         this.logger = logger;
@@ -26,14 +27,14 @@ public class UserHandler : IAuthorizationHandler
 
         if (user is null)
         {
-            var message = $"User with email {loginParameters.Email} does not exist.";
+            string message = $"User with email {loginParameters.Email} does not exist.";
             logger.LogError(message);
             return Result<LoginResponse>.Failure(message);
         }
 
         if (!user.Password.Equals(loginParameters.Password))
         {
-            var message = $"Password for user with email {loginParameters.Email} is incorrect.";
+            string message = $"Password for user with email {loginParameters.Email} is incorrect.";
             logger.LogError(message);
             return Result<LoginResponse>.Failure(message);
         }
@@ -52,7 +53,7 @@ public class UserHandler : IAuthorizationHandler
 
         if (userInDatabase is not null)
         {
-            var message = $"User with email {registrationParameters.Email} already exists.";
+            string message = $"User with email {registrationParameters.Email} already exists.";
             logger.LogError(message);
             return Result<RegisterResponse>.Failure(message);
         }
