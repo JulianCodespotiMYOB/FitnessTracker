@@ -17,19 +17,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public ApplicationDbContext()
     {
         context = this;
-        context.Users.Add(new User
-        {
-            Email = "JohnDoe@gmail.com",
-            Username = "johndoe",
-            Password = "123456",
-            FirstName = "John",
-            LastName = "Doe",
-            Id = 1,
-            Workouts = new AutoFaker<Workout>().Generate(3),
-            WorkoutBuddy = new AutoFaker<WorkoutBuddy>()
-        });
-
-        context.SaveChangesAsync();
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,7 +31,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseInMemoryDatabase("FitnessInMemoryDB");
+        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")!);
         optionsBuilder.EnableSensitiveDataLogging();
     }
 }

@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Contracts.Responses.Authorization;
+﻿using FitnessTracker.Application.Common;
+using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Authorization;
@@ -23,16 +24,14 @@ public class UserService : IAuthorizationService
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
     {
-        User? user = await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == loginParameters.Email);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, applicationDbContext, logger);
 
-        if (user is null)
+        if (user.IsSuccess is false)
         {
-            string message = $"User with email {loginParameters.Email} does not exist.";
-            logger.LogError(message);
-            return Result<LoginResponse>.Failure(message);
+            return Result<LoginResponse>.Failure(user.Error);
         }
 
-        if (!user.Password.Equals(loginParameters.Password))
+        if (!user.Value.Password.Equals(loginParameters.Password))
         {
             string message = $"Password for user with email {loginParameters.Email} is incorrect.";
             logger.LogError(message);
@@ -41,21 +40,18 @@ public class UserService : IAuthorizationService
 
         LoginResponse response = new()
         {
-            User = user
+            User = user.Value
         };
         return Result<LoginResponse>.Success(response);
     }
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        User? userInDatabase =
-            await applicationDbContext.Users.FirstOrDefaultAsync(u => u.Email == registrationParameters.Email);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, applicationDbContext, logger);
 
-        if (userInDatabase is not null)
+        if (user.IsSuccess is false)
         {
-            string message = $"User with email {registrationParameters.Email} already exists.";
-            logger.LogError(message);
-            return Result<RegisterResponse>.Failure(message);
+            return Result<RegisterResponse>.Failure(user.Error);
         }
 
         WorkoutBuddy buddy = new()
@@ -65,15 +61,14 @@ public class UserService : IAuthorizationService
             IconId = registrationParameters.BuddyIconId
         };
 
-        User user = registrationParameters.Adapt<User>();
-        user.WorkoutBuddy = buddy;
+        user.Value.WorkoutBuddy = buddy;
 
-        await applicationDbContext.Users.AddAsync(user);
+        await applicationDbContext.Users.AddAsync(user.Value);
         await applicationDbContext.SaveChangesAsync();
 
         RegisterResponse response = new()
         {
-            User = user
+            User = user.Value
         };
         return Result<RegisterResponse>.Success(response);
     }
