@@ -20,7 +20,7 @@ public static class MuscleGroupExtensions
 {
     public static MuscleGroup FromName(string name)
     {
-        var cleanedName = name.Trim().ToLower();
+        string cleanedName = name.Trim().ToLower();
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
             if (cleanedName.Contains(muscleGroup.ToString().ToLower()))

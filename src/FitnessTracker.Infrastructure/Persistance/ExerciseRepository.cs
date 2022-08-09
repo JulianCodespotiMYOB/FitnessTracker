@@ -26,15 +26,17 @@ public class ExerciseRepository : IExerciseRepository
             };
 
         List<Exercise> exercises = new();
+        
+        string csv = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.FullName ?? "",
+            "assets\\exercises.csv");
+        string text = File.ReadAllText(csv);
+        string[] lines = text.Split('\n');
+        foreach (string line in lines)
 
-        var csv = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.FullName ?? "", "assets\\exercises.csv");
-        var text = File.ReadAllText(csv);
-        var lines = text.Split('\n');
-        foreach (var line in lines)
         {
-            var values = line.Split(',');
-            var exerciseName = values[0];
-            var muscle = values[1];
+            string[] values = line.Split(',');
+            string exerciseName = values[0];
+            string muscle = values[1];
             MuscleGroup muscleGroup = MuscleGroupExtensions.FromName(muscle);
 
             Exercise exercise = new()

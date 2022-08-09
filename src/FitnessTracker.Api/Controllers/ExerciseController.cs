@@ -1,6 +1,6 @@
 using FitnessTracker.Contracts.Responses;
 using FitnessTracker.Contracts.Responses.Exercises;
-using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 

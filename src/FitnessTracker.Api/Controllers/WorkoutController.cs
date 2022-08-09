@@ -1,7 +1,7 @@
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses;
 using FitnessTracker.Contracts.Responses.Workouts;
-using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using FluentValidation;
 using FluentValidation.Results;
@@ -28,6 +28,7 @@ public class WorkoutController : ControllerBase
     )
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
+
         if (!validationResult.IsValid)
         {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
@@ -72,9 +73,7 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<UpdateWorkoutResponse> updateWorkoutResponse =
             await workoutService.UpdateWorkout(request, workoutId, userId);

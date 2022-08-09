@@ -1,7 +1,7 @@
 using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Responses;
 using FitnessTracker.Contracts.Responses.Authorization;
-using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using FluentValidation;
@@ -15,11 +15,11 @@ namespace FitnessTracker.Api.Controllers;
 [Route("Users")]
 public class UserController : ControllerBase
 {
-    private readonly IAuthorizationHandler authorizationHandler;
+    private readonly IAuthorizationService _authorizationService;
 
-    public UserController(IAuthorizationHandler authorizationHandler)
+    public UserController(IAuthorizationService authorizationService)
     {
-        this.authorizationHandler = authorizationHandler;
+        _authorizationService = authorizationService;
     }
 
     [HttpPost("Login")]
@@ -28,11 +28,9 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
-        Result<LoginResponse> loginResponse = await authorizationHandler.LoginAsync(request.Adapt<LoginParameters>());
+        Result<LoginResponse> loginResponse = await _authorizationService.LoginAsync(request.Adapt<LoginParameters>());
         return !loginResponse.IsSuccess ? BadRequest(new ErrorResponse(loginResponse.Error)) : Ok(loginResponse.Value);
     }
 
@@ -42,12 +40,10 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<RegisterResponse> registerResponse =
-            await authorizationHandler.RegisterAsync(request.Adapt<RegistrationParameters>());
+            await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
         return !registerResponse.IsSuccess
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);

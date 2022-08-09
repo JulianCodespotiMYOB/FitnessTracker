@@ -2,7 +2,7 @@ using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Models.Common;
 
-namespace FitnessTracker.Interfaces;
+namespace FitnessTracker.Interfaces.Services;
 
 public interface IWorkoutService
 {
