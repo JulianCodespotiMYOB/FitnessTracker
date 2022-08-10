@@ -24,6 +24,11 @@ locals {
   }
 }
 
+variable "connection_string" {
+  type        = string
+  description = "The DB connection string."
+}
+
 resource "aws_security_group" "sg" {
   name        = "${local.repository}"
   description = "${local.repository}"
@@ -64,7 +69,7 @@ resource "aws_instance" "app_server" {
                 aws ecr get-login-password --region ${local.region} | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com
 
                 docker pull $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
-                docker run -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
+                docker run -e ${var.connection_string} -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 EOT
 
   user_data_replace_on_change = true
