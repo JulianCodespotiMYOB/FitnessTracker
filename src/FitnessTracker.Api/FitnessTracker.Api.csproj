@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.1.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0"/>
+        <PackageReference Include="Mapster" Version="7.3.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FitnessTracker.Infrastructure\FitnessTracker.Infrastructure.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Application\FitnessTracker.Application.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
+    </ItemGroup>
+
+</Project>
