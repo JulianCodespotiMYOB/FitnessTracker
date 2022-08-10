@@ -5,8 +5,9 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
+      "publishAllPorts": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7210;http://localhost:5299",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBydWxieHhjcm53dGljdndqbmp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTk5NjEzNjQsImV4cCI6MTk3NTUzNzM2NH0.91Gc5Bv2y03Xb0ItmjPuIe90ZHxqMPjvGhtwraKqkj0",
