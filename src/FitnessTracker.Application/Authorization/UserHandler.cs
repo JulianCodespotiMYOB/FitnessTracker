@@ -48,27 +48,25 @@ public class UserService : IAuthorizationService
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
         Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, applicationDbContext, logger);
-
-        if (user.IsSuccess is false)
+        if (user.IsSuccess)
         {
             return Result<RegisterResponse>.Failure(user.Error);
         }
 
-        WorkoutBuddy buddy = new()
+        User newUser = registrationParameters.Adapt<User>();
+        newUser.WorkoutBuddy = new()
         {
             Name = registrationParameters.BuddyName,
             Description = registrationParameters.BuddyDescription,
             IconId = registrationParameters.BuddyIconId
         };
 
-        user.Value.WorkoutBuddy = buddy;
-
-        await applicationDbContext.Users.AddAsync(user.Value);
+        await applicationDbContext.Users.AddAsync(newUser);
         await applicationDbContext.SaveChangesAsync();
 
         RegisterResponse response = new()
         {
-            User = user.Value
+            User = newUser
         };
         return Result<RegisterResponse>.Success(response);
     }

@@ -39,11 +39,12 @@ public class UserController : ControllerBase
         [FromServices] IValidator<RegisterRequest> validator)
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
+        if (!validationResult.IsValid) 
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
-        Result<RegisterResponse> registerResponse =
-            await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
+        Result<RegisterResponse> registerResponse = await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
         return !registerResponse.IsSuccess
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);
