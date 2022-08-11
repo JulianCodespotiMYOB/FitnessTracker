@@ -28,7 +28,7 @@ public class ExerciseRepository : IExerciseRepository
         List<Exercise> exercises = new();
         
         string csv = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.FullName ?? "",
-            "assets\\exercises.csv");
+            "assets//exercises.csv");
         string text = File.ReadAllText(csv);
         string[] lines = text.Split('\n');
         foreach (string line in lines)
