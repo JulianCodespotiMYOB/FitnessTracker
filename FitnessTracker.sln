@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.Models", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.Contracts", "src\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj", "{B9CECD10-6503-469D-AE55-02DDEA43780A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.Models.Tests", "src\FitnessTracker.Models.Tests\FitnessTracker.Models.Tests.csproj", "{A53F78E4-D8BC-4FB4-A425-FAF9433B9380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{B9CECD10-6503-469D-AE55-02DDEA43780A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9CECD10-6503-469D-AE55-02DDEA43780A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9CECD10-6503-469D-AE55-02DDEA43780A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53F78E4-D8BC-4FB4-A425-FAF9433B9380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53F78E4-D8BC-4FB4-A425-FAF9433B9380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53F78E4-D8BC-4FB4-A425-FAF9433B9380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53F78E4-D8BC-4FB4-A425-FAF9433B9380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17E21FEE-BCB2-49B3-B300-653ACDC3BBAB} = {3F317F86-F09B-4535-84BE-B7808BD54F02}
@@ -65,5 +71,6 @@ Global
 		{F9162C78-0C9C-4A0C-ADCE-3AACC81D7C8E} = {3F317F86-F09B-4535-84BE-B7808BD54F02}
 		{5192DC6D-CFA6-4277-95EE-D80E49A9A86D} = {3F317F86-F09B-4535-84BE-B7808BD54F02}
 		{B9CECD10-6503-469D-AE55-02DDEA43780A} = {3F317F86-F09B-4535-84BE-B7808BD54F02}
+		{A53F78E4-D8BC-4FB4-A425-FAF9433B9380} = {3F317F86-F09B-4535-84BE-B7808BD54F02}
 	EndGlobalSection
 EndGlobal

@@ -70,4 +70,16 @@ public class UserService : IAuthorizationService
         };
         return Result<RegisterResponse>.Success(response);
     }
+
+    public async Task<Result<User>> GetUserAsync(int id)
+    {
+        Result<User> user = await UserHelper.GetUserFromDatabaseById(id, applicationDbContext, logger);
+        return user.IsSuccess ? Result<User>.Success(user.Value) : Result<User>.Failure(user.Error);
+    }
+
+    public async Task<Result<IEnumerable<User>>> GetUsersAsync()
+    {
+        Result<IEnumerable<User>> users = await UserHelper.GetUsersFromDatabase(applicationDbContext, logger);
+        return users.IsSuccess ? Result<IEnumerable<User>>.Success(users.Value) : Result<IEnumerable<User>>.Failure(users.Error);
+    }
 }

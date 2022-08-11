@@ -49,4 +49,23 @@ public class UserController : ControllerBase
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);
     }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser(int id)
+    {
+        Result<User> user = await _authorizationService.GetUserAsync(id);
+        return !user.IsSuccess
+            ? BadRequest(new ErrorResponse(user.Error))
+            : Ok(user);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        Result<IEnumerable<User>> users = await _authorizationService.GetUsersAsync();
+        return !users.IsSuccess
+            ? BadRequest(new ErrorResponse(users.Error))
+            : Ok(users);
+    }
+    
 }

@@ -41,24 +41,38 @@ public class WorkoutBuddy
     {
         if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
 
-        int currentStreak = 0;
+        int currentStreak = 1;
         int daysWorkedOutInCurrentWeek = 0;
-        DateTimeOffset lastWorkoutDateOfTheWeek = User.Workouts.FirstOrDefault()!.Time;
+        DateTimeOffset previousWorkoutInCurrentWeek = User.Workouts.FirstOrDefault()!.Time;
 
         foreach (Workout workout in User.Workouts)
         {
-            if (workout.Time < lastWorkoutDateOfTheWeek.AddDays(7)) daysWorkedOutInCurrentWeek++;
-
-            if (workout.Time >= lastWorkoutDateOfTheWeek.AddDays(7))
+            if (IsWorkoutInCurrentWeek(workout))
             {
-                if (daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal) currentStreak++;
-                if (daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal) currentStreak = 0;
+                daysWorkedOutInCurrentWeek++;
+            }
+
+            if (IsWorkoutInNextWeek(workout))
+            {
+                if (UserHasReachedGoal())
+                {
+                    currentStreak++;
+                }
+                if (UserHasNotReachedGoal())
+                {
+                    currentStreak = 0;
+                }
                 daysWorkedOutInCurrentWeek = 0;
-                lastWorkoutDateOfTheWeek = lastWorkoutDateOfTheWeek.AddDays(7);
+                previousWorkoutInCurrentWeek = previousWorkoutInCurrentWeek.AddDays(7);
             }
         }
 
         return currentStreak;
+        
+        bool IsWorkoutInNextWeek(Workout workout) => workout.Time >= previousWorkoutInCurrentWeek.AddDays(7);
+        bool IsWorkoutInCurrentWeek(Workout workout) => workout.Time < previousWorkoutInCurrentWeek.AddDays(7);
+        bool UserHasReachedGoal() => daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal;
+        bool UserHasNotReachedGoal() => daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal;
     }
 
     private double GetWorkoutBuddyStrength()

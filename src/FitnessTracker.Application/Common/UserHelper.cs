@@ -19,8 +19,6 @@ public class UserHelper
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
-            .ThenInclude(w => w.Data)
-            .ThenInclude(d => d.Anatomy)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
@@ -51,5 +49,25 @@ public class UserHelper
         }
 
         return Result<User>.Success(user);
+    }
+
+    public static async Task<Result<IEnumerable<User>>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext, ILogger logger)
+    {
+        var users = await applicationDbContext.Users
+            .Include(u => u.Workouts)
+            .ThenInclude(w => w.Activities)
+            .ThenInclude(a => a.Data)
+            .Include(u => u.Workouts)
+            .ThenInclude(w => w.Activities)
+            .ThenInclude(a => a.Exercise)
+            .Include(u => u.WorkoutBuddy)
+            .ToListAsync();
+        if (users is null)
+        {
+            logger.LogError($"Users not found");
+            return Result<IEnumerable<User>>.Failure("Users not found");
+        }
+        
+        return Result<IEnumerable<User>>.Success(users);
     }
 }

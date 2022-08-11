@@ -80,11 +80,12 @@ public class WorkoutHandler : IWorkoutService
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null) return Result<UpdateWorkoutResponse>.Failure("Workout not found");
-
-        user.Workouts.Remove(workout);
-
+        
         request.Workout.Id = workoutId;
+        
+        user.Workouts.Remove(workout);
         user.Workouts.Add(request.Workout);
+        
         await applicationDbContext.SaveChangesAsync();
 
         UpdateWorkoutResponse response = new()
