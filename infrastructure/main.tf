@@ -53,7 +53,7 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_eip" "elastic_ip" {
-  vpc = false
+  instance = aws_instance.app_server.id
 }
 
 resource "aws_instance" "app_server" {
@@ -81,7 +81,3 @@ resource "aws_instance" "app_server" {
   tags = local.tags
 }
 
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.app_server.id
-  allocation_id = aws_eip.elastic_ip.id
-}
