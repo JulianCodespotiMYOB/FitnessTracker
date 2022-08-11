@@ -28,8 +28,8 @@ public class ExerciseRepository : IExerciseRepository
 
         List<Exercise> exercises = new();
         
-        Assembly assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-        string csv = Path.Combine(Path.GetDirectoryName(assembly.Location) ?? "", "//Assets//exercises.csv");
+        string binDirectory = (Assembly.GetExecutingAssembly().Location ?? "").Replace("file:///", string.Empty);
+        string csv = Path.Combine(Path.GetDirectoryName(binDirectory) ?? "", "Assets//exercises.csv");
         string text = File.ReadAllText(csv);
         string[] lines = text.Split('\n');
         foreach (string line in lines)
