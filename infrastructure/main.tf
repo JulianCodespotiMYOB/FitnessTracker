@@ -27,6 +27,7 @@ locals {
 variable "connection_string" {
   type        = string
   description = "The DB connection string."
+  sensitive = true
 }
 
 resource "aws_security_group" "sg" {
