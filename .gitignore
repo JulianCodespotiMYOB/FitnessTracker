@@ -5,3 +5,4 @@ bin
 .idea
 launchSettings.json
 *.exe
+.terraform
