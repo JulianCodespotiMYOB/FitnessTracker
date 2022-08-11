@@ -52,6 +52,10 @@ resource "aws_security_group" "sg" {
   }
 }
 
+resource "aws_eip" "elastic_ip" {
+  vpc = true
+}
+
 resource "aws_instance" "app_server" {
   ami           = "ami-0c641f2290e9cd048"
   instance_type = "t2.micro"
@@ -75,4 +79,9 @@ resource "aws_instance" "app_server" {
 
   user_data_replace_on_change = true
   tags = local.tags
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.app_server.id
+  allocation_id = aws_eip.elastic_ip.id
 }
