@@ -1,3 +1,4 @@
+using System.Reflection;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Excercises;
@@ -27,7 +28,8 @@ public class ExerciseRepository : IExerciseRepository
 
         List<Exercise> exercises = new();
         
-        string csv = Path.Combine(Directory.GetCurrentDirectory(), "//Assets//exercises.csv");
+        Assembly assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+        string csv = Path.Combine(Path.GetDirectoryName(assembly.Location) ?? "", "//Assets//exercises.csv");
         string text = File.ReadAllText(csv);
         string[] lines = text.Split('\n');
         foreach (string line in lines)
