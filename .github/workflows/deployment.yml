@@ -49,26 +49,26 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: | 
-          cd infrastructure
+          cd ./infrastructure
           terraform fmt -check
 
       - name: Terraform Init
         id: init
         run: | 
-          cd infrastructure
+          cd ./infrastructure
           terraform init
 
       - name: Terraform Validate
         id: validate
         run: | 
-          cd infrastructure
+          cd ./infrastructure
           terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: | 
-          cd infrastructure
+          cd ./infrastructure
           terraform plan -no-color -input=false
         continue-on-error: true
 
@@ -79,5 +79,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: | 
-          cd infrastructure
+          cd ./infrastructure
           terraform apply -auto-approve -input=false
