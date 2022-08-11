@@ -53,7 +53,7 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_eip" "elastic_ip" {
-  vpc = true
+  vpc = false
 }
 
 resource "aws_instance" "app_server" {
