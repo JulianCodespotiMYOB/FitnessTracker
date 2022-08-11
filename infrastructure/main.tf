@@ -57,10 +57,10 @@ resource "aws_eip" "elastic_ip" {
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-0c641f2290e9cd048"
+  ami = "ami-0c641f2290e9cd048"
   instance_type = "t2.micro"
   iam_instance_profile = "ec2-docker"
-  vpc_security_group_ids = [ "${aws_security_group.sg.id}" ]
+  vpc_security_group_ids = [ aws_security_group.sg.id ]
   user_data = <<-EOT
                 #!/bin/sh
 
