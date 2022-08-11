@@ -73,8 +73,9 @@ resource "aws_instance" "app_server" {
                 ACCOUNT_ID=`aws sts get-caller-identity --query "Account" --output text`
                 aws ecr get-login-password --region ${local.region} | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com
 
+                export CONNECTION_STRING=${var.connection_string}
                 docker pull $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
-                docker run -e "CONNECTION_STRING=${var.connection_string}" -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
+                docker run -e CONNECTION_STRING -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 EOT
 
   user_data_replace_on_change = true
