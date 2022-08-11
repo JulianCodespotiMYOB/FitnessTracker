@@ -78,7 +78,3 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./infrastructure
         run: terraform apply -var="connection_string=${{ secrets.CONNECTION_STRING }}" -auto-approve -input=false
-        env:
-          TF_WORKSPACE: ${{ env.WORKSPACE }}
-          AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
