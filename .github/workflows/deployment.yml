@@ -48,22 +48,19 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: | 
-          cd ./infrastructure
-          terraform init
+        working-directory: ./infrastructure
+        run: terraform init
 
       - name: Terraform Validate
         id: validate
-        run: | 
-          cd ./infrastructure
-          terraform validate -no-color
+        working-directory: ./infrastructure
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: | 
-          cd ./infrastructure
-          terraform plan -no-color -input=false
+        working-directory: ./infrastructure
+        run: terraform plan -no-color -input=false
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -72,6 +69,5 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: | 
-          cd ./infrastructure
-          terraform apply -auto-approve -input=false
+        working-directory: ./infrastructure
+        run: terraform apply -auto-approve -input=false
