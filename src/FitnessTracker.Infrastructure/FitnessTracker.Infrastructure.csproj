@@ -7,34 +7,34 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoBogus" Version="2.13.1" />
-        <PackageReference Include="Bogus" Version="34.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0-preview.6.22330.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.6.22329.4" />
+        <PackageReference Include="AutoBogus" Version="2.13.1"/>
+        <PackageReference Include="Bogus" Version="34.0.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0-preview.6.22330.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.6.22329.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-preview.6.22329.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.6.22329.4" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0-preview.6.22324.4" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
-        <PackageReference Include="Npgsql" Version="7.0.0-preview.6" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-preview.6" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.6.22329.4"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0-preview.6.22324.4"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1"/>
+        <PackageReference Include="Npgsql" Version="7.0.0-preview.6"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-preview.6"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj" />
-        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="Assets\*.*">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>  
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

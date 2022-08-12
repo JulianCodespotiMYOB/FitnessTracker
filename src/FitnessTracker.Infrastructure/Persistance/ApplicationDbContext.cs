@@ -1,23 +1,22 @@
 using System.Reflection;
-using AutoBogus;
 using FitnessTracker.Interfaces;
 using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Buddy;
-using FitnessTracker.Models.Fitness.Workouts;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Infrastructure.Persistance;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public DbSet<User> Users { get; set; } = null!;
-
     private readonly IApplicationDbContext context = null!;
 
     public ApplicationDbContext()
     {
         context = this;
     }
+
+    public DbSet<User> Users { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

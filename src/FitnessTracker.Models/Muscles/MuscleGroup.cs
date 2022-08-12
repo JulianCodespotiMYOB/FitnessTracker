@@ -23,8 +23,12 @@ public static class MuscleGroupExtensions
         string cleanedName = name.Trim().ToLower();
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
+        {
             if (cleanedName.Contains(muscleGroup.ToString().ToLower()))
+            {
                 return muscleGroup;
+            }
+        }
 
         return MuscleGroup.Unknown;
     }

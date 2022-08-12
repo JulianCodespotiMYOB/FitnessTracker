@@ -31,6 +31,7 @@ public class UserHelper
 
         return Result<User>.Success(user);
     }
+
     public static async Task<Result<User>> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context,
         ILogger logger)
     {

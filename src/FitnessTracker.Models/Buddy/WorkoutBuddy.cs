@@ -39,7 +39,10 @@ public class WorkoutBuddy
 
     private int GetWorkoutBuddyStreak()
     {
-        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
+        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
+        {
+            return 0;
+        }
 
         int currentStreak = 0;
         int daysWorkedOutInCurrentWeek = 0;
@@ -47,12 +50,23 @@ public class WorkoutBuddy
 
         foreach (Workout workout in User.Workouts)
         {
-            if (workout.Time < lastWorkoutDateOfTheWeek.AddDays(7)) daysWorkedOutInCurrentWeek++;
+            if (workout.Time < lastWorkoutDateOfTheWeek.AddDays(7))
+            {
+                daysWorkedOutInCurrentWeek++;
+            }
 
             if (workout.Time >= lastWorkoutDateOfTheWeek.AddDays(7))
             {
-                if (daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal) currentStreak++;
-                if (daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal) currentStreak = 0;
+                if (daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal)
+                {
+                    currentStreak++;
+                }
+
+                if (daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal)
+                {
+                    currentStreak = 0;
+                }
+
                 daysWorkedOutInCurrentWeek = 0;
                 lastWorkoutDateOfTheWeek = lastWorkoutDateOfTheWeek.AddDays(7);
             }
@@ -73,8 +87,13 @@ public class WorkoutBuddy
         List<Activity> activities = GetActivities();
         double workoutBuddySpeed = 0;
         foreach (Activity activity in activities)
+        {
             if (activity.Data.Type == ExerciseType.Cardio)
+            {
                 workoutBuddySpeed += 1;
+            }
+        }
+
         return workoutBuddySpeed;
     }
 
@@ -82,7 +101,9 @@ public class WorkoutBuddy
     {
         List<Exercise> exercises = GetExercises();
         foreach (IBuddyAnatomy buddyAnatomy in buddyData.Anatomy)
+        {
             buddyAnatomy.Level = GetAnatomyLevel(buddyAnatomy.MuscleGroup);
+        }
 
         int GetAnatomyLevel(MuscleGroup anatomyType)
         {

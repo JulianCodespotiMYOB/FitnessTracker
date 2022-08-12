@@ -6,7 +6,6 @@ using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Authorization;
