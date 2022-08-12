@@ -1,12 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FitnessTracker.Application.Authorization;
+using FitnessTracker.Application.Features.Authorization;
 using FitnessTracker.Application.Features.Exercises;
 using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FluentValidation;
 using Newtonsoft.Json;

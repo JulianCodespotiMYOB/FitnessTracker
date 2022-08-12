@@ -1,5 +1,5 @@
-﻿using FitnessTracker.Models.Buddy.BuddyAnatomy;
-using FitnessTracker.Models.Buddy.BuddyAnatomy.BuddyParts;
+﻿using FitnessTracker.Models.Buddy.Anatomy;
+using FitnessTracker.Models.Buddy.Anatomy.Parts;
 
 namespace FitnessTracker.Models.Buddy;
 

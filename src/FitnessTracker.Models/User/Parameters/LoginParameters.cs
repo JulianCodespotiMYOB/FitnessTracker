@@ -1,3 +1,3 @@
-namespace FitnessTracker.Models.Authorization;
+namespace FitnessTracker.Models.User.Parameters;
 
 public record LoginParameters(string Email, string Password);

@@ -1,12 +1,13 @@
-using FitnessTracker.Application.Authorization;
 using FitnessTracker.Application.Common;
+using FitnessTracker.Application.Features.Authorization;
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
-using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.User;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Workouts;

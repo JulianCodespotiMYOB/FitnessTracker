@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Muscles;
+namespace FitnessTracker.Models.Fitness;
 
 public enum MuscleGroup
 {

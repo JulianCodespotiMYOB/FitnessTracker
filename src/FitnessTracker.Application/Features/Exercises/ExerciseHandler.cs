@@ -1,9 +1,10 @@
 using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Excercises;
-using FitnessTracker.Models.Muscles;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Exercises;

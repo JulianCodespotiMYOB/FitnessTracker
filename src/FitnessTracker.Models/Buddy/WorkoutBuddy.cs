@@ -1,15 +1,14 @@
-﻿using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Buddy.BuddyAnatomy;
+﻿using FitnessTracker.Models.Buddy.Anatomy;
+using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Fitness.Workouts;
-using FitnessTracker.Models.Muscles;
 
 namespace FitnessTracker.Models.Buddy;
 
 public class WorkoutBuddy
 {
     public int Id { get; set; }
-    public User User { get; set; }
+    public User.User User { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public int IconId { get; set; }

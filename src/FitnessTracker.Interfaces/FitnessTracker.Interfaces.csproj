@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.6.22329.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.6.22329.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models" />
     </ItemGroup>
 
     <PropertyGroup>

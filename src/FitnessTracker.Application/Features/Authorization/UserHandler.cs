@@ -1,14 +1,14 @@
 ﻿using FitnessTracker.Application.Common;
 using FitnessTracker.Contracts.Responses.Authorization;
-using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
-using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.User;
+using FitnessTracker.Models.User.Parameters;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Authorization;
+namespace FitnessTracker.Application.Features.Authorization;
 
 public class UserService : IAuthorizationService
 {

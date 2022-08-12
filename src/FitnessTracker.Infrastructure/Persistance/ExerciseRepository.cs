@@ -1,8 +1,9 @@
 using System.Reflection;
 using FitnessTracker.Interfaces;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Excercises;
-using FitnessTracker.Models.Muscles;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace FitnessTracker.Infrastructure.Persistance;

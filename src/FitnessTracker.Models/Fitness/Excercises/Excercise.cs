@@ -1,5 +1,3 @@
-using FitnessTracker.Models.Muscles;
-
 namespace FitnessTracker.Models.Fitness.Excercises;
 
 public class Exercise

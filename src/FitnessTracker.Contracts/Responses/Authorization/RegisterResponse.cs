@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Authorization;
+using FitnessTracker.Models.User;
 
 namespace FitnessTracker.Contracts.Responses.Authorization;
 

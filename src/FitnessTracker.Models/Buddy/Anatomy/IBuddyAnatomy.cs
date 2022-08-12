@@ -1,6 +1,6 @@
-﻿using FitnessTracker.Models.Muscles;
+﻿using FitnessTracker.Models.Fitness;
 
-namespace FitnessTracker.Models.Buddy.BuddyAnatomy;
+namespace FitnessTracker.Models.Buddy.Anatomy;
 
 public interface IBuddyAnatomy
 {

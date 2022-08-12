@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Authorization;
+namespace FitnessTracker.Models.User.Parameters;
 
 public record RegistrationParameters(
     string Username,

@@ -1,7 +1,8 @@
 using System.Reflection;
 using FitnessTracker.Interfaces;
-using FitnessTracker.Models.Authorization;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Buddy;
+using FitnessTracker.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Infrastructure.Persistance;

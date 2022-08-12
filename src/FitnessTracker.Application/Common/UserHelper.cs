@@ -1,6 +1,7 @@
 ﻿using FitnessTracker.Interfaces;
-using FitnessTracker.Models.Authorization;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
