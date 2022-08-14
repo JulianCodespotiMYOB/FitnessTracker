@@ -1,6 +1,6 @@
-﻿using FitnessTracker.Interfaces;
-using FitnessTracker.Models.Authorization;
+﻿using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -29,6 +29,7 @@ public class UserHelper
 
         return Result<User>.Success(user);
     }
+
     public static async Task<Result<User>> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context,
         ILogger logger)
     {
@@ -51,9 +52,10 @@ public class UserHelper
         return Result<User>.Success(user);
     }
 
-    public static async Task<Result<IEnumerable<User>>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext, ILogger logger)
+    public static async Task<Result<IEnumerable<User>>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext,
+        ILogger logger)
     {
-        var users = await applicationDbContext.Users
+        List<User>? users = await applicationDbContext.Users
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Data)
@@ -64,10 +66,10 @@ public class UserHelper
             .ToListAsync();
         if (users is null)
         {
-            logger.LogError($"Users not found");
+            logger.LogError("Users not found");
             return Result<IEnumerable<User>>.Failure("Users not found");
         }
-        
+
         return Result<IEnumerable<User>>.Success(users);
     }
 }

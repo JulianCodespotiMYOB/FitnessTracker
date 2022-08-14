@@ -1,6 +1,7 @@
 using FitnessTracker.Contracts.Responses.Authorization;
-using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Users;
+using FitnessTracker.Models.Users.Parameters;
 
 namespace FitnessTracker.Interfaces.Services;
 

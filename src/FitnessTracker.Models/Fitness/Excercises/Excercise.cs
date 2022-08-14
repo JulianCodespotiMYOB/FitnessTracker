@@ -1,7 +1,3 @@
-using System.Text.Json.Serialization;
-using FitnessTracker.Models.Muscles;
-using Newtonsoft.Json.Converters;
-
 namespace FitnessTracker.Models.Fitness.Excercises;
 
 public class Exercise

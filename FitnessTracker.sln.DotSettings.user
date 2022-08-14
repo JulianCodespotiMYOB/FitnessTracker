@@ -1,4 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AWorkoutBuddy_002Ecs_002Fl_003Asrc_003FFitnessTracker_002EModels_003FBuddy_003FWorkoutBuddy_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=A53F78E4_002DD8BC_002D4FB4_002DA425_002DFAF9433B9380_002Fd_003ABuddy_002Ff_003AWorkoutBuddyTest_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1bda2d10_002Db5bd_002D45b7_002D9d99_002D14bf7a3c3ef8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3 #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
@@ -15,18 +16,18 @@
     &lt;TestId&gt;xUnit::A53F78E4-D8BC-4FB4-A425-FAF9433B9380::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60ad0ae6_002Dba01_002D4d1c_002D9418_002D07ad5b739d08/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60ad0ae6_002Dba01_002D4d1c_002D9418_002D07ad5b739d08/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::A53F78E4-D8BC-4FB4-A425-FAF9433B9380::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut2WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=aa574f3a_002D15ab_002D461a_002D8253_002De2758062ff31/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3 #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=aa574f3a_002D15ab_002D461a_002D8253_002De2758062ff31/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3 #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::A53F78E4-D8BC-4FB4-A425-FAF9433B9380::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::9AEC581B-4F69-468C-82CE-514B3C60A4AE::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut2WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs2&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bbf78e3f_002D418c_002D47c3_002D9ae5_002D1854af32c371/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenAUserHasWorkedOut3WeeksInARow_WhenCalculatingBuddyStreak_ThenStreakIs3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::A53F78E4-D8BC-4FB4-A425-FAF9433B9380::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut3WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs3&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::9AEC581B-4F69-468C-82CE-514B3C60A4AE::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut2WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -76,4 +76,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./infrastructure
-        run: terraform apply -var="connection_string=${{ secrets.CONNECTION_STRING }}" -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false
+        env:
+          TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}

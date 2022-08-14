@@ -13,14 +13,14 @@ namespace FitnessTracker.Api.Controllers;
 [Route("Users")]
 public class WorkoutController : ControllerBase
 {
-    private readonly IWorkoutService workoutService;
+    private readonly IWorkoutService _workoutService;
 
     public WorkoutController(IWorkoutService workoutService)
     {
-        this.workoutService = workoutService;
+        _workoutService = workoutService;
     }
 
-    [HttpPost("{userId}/Workouts")]
+    [HttpPost("{userId:int}/Workouts")]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
         [FromRoute] int userId,
@@ -28,42 +28,41 @@ public class WorkoutController : ControllerBase
     )
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
-
         if (!validationResult.IsValid)
         {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        Result<RecordWorkoutResponse> recordWorkoutResponse = await workoutService.RecordWorkout(request, userId);
+        Result<RecordWorkoutResponse> recordWorkoutResponse = await _workoutService.RecordWorkout(request, userId);
         return recordWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(recordWorkoutResponse.Error))
             : Ok(recordWorkoutResponse.Value);
     }
 
-    [HttpGet("{userId}/Workouts/{workoutId}")]
+    [HttpGet("{userId:int}/Workouts/{workoutId:int}")]
     public async Task<IActionResult> GetWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId
     )
     {
-        Result<GetWorkoutResponse> getWorkoutResponse = await workoutService.GetWorkout(workoutId, userId);
+        Result<GetWorkoutResponse> getWorkoutResponse = await _workoutService.GetWorkout(workoutId, userId);
         return getWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutResponse.Error))
             : Ok(getWorkoutResponse.Value);
     }
 
-    [HttpGet("{userId}/Workouts")]
+    [HttpGet("{userId:int}/Workouts")]
     public async Task<IActionResult> GetWorkouts(
         [FromRoute] int userId
     )
     {
-        Result<GetWorkoutsResponse> getWorkoutsResponse = await workoutService.GetWorkouts(userId);
+        Result<GetWorkoutsResponse> getWorkoutsResponse = await _workoutService.GetWorkouts(userId);
         return getWorkoutsResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutsResponse.Error))
             : Ok(getWorkoutsResponse.Value);
     }
 
-    [HttpPut("{userId}/Workouts/{workoutId}")]
+    [HttpPut("{userId:int}/Workouts/{workoutId:int}")]
     public async Task<IActionResult> UpdateWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId,
@@ -73,22 +72,24 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
         Result<UpdateWorkoutResponse> updateWorkoutResponse =
-            await workoutService.UpdateWorkout(request, workoutId, userId);
+            await _workoutService.UpdateWorkout(request, workoutId, userId);
         return updateWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(updateWorkoutResponse.Error))
             : Ok(updateWorkoutResponse.Value);
     }
 
-    [HttpDelete("{userId}/Workouts/{workoutId}")]
+    [HttpDelete("{userId:int}/Workouts/{workoutId:int}")]
     public async Task<IActionResult> DeleteWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId
     )
     {
-        Result<DeleteWorkoutResponse> deleteWorkoutResponse = await workoutService.DeleteWorkout(workoutId, userId);
+        Result<DeleteWorkoutResponse> deleteWorkoutResponse = await _workoutService.DeleteWorkout(workoutId, userId);
         return deleteWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(deleteWorkoutResponse.Error))
             : Ok(deleteWorkoutResponse.Value);

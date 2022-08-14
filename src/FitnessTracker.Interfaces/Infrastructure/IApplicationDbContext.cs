@@ -1,7 +1,7 @@
-using FitnessTracker.Models.Authorization;
+using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Interfaces;
+namespace FitnessTracker.Interfaces.Infrastructure;
 
 public interface IApplicationDbContext
 {

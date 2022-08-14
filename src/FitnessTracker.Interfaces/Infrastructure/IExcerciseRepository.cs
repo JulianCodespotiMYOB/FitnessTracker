@@ -1,7 +1,7 @@
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Excercises;
 
-namespace FitnessTracker.Interfaces;
+namespace FitnessTracker.Interfaces.Infrastructure;
 
 public interface IExerciseRepository
 {

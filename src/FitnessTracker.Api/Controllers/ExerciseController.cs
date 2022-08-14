@@ -10,17 +10,17 @@ namespace FitnessTracker.Api.Controllers;
 [Route("Exercises")]
 public class ExerciseController : ControllerBase
 {
-    private readonly IExerciseService exerciseService;
+    private readonly IExerciseService _exerciseService;
 
     public ExerciseController(IExerciseService exerciseService)
     {
-        this.exerciseService = exerciseService;
+        _exerciseService = exerciseService;
     }
 
     [HttpGet]
     public IActionResult GetExercises()
     {
-        Result<GetExercisesResponse> exercisesResponse = exerciseService.GetExercises();
+        Result<GetExercisesResponse> exercisesResponse = _exerciseService.GetExercises();
         return !exercisesResponse.IsSuccess
             ? BadRequest(new ErrorResponse(exercisesResponse.Error))
             : Ok(exercisesResponse.Value);

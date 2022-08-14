@@ -1,8 +1,8 @@
-﻿using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Buddy.BuddyAnatomy;
+﻿using FitnessTracker.Models.Buddy.Anatomy;
+using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Fitness.Workouts;
-using FitnessTracker.Models.Muscles;
+using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Models.Buddy;
 
@@ -39,7 +39,10 @@ public class WorkoutBuddy
 
     private int GetWorkoutBuddyStreak()
     {
-        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
+        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
+        {
+            return 0;
+        }
 
         int currentStreak = 1;
         int daysWorkedOutInCurrentWeek = 0;
@@ -58,21 +61,38 @@ public class WorkoutBuddy
                 {
                     currentStreak++;
                 }
+
                 if (UserHasNotReachedGoal())
                 {
                     currentStreak = 0;
                 }
+
                 daysWorkedOutInCurrentWeek = 0;
                 previousWorkoutInCurrentWeek = previousWorkoutInCurrentWeek.AddDays(7);
             }
         }
 
         return currentStreak;
-        
-        bool IsWorkoutInNextWeek(Workout workout) => workout.Time >= previousWorkoutInCurrentWeek.AddDays(7);
-        bool IsWorkoutInCurrentWeek(Workout workout) => workout.Time < previousWorkoutInCurrentWeek.AddDays(7);
-        bool UserHasReachedGoal() => daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal;
-        bool UserHasNotReachedGoal() => daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal;
+
+        bool IsWorkoutInNextWeek(Workout workout)
+        {
+            return workout.Time >= previousWorkoutInCurrentWeek.AddDays(7);
+        }
+
+        bool IsWorkoutInCurrentWeek(Workout workout)
+        {
+            return workout.Time < previousWorkoutInCurrentWeek.AddDays(7);
+        }
+
+        bool UserHasReachedGoal()
+        {
+            return daysWorkedOutInCurrentWeek >= User.WeeklyWorkoutAmountGoal;
+        }
+
+        bool UserHasNotReachedGoal()
+        {
+            return daysWorkedOutInCurrentWeek < User.WeeklyWorkoutAmountGoal;
+        }
     }
 
     private double GetWorkoutBuddyStrength()
@@ -88,7 +108,10 @@ public class WorkoutBuddy
         double workoutBuddySpeed = 0;
         foreach (Activity activity in activities)
             if (activity.Data.Type == ExerciseType.Cardio)
+            {
                 workoutBuddySpeed += 1;
+            }
+
         return workoutBuddySpeed;
     }
 

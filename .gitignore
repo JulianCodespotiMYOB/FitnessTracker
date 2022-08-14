@@ -6,3 +6,4 @@ bin
 launchSettings.json
 *.exe
 .terraform
+global.json

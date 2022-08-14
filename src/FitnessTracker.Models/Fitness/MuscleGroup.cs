@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Muscles;
+namespace FitnessTracker.Models.Fitness;
 
 public enum MuscleGroup
 {
@@ -24,7 +24,9 @@ public static class MuscleGroupExtensions
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
             if (cleanedName.Contains(muscleGroup.ToString().ToLower()))
+            {
                 return muscleGroup;
+            }
 
         return MuscleGroup.Unknown;
     }
