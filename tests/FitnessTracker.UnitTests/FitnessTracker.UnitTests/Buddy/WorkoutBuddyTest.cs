@@ -1,6 +1,6 @@
 ﻿using AutoBogus;
+using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Fitness.Workouts;
-using FitnessTracker.Models.Users;
 using Xunit;
 
 namespace FitnessTracker.UnitTests.Buddy;

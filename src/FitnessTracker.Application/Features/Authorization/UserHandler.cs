@@ -2,10 +2,9 @@
 using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
+using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Users;
-using FitnessTracker.Models.Users.Parameters;
 using Mapster;
 using Microsoft.Extensions.Logging;
 

@@ -30,4 +30,12 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::9AEC581B-4F69-468C-82CE-514B3C60A4AE::net6.0::FitnessTracker.Models.Test.WorkoutBuddyTest.GivenAUserHasWorkedOut2WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
+	
+	</wpf:ResourceDictionary>

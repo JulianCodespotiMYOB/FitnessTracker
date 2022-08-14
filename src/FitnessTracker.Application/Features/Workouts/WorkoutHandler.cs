@@ -4,9 +4,9 @@ using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
+using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Workouts;
-using FitnessTracker.Models.Users;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Workouts;

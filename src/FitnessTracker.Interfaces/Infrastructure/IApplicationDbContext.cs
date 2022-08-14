@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Users;
+using FitnessTracker.Models.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Interfaces.Infrastructure;

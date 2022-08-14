@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Fitness.Workouts;
 
