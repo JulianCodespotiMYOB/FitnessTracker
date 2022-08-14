@@ -20,8 +20,6 @@ public class UserHelper
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
-            .ThenInclude(w => w.Data)
-            .ThenInclude(d => d.Anatomy)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
