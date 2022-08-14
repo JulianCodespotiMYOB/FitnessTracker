@@ -11,13 +11,16 @@ public class WorkoutBuddyTest
     public void GivenAUserHasWorkedOut2WeeksInARowAndWeeklyGoalIs1_WhenCalculatingBuddyStreak_ThenStreakIs2()
     {
         // Given
-        User? user = new AutoFaker<User>().Generate();
+        User user = new AutoFaker<User>().Generate();
         user.WeeklyWorkoutAmountGoal = 1;
         List<Workout>? workouts = new AutoFaker<Workout>().Generate(3);
 
-        for (int i = 0; i < 3; i++) workouts[i].Time = DateTime.Now.AddDays(6 * i);
-        user.Workouts = workouts;
+        for (int i = 0; i < 3; i++) 
+        {
+            workouts[i].Time = DateTime.Now.AddDays(6 * i);
+        }
 
+        user.Workouts = workouts;
         user.WorkoutBuddy.User = user;
 
         // When

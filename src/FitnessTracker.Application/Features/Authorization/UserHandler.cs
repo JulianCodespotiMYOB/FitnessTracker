@@ -23,8 +23,7 @@ public class UserService : IAuthorizationService
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
     {
-        Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
         if (user.IsSuccess is false)
         {

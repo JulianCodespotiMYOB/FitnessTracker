@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.Contracts", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7021AF28-0FD1-41A4-80FC-ADAB2A33B4C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.UnitTests", "tests\FitnessTracker.UnitTests\FitnessTracker.UnitTests\FitnessTracker.UnitTests.csproj", "{9AEC581B-4F69-468C-82CE-514B3C60A4AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.UnitTests", "tests\FitnessTracker.UnitTests\FitnessTracker.UnitTests.csproj", "{9AEC581B-4F69-468C-82CE-514B3C60A4AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
