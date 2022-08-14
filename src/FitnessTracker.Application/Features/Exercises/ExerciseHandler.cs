@@ -11,22 +11,21 @@ namespace FitnessTracker.Application.Features.Exercises;
 
 public class ExerciseHandler : IExerciseService
 {
-    private readonly IExerciseRepository exerciseRepository;
-    private readonly ILogger logger;
+    private readonly IExerciseRepository _exerciseRepository;
+    private readonly ILogger _logger;
 
     public ExerciseHandler(IExerciseRepository exerciseRepository, ILogger<ExerciseHandler> logger)
     {
-        this.exerciseRepository = exerciseRepository;
-        this.logger = logger;
+        _exerciseRepository = exerciseRepository;
+        _logger = logger;
     }
 
     public Result<GetExercisesResponse> GetExercises()
     {
-        Result<IEnumerable<Exercise>> result = exerciseRepository.GetExercises();
-
+        Result<IEnumerable<Exercise>> result = _exerciseRepository.GetExercises();
         if (result.IsSuccess is false)
         {
-            logger.LogError($"Failed to load exercises: {result.Error}");
+            _logger.LogError($"Failed to load exercises: {result.Error}");
             return Result<GetExercisesResponse>.Failure(result.Error);
         }
 
@@ -45,11 +44,7 @@ public class ExerciseHandler : IExerciseService
             })
             .ToList();
 
-        GetExercisesResponse response = new()
-        {
-            Exercises = cleanedExercises
-        };
-
+        GetExercisesResponse response = new(cleanedExercises);
         return Result<GetExercisesResponse>.Success(response);
     }
 }

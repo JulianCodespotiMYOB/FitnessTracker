@@ -12,18 +12,18 @@ namespace FitnessTracker.Application.Features.Authorization;
 
 public class UserService : IAuthorizationService
 {
-    private readonly IApplicationDbContext applicationDbContext;
-    private readonly ILogger logger;
+    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly ILogger _logger;
 
     public UserService(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
     {
-        this.applicationDbContext = applicationDbContext;
-        this.logger = logger;
+        _applicationDbContext = applicationDbContext;
+        _logger = logger;
     }
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, applicationDbContext, logger);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
         if (user.IsSuccess is false)
         {
@@ -33,20 +33,17 @@ public class UserService : IAuthorizationService
         if (!user.Value.Password.Equals(loginParameters.Password))
         {
             string message = $"Password for user with email {loginParameters.Email} is incorrect.";
-            logger.LogError(message);
+            _logger.LogError(message);
             return Result<LoginResponse>.Failure(message);
         }
 
-        LoginResponse response = new()
-        {
-            User = user.Value
-        };
+        LoginResponse response = new(user.Value);
         return Result<LoginResponse>.Success(response);
     }
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, applicationDbContext, logger);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
         if (user.IsSuccess)
         {
             return Result<RegisterResponse>.Failure(user.Error);
@@ -60,13 +57,10 @@ public class UserService : IAuthorizationService
             IconId = registrationParameters.BuddyIconId
         };
 
-        await applicationDbContext.Users.AddAsync(newUser);
-        await applicationDbContext.SaveChangesAsync();
+        await _applicationDbContext.Users.AddAsync(newUser);
+        await _applicationDbContext.SaveChangesAsync();
 
-        RegisterResponse response = new()
-        {
-            User = newUser
-        };
+        RegisterResponse response = new(newUser);
         return Result<RegisterResponse>.Success(response);
     }
 }

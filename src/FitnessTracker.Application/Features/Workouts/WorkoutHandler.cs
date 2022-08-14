@@ -14,18 +14,18 @@ namespace FitnessTracker.Application.Features.Workouts;
 
 public class WorkoutHandler : IWorkoutService
 {
-    private readonly IApplicationDbContext applicationDbContext;
-    private readonly ILogger logger;
+    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly ILogger _logger;
 
     public WorkoutHandler(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
     {
-        this.applicationDbContext = applicationDbContext;
-        this.logger = logger;
+        _applicationDbContext = applicationDbContext;
+        _logger = logger;
     }
 
     public async Task<Result<RecordWorkoutResponse>> RecordWorkout(RecordWorkoutRequest request, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, applicationDbContext, logger);
+        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
 
         if (userResult.IsSuccess is false)
         {
@@ -34,7 +34,7 @@ public class WorkoutHandler : IWorkoutService
 
         User user = userResult.Value;
         user.Workouts.Add(request.Workout);
-        await applicationDbContext.SaveChangesAsync();
+        await _applicationDbContext.SaveChangesAsync();
 
         RecordWorkoutResponse response = new()
         {
@@ -46,7 +46,7 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<GetWorkoutsResponse>> GetWorkouts(int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, applicationDbContext, logger);
+        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false)
         {
             return Result<GetWorkoutsResponse>.Failure("User not found");
@@ -61,7 +61,7 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<GetWorkoutResponse>> GetWorkout(int workoutId, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, applicationDbContext, logger);
+        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false)
         {
             return Result<GetWorkoutResponse>.Failure("User not found");
@@ -85,7 +85,7 @@ public class WorkoutHandler : IWorkoutService
     public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId,
         int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, applicationDbContext, logger);
+        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false)
         {
             return Result<UpdateWorkoutResponse>.Failure("User not found");
@@ -103,7 +103,7 @@ public class WorkoutHandler : IWorkoutService
 
         request.Workout.Id = workoutId;
         user.Workouts.Add(request.Workout);
-        await applicationDbContext.SaveChangesAsync();
+        await _applicationDbContext.SaveChangesAsync();
 
         UpdateWorkoutResponse response = new()
         {
@@ -115,7 +115,7 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, applicationDbContext, logger);
+        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false)
         {
             return Result<DeleteWorkoutResponse>.Failure("User not found");
@@ -130,7 +130,7 @@ public class WorkoutHandler : IWorkoutService
         }
 
         user.Workouts.Remove(workout);
-        await applicationDbContext.SaveChangesAsync();
+        await _applicationDbContext.SaveChangesAsync();
 
         DeleteWorkoutResponse response = new()
         {
