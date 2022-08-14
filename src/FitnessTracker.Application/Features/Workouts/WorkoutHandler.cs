@@ -25,7 +25,6 @@ public class WorkoutHandler : IWorkoutService
     public async Task<Result<RecordWorkoutResponse>> RecordWorkout(RecordWorkoutRequest request, int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-
         if (userResult.IsSuccess is false)
         {
             return Result<RecordWorkoutResponse>.Failure("User not found");
@@ -81,8 +80,7 @@ public class WorkoutHandler : IWorkoutService
         return Result<GetWorkoutResponse>.Success(response);
     }
 
-    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId,
-        int userId)
+    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false)
@@ -90,18 +88,16 @@ public class WorkoutHandler : IWorkoutService
             return Result<UpdateWorkoutResponse>.Failure("User not found");
         }
 
-        User? user = userResult.Value;
-
+        User user = userResult.Value;
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
-        user.Workouts.Remove(workout);
-
-        request.Workout.Id = workoutId;
-        user.Workouts.Add(request.Workout);
+        workout.Past = request.Workout.Past;
+        workout.Completed = request.Workout.Completed;
+        workout.Time = request.Workout.Time;
         await _applicationDbContext.SaveChangesAsync();
 
         UpdateWorkoutResponse response = new()
