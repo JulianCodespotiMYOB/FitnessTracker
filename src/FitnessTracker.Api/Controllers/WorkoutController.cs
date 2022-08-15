@@ -29,9 +29,7 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<RecordWorkoutResponse> recordWorkoutResponse = await _workoutService.RecordWorkout(request, userId);
         return recordWorkoutResponse.IsSuccess is false
@@ -53,10 +51,11 @@ public class WorkoutController : ControllerBase
 
     [HttpGet("{userId:int}/Workouts")]
     public async Task<IActionResult> GetWorkouts(
-        [FromRoute] int userId
+        [FromRoute] int userId,
+        [FromQuery] GetWorkoutsRequest request
     )
     {
-        Result<GetWorkoutsResponse> getWorkoutsResponse = await _workoutService.GetWorkouts(userId);
+        Result<GetWorkoutsResponse> getWorkoutsResponse = await _workoutService.GetWorkouts(userId, request);
         return getWorkoutsResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutsResponse.Error))
             : Ok(getWorkoutsResponse.Value);
@@ -72,9 +71,7 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<UpdateWorkoutResponse> updateWorkoutResponse =
             await _workoutService.UpdateWorkout(request, workoutId, userId);

@@ -1,7 +1,7 @@
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Fitness.Workouts;
 
-namespace FitnessTracker.Models.Authorization;
+namespace FitnessTracker.Models.Users;
 
 public class User
 {

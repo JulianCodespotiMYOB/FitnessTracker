@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Authorization;
+namespace FitnessTracker.Models.Users;
 
 public class LoginParameters
 {

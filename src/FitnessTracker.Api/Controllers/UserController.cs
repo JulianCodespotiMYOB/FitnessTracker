@@ -2,8 +2,8 @@ using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Responses;
 using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces.Services;
-using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Users;
 using FluentValidation;
 using FluentValidation.Results;
 using Mapster;
@@ -28,9 +28,7 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<LoginResponse> loginResponse = await _authorizationService.LoginAsync(request.Adapt<LoginParameters>());
         return !loginResponse.IsSuccess ? BadRequest(new ErrorResponse(loginResponse.Error)) : Ok(loginResponse.Value);
@@ -42,9 +40,7 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
-        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
 
         Result<RegisterResponse> registerResponse =
             await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());

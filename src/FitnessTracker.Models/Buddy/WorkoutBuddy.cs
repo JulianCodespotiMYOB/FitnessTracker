@@ -1,8 +1,8 @@
-﻿using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Buddy.Anatomy;
+﻿using FitnessTracker.Models.Buddy.Anatomy;
 using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Models.Buddy;
 
@@ -39,10 +39,7 @@ public class WorkoutBuddy
 
     private int GetWorkoutBuddyStreak()
     {
-        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
-        {
-            return 0;
-        }
+        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
 
         int currentStreak = 1;
         int daysWorkedOutInCurrentWeek = 0;
@@ -50,22 +47,13 @@ public class WorkoutBuddy
 
         foreach (Workout workout in User.Workouts)
         {
-            if (IsWorkoutInCurrentWeek(workout))
-            {
-                daysWorkedOutInCurrentWeek++;
-            }
+            if (IsWorkoutInCurrentWeek(workout)) daysWorkedOutInCurrentWeek++;
 
             if (IsWorkoutInNextWeek(workout))
             {
-                if (UserHasReachedGoal())
-                {
-                    currentStreak++;
-                }
+                if (UserHasReachedGoal()) currentStreak++;
 
-                if (UserHasNotReachedGoal())
-                {
-                    currentStreak = 0;
-                }
+                if (UserHasNotReachedGoal()) currentStreak = 0;
 
                 daysWorkedOutInCurrentWeek = 0;
                 previousWorkoutInCurrentWeek = previousWorkoutInCurrentWeek.AddDays(7);
@@ -108,9 +96,7 @@ public class WorkoutBuddy
         double workoutBuddySpeed = 0;
         foreach (Activity activity in activities)
             if (activity.Data.Type == ExerciseType.Cardio)
-            {
                 workoutBuddySpeed += 1;
-            }
 
         return workoutBuddySpeed;
     }

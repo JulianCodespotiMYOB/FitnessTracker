@@ -1,5 +1,5 @@
-﻿using FitnessTracker.Models.Authorization;
-using FitnessTracker.Models.Buddy;
+﻿using FitnessTracker.Models.Buddy;
+using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

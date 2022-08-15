@@ -1,6 +1,6 @@
 ﻿using AutoBogus;
-using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.Users;
 using Xunit;
 
 namespace FitnessTracker.UnitTests.Buddy;
@@ -15,10 +15,7 @@ public class WorkoutBuddyTest
         user.WeeklyWorkoutAmountGoal = 1;
         List<Workout>? workouts = new AutoFaker<Workout>().Generate(3);
 
-        for (int i = 0; i < 3; i++) 
-        {
-            workouts[i].Time = DateTime.Now.AddDays(6 * i);
-        }
+        for (int i = 0; i < 3; i++) workouts[i].Time = DateTime.Now.AddDays(6 * i);
 
         user.Workouts = workouts;
         user.WorkoutBuddy.User = user;

@@ -20,13 +20,11 @@ public class ExerciseRepository : IExerciseRepository
     public Result<IEnumerable<Exercise>> GetExercises()
     {
         if (_cache.TryGetValue(ExercisesCacheKey, out List<Exercise>? cachedExercises))
-        {
             return cachedExercises switch
             {
                 null => Result<IEnumerable<Exercise>>.Failure("Failed to load exercises."),
                 _ => Result<IEnumerable<Exercise>>.Success(cachedExercises)
             };
-        }
 
         List<Exercise> exercises = new();
 

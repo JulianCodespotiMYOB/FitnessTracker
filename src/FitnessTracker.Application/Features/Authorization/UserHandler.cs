@@ -2,9 +2,9 @@
 using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
-using FitnessTracker.Models.Authorization;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Users;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
@@ -23,12 +23,10 @@ public class UserService : IAuthorizationService
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
+        Result<User> user =
+            await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
-        if (user.IsSuccess is false)
-        {
-            return Result<LoginResponse>.Failure(user.Error);
-        }
+        if (user.IsSuccess is false) return Result<LoginResponse>.Failure(user.Error);
 
         if (!user.Value.Password.Equals(loginParameters.Password))
         {
@@ -45,10 +43,7 @@ public class UserService : IAuthorizationService
     {
         Result<User> user =
             await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess)
-        {
-            return Result<RegisterResponse>.Failure(user.Error);
-        }
+        if (user.IsSuccess) return Result<RegisterResponse>.Failure(user.Error);
 
         User newUser = registrationParameters.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy
