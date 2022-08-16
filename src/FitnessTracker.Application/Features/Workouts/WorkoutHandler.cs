@@ -25,10 +25,7 @@ public class WorkoutHandler : IWorkoutService
     public async Task<Result<RecordWorkoutResponse>> RecordWorkout(RecordWorkoutRequest request, int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
-        {
-            return Result<RecordWorkoutResponse>.Failure("User not found");
-        }
+        if (userResult.IsSuccess is false) return Result<RecordWorkoutResponse>.Failure("User not found");
 
         User user = userResult.Value;
         user.Workouts.Add(request.Workout);
@@ -75,7 +72,8 @@ public class WorkoutHandler : IWorkoutService
         return Result<GetWorkoutResponse>.Success(response);
     }
 
-    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
+    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId,
+        int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
         if (userResult.IsSuccess is false) return Result<UpdateWorkoutResponse>.Failure("User not found");

@@ -2,6 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using FitnessTracker.Application.Features.Authorization;
 using FitnessTracker.Application.Features.Exercises;
+using FitnessTracker.Application.Features.WorkoutGraphData;
+using FitnessTracker.Application.Features.WorkoutNames;
 using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Requests.Workouts;
@@ -39,6 +41,8 @@ builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValida
 builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
 builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutRequestValidator>();
 builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
+builder.Services.AddSingleton<IWorkoutNamesService, WorkoutNamesHandler>();
+builder.Services.AddSingleton<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
 builder.Services.AddSingleton<IAuthorizationService, UserService>();
 builder.Services.AddSingleton<IExerciseRepository, ExerciseRepository>();
 builder.Services.AddSingleton<IExerciseService, ExerciseHandler>();
