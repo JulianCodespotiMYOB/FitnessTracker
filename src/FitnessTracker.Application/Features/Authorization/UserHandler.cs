@@ -26,7 +26,10 @@ public class UserService : IAuthorizationService
         Result<User> user =
             await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
-        if (user.IsSuccess is false) return Result<LoginResponse>.Failure(user.Error);
+        if (user.IsSuccess is false) 
+        {
+            return Result<LoginResponse>.Failure(user.Error);
+        }
 
         if (!user.Value.Password.Equals(loginParameters.Password))
         {
@@ -41,9 +44,11 @@ public class UserService : IAuthorizationService
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess) return Result<RegisterResponse>.Failure(user.Error);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
+        if (user.IsSuccess)
+        {
+            return Result<RegisterResponse>.Failure(user.Error);
+        }
 
         User newUser = registrationParameters.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy
@@ -60,17 +65,19 @@ public class UserService : IAuthorizationService
         return Result<RegisterResponse>.Success(response);
     }
 
-    public async Task<Result<User>> GetUserAsync(int id)
+    public async Task<Result<GetUserResponse>> GetUserAsync(int id)
     {
         Result<User> user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext, _logger);
-        return user.IsSuccess ? Result<User>.Success(user.Value) : Result<User>.Failure(user.Error);
+        return user.IsSuccess 
+            ? Result<GetUserResponse>.Success(new(user.Value)) 
+            : Result<GetUserResponse>.Failure(user.Error);
     }
 
-    public async Task<Result<IEnumerable<User>>> GetUsersAsync()
+    public async Task<Result<GetUsersResponse>> GetUsersAsync()
     {
         Result<IEnumerable<User>> users = await UserHelper.GetUsersFromDatabase(_applicationDbContext, _logger);
         return users.IsSuccess
-            ? Result<IEnumerable<User>>.Success(users.Value)
-            : Result<IEnumerable<User>>.Failure(users.Error);
+            ? Result<GetUsersResponse>.Success(new(users.Value))
+            : Result<GetUsersResponse>.Failure(users.Error);
     }
 }

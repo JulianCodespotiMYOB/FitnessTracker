@@ -28,10 +28,14 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
         Result<LoginResponse> loginResponse = await _authorizationService.LoginAsync(request.Adapt<LoginParameters>());
-        return !loginResponse.IsSuccess ? BadRequest(new ErrorResponse(loginResponse.Error)) : Ok(loginResponse.Value);
+        return !loginResponse.IsSuccess 
+            ? BadRequest(new ErrorResponse(loginResponse.Error)) 
+            : Ok(loginResponse.Value);
     }
 
     [HttpPost("Register")]
@@ -40,10 +44,11 @@ public class UserController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
-        Result<RegisterResponse> registerResponse =
-            await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
+        Result<RegisterResponse> registerResponse = await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
         return !registerResponse.IsSuccess
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);
@@ -52,18 +57,18 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser(int id)
     {
-        Result<User> user = await _authorizationService.GetUserAsync(id);
+        Result<GetUserResponse> user = await _authorizationService.GetUserAsync(id);
         return !user.IsSuccess
             ? BadRequest(new ErrorResponse(user.Error))
-            : Ok(user);
+            : Ok(user.Value);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
-        Result<IEnumerable<User>> users = await _authorizationService.GetUsersAsync();
+        Result<GetUsersResponse> users = await _authorizationService.GetUsersAsync();
         return !users.IsSuccess
             ? BadRequest(new ErrorResponse(users.Error))
-            : Ok(users);
+            : Ok(users.Value);
     }
 }
