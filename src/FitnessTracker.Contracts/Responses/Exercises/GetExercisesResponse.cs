@@ -1,5 +1,5 @@
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 
 namespace FitnessTracker.Contracts.Responses.Exercises;
 
-public record GetExercisesResponse(IEnumerable<Exercise> Exercises);
+public record GetExercisesResponse(List<Exercise> Exercises);

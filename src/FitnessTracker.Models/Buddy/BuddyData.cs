@@ -15,12 +15,12 @@ public class BuddyData
         new BuddyAbs(),
         new BuddyBack(),
         new BuddyChest(),
-        new BuddyLegs(),
+        new BuddyUpperLegs(),
+        new BuddyLowerLegs(),
         new BuddyShoulders(),
-        new BuddyForearms(),
+        new BuddyForearm(),
         new BuddyGlutes(),
         new BuddyAbs(),
-        new BuddyLats(),
         new BuddyTriceps(),
         new BuddyBiceps()
     };

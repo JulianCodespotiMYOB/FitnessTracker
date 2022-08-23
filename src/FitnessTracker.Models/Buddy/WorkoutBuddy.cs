@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.Models.Buddy.Anatomy;
 using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 
@@ -109,7 +109,7 @@ public class WorkoutBuddy
 
         int GetAnatomyLevel(MuscleGroup anatomyType)
         {
-            return exercises.Count(exercise => exercise.PrimaryMuscleGroup == anatomyType);
+            return exercises.Count(exercise => exercise.MainMuscleGroup == anatomyType);
         }
     }
 }

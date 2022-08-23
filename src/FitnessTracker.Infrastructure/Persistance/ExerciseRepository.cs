@@ -2,7 +2,7 @@ using System.Reflection;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace FitnessTracker.Infrastructure.Persistance;
@@ -42,9 +42,7 @@ public class ExerciseRepository : IExerciseRepository
             Exercise exercise = new()
             {
                 Name = exerciseName,
-                Description = "",
-                Type = ExerciseType.Strength,
-                PrimaryMuscleGroup = muscleGroup
+                Type = ExerciseType.Strength
             };
 
             exercises.Add(exercise);

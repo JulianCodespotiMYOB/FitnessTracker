@@ -37,16 +37,16 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         switch (request.WorkoutGraphType)
         {
             case WorkoutGraphType.Weight:
-                dataToReturn = GetExerciseWeightDataAndTime(user, request.ExcerciseName, request.WeightUnit);
+                dataToReturn = GetExerciseWeightDataAndTime(user, request.ExerciseName, request.WeightUnit);
                 break;
             case WorkoutGraphType.Distance:
-                dataToReturn = GetExerciseDistanceDataAndTime(user, request.ExcerciseName);
+                dataToReturn = GetExerciseDistanceDataAndTime(user, request.ExerciseName);
                 break;
             case WorkoutGraphType.Reps:
-                dataToReturn = GetExerciseRepsDataAndTime(user, request.ExcerciseName);
+                dataToReturn = GetExerciseRepsDataAndTime(user, request.ExerciseName);
                 break;
             case WorkoutGraphType.Sets:
-                dataToReturn = GetExerciseSetsDataAndTime(user, request.ExcerciseName);
+                dataToReturn = GetExerciseSetsDataAndTime(user, request.ExerciseName);
                 break;
             default:
                 return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");

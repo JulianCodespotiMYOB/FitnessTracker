@@ -8,5 +8,5 @@ public class GetWorkoutGraphDataRequest
     public int AmountOfCoordinates { get; set; }
     public WeightUnit WeightUnit { get; set; } = WeightUnit.Kilograms;
     public WorkoutGraphType WorkoutGraphType { get; set; }
-    public string ExcerciseName { get; set; }
+    public string ExerciseName { get; set; }
 }

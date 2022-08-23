@@ -2,8 +2,7 @@ using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Exercises;
@@ -21,29 +20,10 @@ public class ExerciseHandler : IExerciseService
 
     public Result<GetExercisesResponse> GetExercises()
     {
-        Result<IEnumerable<Exercise>> result = _exerciseRepository.GetExercises();
-        if (result.IsSuccess is false)
-        {
-            _logger.LogError($"Failed to load exercises: {result.Error}");
-            return Result<GetExercisesResponse>.Failure(result.Error);
-        }
+        ExerciseScraper exerciseScraper = new();
+        List<Exercise> exercises = exerciseScraper.ScrapeExercises();
 
-        List<Exercise> cleanedExercises = result.Value
-            .Where(x => x.PrimaryMuscleGroup != MuscleGroup.Unknown)
-            .Select(x => new Exercise
-            {
-                Id = x.Id,
-                Type = x.Type,
-                Name = x.Name
-                    .Split(' ')
-                    .Select(y => string.Concat(y[..1].ToUpper(), y.AsSpan(1)))
-                    .Aggregate((a, b) => string.Concat(a, " ", b)),
-                Description = x.Description,
-                PrimaryMuscleGroup = x.PrimaryMuscleGroup
-            })
-            .ToList();
-
-        GetExercisesResponse response = new(cleanedExercises);
+        GetExercisesResponse response = new(exercises);
         return Result<GetExercisesResponse>.Success(response);
     }
 }

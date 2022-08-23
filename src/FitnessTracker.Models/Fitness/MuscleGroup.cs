@@ -3,29 +3,15 @@ namespace FitnessTracker.Models.Fitness;
 public enum MuscleGroup
 {
     Unknown,
-    Chest,
-    Back,
-    Shoulders,
-    Legs,
+    Cardio,
     Abs,
+    Back,
     Biceps,
+    Chest,
+    Forearm,
+    Glutes,
+    Shoulders,
     Triceps,
-    Forearms,
-    Traps,
-    Lats,
-    Glutes
-}
-
-public static class MuscleGroupExtensions
-{
-    public static MuscleGroup FromName(string name)
-    {
-        string cleanedName = name.Trim().ToLower();
-
-        foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
-            if (cleanedName.Contains(muscleGroup.ToString().ToLower()))
-                return muscleGroup;
-
-        return MuscleGroup.Unknown;
-    }
+    UpperLegs,
+    LowerLegs
 }

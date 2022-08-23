@@ -5,6 +5,12 @@
         <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Reference Include="HtmlAgilityPack">
+            <HintPath>..\..\..\..\..\..\.nuget\packages\htmlagilitypack\1.11.43\lib\netstandard2.0\HtmlAgilityPack.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>

@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 
 namespace FitnessTracker.Models.Fitness.Datas;
 
