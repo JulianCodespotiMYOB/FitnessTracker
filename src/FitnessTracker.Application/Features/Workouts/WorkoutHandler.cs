@@ -16,7 +16,7 @@ public class WorkoutHandler : IWorkoutService
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly ILogger _logger;
 
-    public WorkoutHandler(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
+    public WorkoutHandler(IApplicationDbContext applicationDbContext, ILogger<UserHandler> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;

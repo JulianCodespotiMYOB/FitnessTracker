@@ -43,7 +43,7 @@ builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutReq
 builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
 builder.Services.AddSingleton<IWorkoutNamesService, WorkoutNamesHandler>();
 builder.Services.AddSingleton<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
-builder.Services.AddSingleton<IAuthorizationService, UserService>();
+builder.Services.AddSingleton<IAuthorizationService, UserHandler>();
 builder.Services.AddSingleton<IExerciseRepository, ExerciseRepository>();
 builder.Services.AddSingleton<IExerciseService, ExerciseHandler>();
 

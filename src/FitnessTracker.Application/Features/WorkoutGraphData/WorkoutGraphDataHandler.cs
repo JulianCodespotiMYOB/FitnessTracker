@@ -17,7 +17,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly ILogger _logger;
 
-    public WorkoutGraphDataHandler(IApplicationDbContext applicationDbContext, ILogger<UserService> logger)
+    public WorkoutGraphDataHandler(IApplicationDbContext applicationDbContext, ILogger<UserHandler> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
