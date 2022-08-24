@@ -8,7 +8,7 @@ using FitnessTracker.Models.Users;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Features.Authorization;
+namespace FitnessTracker.Application.Features;
 
 public class UserHandler : IAuthorizationService
 {
@@ -26,7 +26,7 @@ public class UserHandler : IAuthorizationService
         Result<User> user =
             await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
-        if (user.IsSuccess is false) 
+        if (user.IsSuccess is false)
         {
             return Result<LoginResponse>.Failure(user.Error);
         }
@@ -44,7 +44,8 @@ public class UserHandler : IAuthorizationService
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
+        Result<User> user =
+            await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
         if (user.IsSuccess)
         {
             return Result<RegisterResponse>.Failure(user.Error);
@@ -68,8 +69,8 @@ public class UserHandler : IAuthorizationService
     public async Task<Result<GetUserResponse>> GetUserAsync(int id)
     {
         Result<User> user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext, _logger);
-        return user.IsSuccess 
-            ? Result<GetUserResponse>.Success(new(user.Value)) 
+        return user.IsSuccess
+            ? Result<GetUserResponse>.Success(new GetUserResponse(user.Value))
             : Result<GetUserResponse>.Failure(user.Error);
     }
 
@@ -77,7 +78,7 @@ public class UserHandler : IAuthorizationService
     {
         Result<IEnumerable<User>> users = await UserHelper.GetUsersFromDatabase(_applicationDbContext, _logger);
         return users.IsSuccess
-            ? Result<GetUsersResponse>.Success(new(users.Value))
+            ? Result<GetUsersResponse>.Success(new GetUsersResponse(users.Value))
             : Result<GetUsersResponse>.Failure(users.Error);
     }
 }

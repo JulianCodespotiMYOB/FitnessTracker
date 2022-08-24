@@ -1,11 +1,12 @@
 using FitnessTracker.Contracts.Responses.Exercises;
+using FitnessTracker.Domain;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Exercises;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Features.Exercises;
+namespace FitnessTracker.Application.Features;
 
 public class ExerciseHandler : IExerciseService
 {
@@ -21,7 +22,7 @@ public class ExerciseHandler : IExerciseService
     public Result<GetExercisesResponse> GetExercises()
     {
         ExerciseScraper exerciseScraper = new();
-        List<Exercise> exercises = exerciseScraper.ScrapeExercises();
+        List<Exercise> exercises = ExerciseScraper.ScrapeExercises();
 
         GetExercisesResponse response = new(exercises);
         return Result<GetExercisesResponse>.Success(response);

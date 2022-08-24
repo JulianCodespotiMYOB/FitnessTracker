@@ -2,21 +2,23 @@ using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Exercises;
 using HtmlAgilityPack;
 
+namespace FitnessTracker.Domain;
+
 public class ExerciseScraper
 {
-    public List<Exercise> ScrapeExercises()
+    public static List<Exercise> ScrapeExercises()
     {
         string url = "https://www.jefit.com/exercises/bodypart.php?id=11&exercises=All";
         HtmlWeb web = new();
         HtmlDocument doc = web.Load(url);
+
         bool nextPageExists = true;
         List<HtmlNodeCollection>? listOfLinksToExercises = new();
         while (nextPageExists)
         {
-            //*[@id="hor-minimalist_3"]/tbody/tr/td/table/tbody/tr[*]/td[3]/h4/a
-            //<a rel="next" href="./bodypart.php?id=11&amp;exercises=All
             listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
             HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
+
             if (nextButtonLink is null)
             {
                 nextPageExists = false;
@@ -24,8 +26,7 @@ public class ExerciseScraper
             }
 
             url = nextButtonLink.Attributes["href"].Value;
-            //remove first character
-            string cleanUrl = "https://www.jefit.com/exercises" + url.Substring(1);
+            string cleanUrl = string.Concat("https://www.jefit.com/exercises", url.AsSpan(1));
             doc = web.Load(cleanUrl);
         }
 
@@ -46,20 +47,26 @@ public class ExerciseScraper
                     HtmlNode? mainMuscleGroupTest =
                         doc.DocumentNode.SelectSingleNode(
                             $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{i}]/div[2]/p[1]");
-                    if (mainMuscleGroupTest is not null)
+
+                    if (mainMuscleGroupTest is null)
                     {
-                        j = i;
-                        for (int p = 0; p < 10; p++)
+                        continue;
+                    }
+
+                    j = i;
+                    for (int p = 0; p < 10; p++)
+                    {
+                        HtmlNode typeTest =
+                            doc.DocumentNode.SelectSingleNode(
+                                $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{p}]/div[2]/p[4]");
+
+                        if (typeTest is null)
                         {
-                            HtmlNode typeTest =
-                                doc.DocumentNode.SelectSingleNode(
-                                    $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{p}]/div[2]/p[4]");
-                            if (typeTest is not null)
-                            {
-                                k = p;
-                                break;
-                            }
+                            continue;
                         }
+
+                        k = p;
+                        break;
                     }
                 }
 
@@ -81,6 +88,7 @@ public class ExerciseScraper
                 HtmlNode equipment =
                     doc.DocumentNode.SelectSingleNode(
                         $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{k}]/div[2]/p[6]");
+
                 Exercise exercise = new()
                 {
                     Name = excerciseNameClean,
@@ -93,6 +101,7 @@ public class ExerciseScraper
                     Mechanics = MechanicsExtensions.FromName(mechanics.InnerText),
                     Equipment = EquipmentExtensions.FromName(equipment.InnerText)
                 };
+
                 exercises.Add(exercise);
             }
         }

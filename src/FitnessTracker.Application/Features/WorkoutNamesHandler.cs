@@ -1,5 +1,4 @@
 using FitnessTracker.Application.Common;
-using FitnessTracker.Application.Features.Authorization;
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Contracts.Requests.Workouts.Enums;
 using FitnessTracker.Contracts.Responses.Workouts;
@@ -9,7 +8,7 @@ using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Users;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Features.WorkoutNames;
+namespace FitnessTracker.Application.Features;
 
 public class WorkoutNamesHandler : IWorkoutNamesService
 {
@@ -25,7 +24,10 @@ public class WorkoutNamesHandler : IWorkoutNamesService
     public async Task<Result<GetWorkoutNamesResponse>> GetWorkoutNames(int userId, GetWorkoutNamesRequest request)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false) return Result<GetWorkoutNamesResponse>.Failure("User not found");
+        if (userResult.IsSuccess is false)
+        {
+            return Result<GetWorkoutNamesResponse>.Failure("User not found");
+        }
 
         User user = userResult.Value;
         List<string> workoutNames = user.Workouts.Select(w => w.Name).ToList();
@@ -39,7 +41,10 @@ public class WorkoutNamesHandler : IWorkoutNamesService
             _ => workoutNames
         };
 
-        if (request.Amount is not null) workoutNames = workoutNames.Take(request.Amount.Value).ToList();
+        if (request.Amount is not null)
+        {
+            workoutNames = workoutNames.Take(request.Amount.Value).ToList();
+        }
 
         GetWorkoutNamesResponse response = new()
         {

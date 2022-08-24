@@ -33,8 +33,8 @@ public class UserController : ControllerBase
         }
 
         Result<LoginResponse> loginResponse = await _authorizationService.LoginAsync(request.Adapt<LoginParameters>());
-        return !loginResponse.IsSuccess 
-            ? BadRequest(new ErrorResponse(loginResponse.Error)) 
+        return !loginResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(loginResponse.Error))
             : Ok(loginResponse.Value);
     }
 
@@ -48,7 +48,8 @@ public class UserController : ControllerBase
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        Result<RegisterResponse> registerResponse = await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
+        Result<RegisterResponse> registerResponse =
+            await _authorizationService.RegisterAsync(request.Adapt<RegistrationParameters>());
         return !registerResponse.IsSuccess
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);

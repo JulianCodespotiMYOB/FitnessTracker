@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Common;
 
-public class UserHelper
+public static class UserHelper
 {
     public static async Task<Result<User>> GetUserFromDatabaseById(int userId, IApplicationDbContext context,
         ILogger logger)
@@ -64,6 +64,7 @@ public class UserHelper
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
             .ToListAsync();
+
         if (users is null)
         {
             logger.LogError("Users not found");

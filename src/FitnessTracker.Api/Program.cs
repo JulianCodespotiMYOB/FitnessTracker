@@ -1,10 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FitnessTracker.Application.Features.Authorization;
-using FitnessTracker.Application.Features.Exercises;
-using FitnessTracker.Application.Features.WorkoutGraphData;
-using FitnessTracker.Application.Features.WorkoutNames;
-using FitnessTracker.Application.Features.Workouts;
+using FitnessTracker.Application.Features;
 using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Requests.Workouts;
 using FitnessTracker.Infrastructure.Persistance;
@@ -33,23 +29,26 @@ builder.Services.AddCors(opts =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); });
-builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Singleton);
+builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Scoped);
 builder.Services.AddMemoryCache();
 
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
 builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
 builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutRequestValidator>();
-builder.Services.AddSingleton<IWorkoutService, WorkoutHandler>();
-builder.Services.AddSingleton<IWorkoutNamesService, WorkoutNamesHandler>();
-builder.Services.AddSingleton<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
-builder.Services.AddSingleton<IAuthorizationService, UserHandler>();
-builder.Services.AddSingleton<IExerciseRepository, ExerciseRepository>();
-builder.Services.AddSingleton<IExerciseService, ExerciseHandler>();
+builder.Services.AddScoped<IWorkoutService, WorkoutHandler>();
+builder.Services.AddScoped<IWorkoutNamesService, WorkoutNamesHandler>();
+builder.Services.AddScoped<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
+builder.Services.AddScoped<IAuthorizationService, UserHandler>();
+builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddScoped<IExerciseService, ExerciseHandler>();
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

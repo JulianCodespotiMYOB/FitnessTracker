@@ -11,6 +11,10 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.43"/>
+    </ItemGroup>
+
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
