@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Domain;
-using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Exercises;
@@ -20,7 +19,7 @@ public class ExerciseHandler : IExerciseService
 
     public ExerciseHandler(IExerciseRepository exerciseRepository, ILogger<ExerciseHandler> logger, IApplicationDbContext applicationDbContext, IMemoryCache cache)
     {
-        _exerciseRepository = exerciseRepository;
+        _cache = cache;
         _logger = logger;
         _applicationDbContext = applicationDbContext;
         _cache = cache;

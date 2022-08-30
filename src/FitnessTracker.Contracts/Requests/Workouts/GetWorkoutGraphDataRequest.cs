@@ -5,7 +5,7 @@ namespace FitnessTracker.Contracts.Requests.Workouts;
 
 public class GetWorkoutGraphDataRequest
 {
-    public int AmountOfCoordinates { get; set; }
+    public int AmountOfCoordinates { get; set; } = int.MaxValue;
     public WeightUnit WeightUnit { get; set; } = WeightUnit.Kilograms;
     public WorkoutGraphType WorkoutGraphType { get; set; }
     public string ExerciseName { get; set; }

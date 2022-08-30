@@ -24,8 +24,7 @@ public class WorkoutNamesController : ControllerBase
         [FromQuery] GetWorkoutNamesRequest request
     )
     {
-        Result<GetWorkoutNamesResponse> getWorkoutNamesResponse =
-            await _workoutNamesService.GetWorkoutNames(userId, request);
+        Result<GetWorkoutNamesResponse> getWorkoutNamesResponse = await _workoutNamesService.GetWorkoutNames(userId, request);
         return getWorkoutNamesResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutNamesResponse.Error))
             : Ok(getWorkoutNamesResponse.Value);

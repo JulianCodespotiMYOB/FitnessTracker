@@ -24,8 +24,7 @@ public class WorkoutGraphDataController : ControllerBase
         [FromQuery] GetWorkoutGraphDataRequest request
     )
     {
-        Result<GetWorkoutGraphDataResponse> getWorkoutGraphDataResponse =
-            await _workoutGraphDataService.GetWorkoutGraphData(request, userId);
+        Result<GetWorkoutGraphDataResponse> getWorkoutGraphDataResponse = await _workoutGraphDataService.GetWorkoutGraphData(request, userId);
         return getWorkoutGraphDataResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutGraphDataResponse.Error))
             : Ok(getWorkoutGraphDataResponse.Value);
