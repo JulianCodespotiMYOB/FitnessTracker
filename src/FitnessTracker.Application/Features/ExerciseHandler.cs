@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using FitnessTracker.Contracts.Responses.Exercises;
 using FitnessTracker.Domain;
+using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Exercises;
@@ -46,9 +47,9 @@ public class ExerciseHandler : IExerciseService
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        List<Exercise> exercises = ExerciseScraper.ScrapeExercises();
+        Result<List<Exercise>> exercises = ExerciseScraper.ScrapeExercises();
         stopwatch.Stop();
-        _applicationDbContext.Exercises.AddRange(exercises);
+        _applicationDbContext.Exercises.AddRange(exercises.Value);
         _applicationDbContext.SaveChangesAsync();
         PostExercisesResponse response = new(stopwatch.ElapsedMilliseconds);
         return Result<PostExercisesResponse>.Success(response);
