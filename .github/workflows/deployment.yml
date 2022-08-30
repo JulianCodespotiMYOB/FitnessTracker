@@ -97,6 +97,7 @@ jobs:
     steps:
       - name: Update exercises
         uses: actions/checkout@v3
-        run: |
-          curl -X POST ${{ needs.deploy.outputs.server_ip }}/Exercises
-      
+        with:
+          url: ${{ needs.deploy.outputs.server_ip }}/Exercises
+          method: POST
+          insecure-skip-verify: true
