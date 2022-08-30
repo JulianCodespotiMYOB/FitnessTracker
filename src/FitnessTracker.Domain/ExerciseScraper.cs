@@ -12,16 +12,14 @@ public class ExerciseScraper
         HtmlWeb web = new();
         HtmlDocument doc = web.Load(url);
 
-        bool nextPageExists = true;
         List<HtmlNodeCollection>? listOfLinksToExercises = new();
-        while (nextPageExists)
+        while (true)
         {
             listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
             HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
 
             if (nextButtonLink is null)
             {
-                nextPageExists = false;
                 break;
             }
 

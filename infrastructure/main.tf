@@ -56,6 +56,10 @@ resource "aws_eip" "elastic_ip" {
   instance = aws_instance.app_server.id
 }
 
+output "server_ip" {
+  value = aws_eip.elastic_ip.public_dns
+}
+
 resource "aws_instance" "app_server" {
   ami = "ami-0c641f2290e9cd048"
   instance_type = "t2.micro"

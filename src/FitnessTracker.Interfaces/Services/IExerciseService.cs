@@ -6,4 +6,5 @@ namespace FitnessTracker.Interfaces.Services;
 public interface IExerciseService
 {
     Result<GetExercisesResponse> GetExercises();
+    Result<PostExercisesResponse> PostExercises();
 }

@@ -25,4 +25,14 @@ public class ExerciseController : ControllerBase
             ? BadRequest(new ErrorResponse(exercisesResponse.Error))
             : Ok(exercisesResponse.Value);
     }
+
+    [HttpPost]
+    public IActionResult PostExercises()
+    {
+        Result<PostExercisesResponse> exercisesResponse = _exerciseService.PostExercises();
+        return !exercisesResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(exercisesResponse.Error))
+            : Ok(exercisesResponse.Value);
+
+    }
 }
