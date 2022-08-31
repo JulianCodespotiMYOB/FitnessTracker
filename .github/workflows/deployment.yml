@@ -84,7 +84,7 @@ jobs:
 
       - name: Terraform Output
         id: output
-        run: terraform output -raw server_ip
+        run: terraform-bin output -raw server_ip
 
       - name: Post Deploy
         working-directory: ./infrastructure
