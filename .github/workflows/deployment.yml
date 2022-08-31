@@ -85,22 +85,14 @@ jobs:
       - name: Terraform Output
         id: output
         working-directory: ./infrastructure
-        run: echo "::set-output name=server_ip::$(terraform output -raw server_ip)"
-    
-  PostDeploy:      
-    name: 'Update exercises'
-    needs: deploy
-    runs-on: ubuntu-latest
-    env:
-      server_ip: ${{needs.deploy.outputs.serverIp}}
-    steps:
-      - name: Update exercises
         run: |
+          IP=$(terraform output -raw server_ip)
           attempt_counter=0
           max_attempts=5
-          echo "${{ env.server_ip }}"
 
-          until $(curl --output /dev/null --silent --head --fail ${{ env.server_ip }}/health); do
+          until $(curl --output /dev/null --silent --head --fail $IP/health); do
+              echo "[GET] $IP/health..."
+
               if [ ${attempt_counter} -eq ${max_attempts} ];then
                 echo "Max attempts reached"
                 exit 1
@@ -111,4 +103,4 @@ jobs:
               sleep 5
           done
 
-          curl -X POST ${{ env.server_ip }}/Exercises
+          curl -X POST $IP/Exercises
