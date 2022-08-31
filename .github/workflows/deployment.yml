@@ -83,12 +83,13 @@ jobs:
           TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
 
       - name: Terraform Output
-        run: echo ${{ steps.deploy.outputs.tf_server_ip  }}
+        id: output
+        run: terraform output -raw server_ip
 
       - name: Post Deploy
         working-directory: ./infrastructure
         run: |
-          IP=$(echo ${{ steps.deploy.outputs.tf_server_ip }} | jq -r '.server_ip')
+          IP=${{ steps.output.outputs.stdout }}
           attempt_counter=0
           max_attempts=5
 
