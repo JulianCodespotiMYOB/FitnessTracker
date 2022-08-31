@@ -85,9 +85,7 @@ jobs:
       - name: Terraform Output
         id: output
         working-directory: ./infrastructure
-        run: |
-            IP=$(terraform output -raw server_ip)
-            echo "::set-output name=server_ip::${IP}"
+        run: echo "::set-output name=server_ip::$(terraform output -raw server_ip)"
     
   UpdateExercises:      
     name: 'Update exercises'

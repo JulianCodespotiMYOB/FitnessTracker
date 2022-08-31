@@ -31,6 +31,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); });
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Scoped);
 builder.Services.AddMemoryCache();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
