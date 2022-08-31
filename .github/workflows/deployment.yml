@@ -87,7 +87,7 @@ jobs:
       - id: output
         working-directory: ./infrastructure
         run: |
-            IP=$(terraform output -json | jq -r '.server_ip.value')
+            IP=`terraform output -json | jq -r '.server_ip.value'`
             echo "::set-output name=server_ip::$IP"
     
   UpdateExercises:      
@@ -95,7 +95,8 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Update exercises
+      - name: Checkout
         uses: actions/checkout@v3
-        run: |
-          curl -X POST ${{ needs.deploy.outputs.server_ip }}/Exercises
+
+      - name: Update exercises
+        run: curl -X POST ${{ needs.deploy.outputs.server_ip }}/Exercises

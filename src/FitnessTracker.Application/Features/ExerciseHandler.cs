@@ -12,13 +12,12 @@ namespace FitnessTracker.Application.Features;
 
 public class ExerciseHandler : IExerciseService
 {
-    private readonly IExerciseRepository _exerciseRepository;
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly ILogger _logger;
     private const string ExercisesCacheKey = "Exercises";
     private readonly IMemoryCache _cache;
 
-    public ExerciseHandler(IExerciseRepository exerciseRepository, ILogger<ExerciseHandler> logger, IApplicationDbContext applicationDbContext, IMemoryCache cache)
+    public ExerciseHandler(ILogger<ExerciseHandler> logger, IApplicationDbContext applicationDbContext, IMemoryCache cache)
     {
         _cache = cache;
         _logger = logger;
@@ -39,6 +38,7 @@ public class ExerciseHandler : IExerciseService
         
         List<Exercise> exercises = _applicationDbContext.Exercises.ToList();
         _cache.Set(ExercisesCacheKey, exercises);
+
         GetExercisesResponse response = new(exercises);
         return Result<GetExercisesResponse>.Success(response);
     }
@@ -49,8 +49,11 @@ public class ExerciseHandler : IExerciseService
         stopwatch.Start();
         Result<List<Exercise>> exercises = ExerciseScraper.ScrapeExercises();
         stopwatch.Stop();
+        _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
+
         _applicationDbContext.Exercises.AddRange(exercises.Value);
         _applicationDbContext.SaveChangesAsync();
+
         PostExercisesResponse response = new(stopwatch.ElapsedMilliseconds);
         return Result<PostExercisesResponse>.Success(response);
     }
