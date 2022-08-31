@@ -84,12 +84,14 @@ jobs:
 
       - name: Terraform Output
         id: output
-        run: terraform-bin output -raw server_ip
+        run: | 
+          IP=$(terraform-bin output -raw server_ip)
+          echo "::set-output name=server_ip::$IP"
 
       - name: Post Deploy
         working-directory: ./infrastructure
         run: |
-          IP=${{ steps.output.outputs.stdout }}
+          IP=${{ steps.output.outputs.server_ip }}
           attempt_counter=0
           max_attempts=5
 
