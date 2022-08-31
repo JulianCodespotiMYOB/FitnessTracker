@@ -76,22 +76,20 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./infrastructure
-        run: terraform apply -auto-approve -input=false
-        env:
-          TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
-
-      - name: Terraform Output
-        id: output
-        run: | 
+        run: |
+          terraform apply -auto-approve -input=false
           IP=$(terraform-bin output -raw server_ip)
           echo "::set-output name=server_ip::$IP"
+        env:
+          TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
 
       - name: Post Deploy
         working-directory: ./infrastructure
         run: |
-          IP=${{ steps.output.outputs.server_ip }}
+          IP=${{ steps.apply.outputs.server_ip }}
           attempt_counter=0
           max_attempts=5
 
