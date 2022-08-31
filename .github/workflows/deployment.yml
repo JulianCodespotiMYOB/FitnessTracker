@@ -37,7 +37,7 @@ jobs:
     needs: 'Build'
     runs-on: ubuntu-latest
     outputs: 
-      server_ip: ${{ steps.output.outputs.server_ip }}
+      serverIp: ${{ steps.output.outputs.serverip }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -81,15 +81,21 @@ jobs:
         run: terraform apply -auto-approve -input=false
         env:
           TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
-          
-      - name: Terraform Output
+
+      - name: Terraform Outputs
         id: output
+        run: |
+          echo "IP=$(terraform output -raw server_ip)" >> $GITHUB_ENV
+
+      - name: Expose Outputs
+        id: expose
         working-directory: ./infrastructure
-        run: echo "::set-output name=server_ip::$(terraform output -raw server_ip)"
+        run: |
+          echo "::set-output name=serverip::${{ env.IP }}"
     
-  UpdateExercises:      
+  PostDeploy:      
     name: 'Update exercises'
-    needs: 'Deploy'
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -97,6 +103,20 @@ jobs:
 
       - name: Update exercises
         run: |
-          IP=${{needs.Deploy.outputs.server_ip}}
-          echo $IP
+          attempt_counter=0
+          max_attempts=5
+          IP=${{ needs.deploy.outputs.serverip }}
+          echo "${{ needs.deploy.outputs.serverip }}"
+
+          until $(curl --output /dev/null --silent --head --fail $IP/health); do
+              if [ ${attempt_counter} -eq ${max_attempts} ];then
+                echo "Max attempts reached"
+                exit 1
+              fi
+
+              printf '.'
+              attempt_counter=$(($attempt_counter+1))
+              sleep 5
+          done
+
           curl -X POST "$IP/Exercises"
