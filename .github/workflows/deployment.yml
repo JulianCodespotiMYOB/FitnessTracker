@@ -84,7 +84,7 @@ jobs:
           TF_VAR_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
           
       - name: Terraform Output
-      - id: output
+        id: output
         working-directory: ./infrastructure
         run: |
             IP=`terraform output -json | jq -r '.server_ip.value'`
