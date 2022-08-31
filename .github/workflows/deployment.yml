@@ -86,12 +86,13 @@ jobs:
         id: output
         working-directory: ./infrastructure
         run: |
-          IP=$(terraform output -raw server_ip)
+          IP=`terraform output -raw server_ip`
           attempt_counter=0
           max_attempts=5
 
           until $(curl --output /dev/null --silent --head --fail $IP/health); do
               echo "[GET] $IP/health..."
+              echo "[GET] ${IP}/health..."
 
               if [ ${attempt_counter} -eq ${max_attempts} ];then
                 echo "Max attempts reached"
