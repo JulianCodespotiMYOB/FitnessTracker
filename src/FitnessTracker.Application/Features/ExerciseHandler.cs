@@ -51,7 +51,14 @@ public class ExerciseHandler : IExerciseService
         stopwatch.Stop();
         _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
 
-        _applicationDbContext.Exercises.AddRange(exercises.Value);
+        if (!exercises.IsSuccess)
+        {
+            return Result<PostExercisesResponse>.Failure(exercises.Error);
+        }
+
+        IEnumerable<Exercise> data = exercises.Value.DistinctBy(x => x.Name);
+        _applicationDbContext.Exercises.RemoveRange(_applicationDbContext.Exercises);
+        _applicationDbContext.Exercises.AddRange(data);
         _applicationDbContext.SaveChangesAsync();
 
         PostExercisesResponse response = new(stopwatch.ElapsedMilliseconds);
