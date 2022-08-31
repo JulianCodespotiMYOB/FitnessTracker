@@ -8,15 +8,8 @@ namespace FitnessTracker.Infrastructure.Persistance;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly IApplicationDbContext _context;
-
-    public ApplicationDbContext()
-    {
-        _context = this;
-    }
-
     public DbSet<User> Users { get; set; } = null!;
-    public DbSet<Exercise> Exercises { get; set; }
+    public DbSet<Exercise> Exercises { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
