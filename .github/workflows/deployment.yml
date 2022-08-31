@@ -93,18 +93,16 @@ jobs:
           attempt_counter=0
           max_attempts=20
 
-          until $(curl --output /dev/null --silent --head --fail $IP/health); do
-              echo "[GET] $IP/health..."
-              echo "[GET] ${IP}/health..."
+          wait-for-url() {
+              echo "Testing $1"
+              timeout --foreground -s TERM 30s bash -c \
+                  'while [[ "$(curl -s -o /dev/null -m 3 -L -w ''%{http_code}'' ${0})" != "200" ]];\
+                  do echo "Waiting for ${0}" && sleep 2;\
+                  done' ${1}
+              echo "${1} - OK!"
+          }
 
-              if [ ${attempt_counter} -eq ${max_attempts} ];then
-                echo "Max attempts reached"
-                exit 1
-              fi
-
-              printf '.'
-              attempt_counter=$(($attempt_counter+1))
-              sleep 20
-          done
+          echo "Waiting for URL: $IP/health"
+          wait-for-url "$IP/health"
 
           curl -X POST $IP/Exercises
