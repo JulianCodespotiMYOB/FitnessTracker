@@ -37,8 +37,7 @@ jobs:
     needs: 'Build'
     runs-on: ubuntu-latest
     outputs: 
-      server_ip:
-        value: ${{ steps.output.outputs.server_ip }}
+      server_ip: ${{ steps.output.outputs.server_ip }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
