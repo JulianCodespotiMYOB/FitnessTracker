@@ -57,7 +57,7 @@ resource "aws_eip" "elastic_ip" {
 }
 
 output "server_ip" {
-  value = aws_eip.elastic_ip.public_dns
+  value = aws_eip.elastic_ip.public_ip
 }
 
 resource "aws_instance" "app_server" {
