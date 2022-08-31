@@ -86,7 +86,7 @@ jobs:
         id: output
         working-directory: ./infrastructure
         run: |
-            IP=`terraform output -json | jq -r '.server_ip.value'`
+            IP=`terraform output -raw`
             echo "::set-output name=server_ip::$IP"
     
   UpdateExercises:      
