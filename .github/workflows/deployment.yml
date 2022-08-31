@@ -33,7 +33,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:latest
 
   deploy:
-    name: 'Terraform'
+    name: 'Deploy'
     needs: 'Build'
     runs-on: ubuntu-latest
     outputs: 
@@ -91,11 +91,14 @@ jobs:
     
   UpdateExercises:      
     name: 'Update exercises'
-    needs: deploy
+    needs: 'Deploy'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Update exercises
-        run: curl -X POST ${{ needs.deploy.outputs.server_ip }}/Exercises
+        run: |
+          IP=${{needs.Deploy.outputs.server_ip}}
+          echo $IP
+          curl -X POST "$IP/Exercises"
