@@ -90,19 +90,17 @@ jobs:
         working-directory: ./infrastructure
         run: |
           IP=${{ steps.apply.outputs.server_ip }}
-          attempt_counter=0
-          max_attempts=20
 
           wait-for-url() {
               echo "Testing $1"
               timeout --foreground -s TERM 30s bash -c \
                   'while [[ "$(curl -s -o /dev/null -m 3 -L -w ''%{http_code}'' ${0})" != "200" ]];\
-                  do echo "Waiting for ${0}" && sleep 2;\
+                  do echo "Waiting for ${0}" && sleep 4;\
                   done' ${1}
               echo "${1} - OK!"
           }
 
           echo "Waiting for URL: $IP/health"
-          wait-for-url "$IP/health"
+          wait-for-url "http://$IP/health"
 
           curl -X POST $IP/Exercises
