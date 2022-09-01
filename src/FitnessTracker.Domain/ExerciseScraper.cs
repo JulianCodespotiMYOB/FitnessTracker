@@ -1,6 +1,6 @@
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 using HtmlAgilityPack;
 
 namespace FitnessTracker.Domain;
@@ -9,7 +9,6 @@ public static class ExerciseScraper
 {
     public static Result<List<Exercise>> ScrapeExercises()
     {
-
         string url = "https://www.jefit.com/exercises/bodypart.php?id=11&exercises=All";
         bool nextPageExists = true;
         List<HtmlNodeCollection>? listOfLinksToExercises = new();
@@ -22,10 +21,7 @@ public static class ExerciseScraper
             listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
             HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
 
-            if (nextButtonLink is null)
-            {
-                break;
-            }
+            if (nextButtonLink is null) break;
 
             url = nextButtonLink.Attributes["href"].Value;
             string cleanUrl = string.Concat("https://www.jefit.com/exercises", url.AsSpan(1));
@@ -35,8 +31,7 @@ public static class ExerciseScraper
         List<Exercise> exercises = new();
         foreach (HtmlNodeCollection linksToExercise in listOfLinksToExercises)
         {
-            foreach(var linkToExercise in linksToExercise)
-            {
+            foreach (HtmlNode? linkToExercise in linksToExercise)
                 try
                 {
                     url = linkToExercise.Attributes["href"].Value;
@@ -52,10 +47,7 @@ public static class ExerciseScraper
                             doc.DocumentNode.SelectSingleNode(
                                 $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{i}]/div[2]/p[1]");
 
-                        if (mainMuscleGroupTest is null)
-                        {
-                            continue;
-                        }
+                        if (mainMuscleGroupTest is null) continue;
 
                         j = i;
                         for (int p = 0; p < 10; p++)
@@ -64,10 +56,7 @@ public static class ExerciseScraper
                                 doc.DocumentNode.SelectSingleNode(
                                     $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{p}]/div[2]/p[4]");
 
-                            if (typeTest is null)
-                            {
-                                continue;
-                            }
+                            if (typeTest is null) continue;
 
                             k = p;
                             break;
@@ -97,10 +86,10 @@ public static class ExerciseScraper
                     {
                         Name = excerciseNameClean,
                         MainMuscleGroup = MuscleGroupExtensions.FromName(mainMuscleGroup.InnerText),
-                        OtherMuscleGroups = otherMuscleGroups is null
+                        OtherMuscleGroups = otherMuscleGroups.InnerText is null
                             ? new List<MuscleGroup>()
                             : otherMuscleGroups.InnerText.Split(',').Select(MuscleGroupExtensions.FromName).ToList(),
-                        DetailedMuscleGroup = MuscleGroupExtensions.FromName(detailedMuscleGroup?.InnerText),
+                        DetailedMuscleGroup = MuscleGroupExtensions.FromNameDetailed(detailedMuscleGroup?.InnerText),
                         Type = ExerciseTypeExtensions.FromName(type.InnerText),
                         Mechanics = MechanicsExtensions.FromName(mechanics.InnerText),
                         Equipment = EquipmentExtensions.FromName(equipment.InnerText)
@@ -112,9 +101,10 @@ public static class ExerciseScraper
                 {
                     Console.WriteLine(e);
                 }
-            };
-        }
 
-        return Result<List<Exercise>>.Success(exercises);
+            ;
+        }
+        List<Exercise> exercisesWithDuplicates = exercises.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+        return Result<List<Exercise>>.Success(exercisesWithDuplicates);
     }
 }

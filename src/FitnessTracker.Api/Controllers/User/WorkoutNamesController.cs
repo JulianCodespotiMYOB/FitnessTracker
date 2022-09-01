@@ -5,7 +5,7 @@ using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Api.Controllers;
+namespace FitnessTracker.Api.Controllers.User;
 
 [ApiController]
 [Route("Users")]
@@ -18,13 +18,14 @@ public class WorkoutNamesController : ControllerBase
         _workoutNamesService = workoutNamesService;
     }
 
-    [HttpGet("{userId:int}/WorkoutsNames")]
+    [HttpGet("{userId:int}/WorkoutNames")]
     public async Task<IActionResult> GetWorkoutNames(
         [FromRoute] int userId,
         [FromQuery] GetWorkoutNamesRequest request
     )
     {
-        Result<GetWorkoutNamesResponse> getWorkoutNamesResponse = await _workoutNamesService.GetWorkoutNames(userId, request);
+        Result<GetWorkoutNamesResponse> getWorkoutNamesResponse =
+            await _workoutNamesService.GetWorkoutNames(userId, request);
         return getWorkoutNamesResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutNamesResponse.Error))
             : Ok(getWorkoutNamesResponse.Value);

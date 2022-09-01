@@ -26,10 +26,7 @@ public class UserHandler : IAuthorizationService
         Result<User> user =
             await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
 
-        if (user.IsSuccess is false)
-        {
-            return Result<LoginResponse>.Failure(user.Error);
-        }
+        if (user.IsSuccess is false) return Result<LoginResponse>.Failure(user.Error);
 
         if (!user.Value.Password.Equals(loginParameters.Password))
         {
@@ -46,10 +43,7 @@ public class UserHandler : IAuthorizationService
     {
         Result<User> user =
             await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess)
-        {
-            return Result<RegisterResponse>.Failure(user.Error);
-        }
+        if (user.IsSuccess) return Result<RegisterResponse>.Failure(user.Error);
 
         User newUser = registrationParameters.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy

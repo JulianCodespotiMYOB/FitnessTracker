@@ -40,7 +40,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutBuddy");
+                    b.ToTable("WorkoutBuddy", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Datas.Data", b =>
@@ -71,7 +71,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Data");
+                    b.ToTable("Data", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Exercises.Exercise", b =>
@@ -106,7 +106,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Workouts.Activity", b =>
@@ -134,7 +134,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("Activity");
+                    b.ToTable("Activity", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Workouts.Workout", b =>
@@ -168,7 +168,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Workout");
+                    b.ToTable("Workout", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Users.User", b =>
@@ -213,7 +213,7 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Buddy.WorkoutBuddy", b =>

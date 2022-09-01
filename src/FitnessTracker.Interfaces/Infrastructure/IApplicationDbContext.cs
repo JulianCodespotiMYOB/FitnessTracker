@@ -1,4 +1,4 @@
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 

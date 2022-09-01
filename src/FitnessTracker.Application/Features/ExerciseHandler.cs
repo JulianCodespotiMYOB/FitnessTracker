@@ -4,7 +4,7 @@ using FitnessTracker.Domain;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -12,30 +12,29 @@ namespace FitnessTracker.Application.Features;
 
 public class ExerciseHandler : IExerciseService
 {
-    private readonly IApplicationDbContext _applicationDbContext;
-    private readonly ILogger _logger;
     private const string ExercisesCacheKey = "Exercises";
+    private readonly IApplicationDbContext _applicationDbContext;
     private readonly IMemoryCache _cache;
+    private readonly ILogger _logger;
 
-    public ExerciseHandler(ILogger<ExerciseHandler> logger, IApplicationDbContext applicationDbContext, IMemoryCache cache)
+    public ExerciseHandler(ILogger<ExerciseHandler> logger, IApplicationDbContext applicationDbContext,
+        IMemoryCache cache)
     {
         _cache = cache;
         _logger = logger;
         _applicationDbContext = applicationDbContext;
         _cache = cache;
     }
-    
+
     public Result<GetExercisesResponse> GetExercises()
     {
         if (_cache.TryGetValue(ExercisesCacheKey, out List<Exercise>? cachedExercises))
-        {
             return cachedExercises switch
             {
                 null => Result<GetExercisesResponse>.Failure("Failed to load exercises."),
                 _ => Result<GetExercisesResponse>.Success(new GetExercisesResponse(cachedExercises))
             };
-        }
-        
+
         List<Exercise> exercises = _applicationDbContext.Exercises.ToList();
         _cache.Set(ExercisesCacheKey, exercises);
 
@@ -51,12 +50,10 @@ public class ExerciseHandler : IExerciseService
         stopwatch.Stop();
         _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
 
-        if (!exercises.IsSuccess)
-        {
-            return Result<PostExercisesResponse>.Failure(exercises.Error);
-        }
+        if (!exercises.IsSuccess) return Result<PostExercisesResponse>.Failure(exercises.Error);
 
         IEnumerable<Exercise> data = exercises.Value.DistinctBy(x => x.Name);
+        //remove all exercises from db 
         _applicationDbContext.Exercises.RemoveRange(_applicationDbContext.Exercises);
         _applicationDbContext.Exercises.AddRange(data);
         _applicationDbContext.SaveChangesAsync();

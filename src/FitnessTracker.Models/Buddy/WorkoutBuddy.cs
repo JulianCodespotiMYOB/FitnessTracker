@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.Models.Buddy.Anatomy;
 using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Excercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 
@@ -19,8 +19,7 @@ public class WorkoutBuddy
     {
         BuddyData buddyData = new();
         buddyData.Streak = GetWorkoutBuddyStreak();
-        buddyData.Strength = GetWorkoutBuddyStrength();
-        buddyData.Speed = GetWorkoutBuddySpeed();
+        buddyData.MuscleGroupStats = GetWorkoutBuddyMuscleGroupStats();
 
         SetBuddyAnatomyLevel(buddyData);
 
@@ -39,10 +38,7 @@ public class WorkoutBuddy
 
     private int GetWorkoutBuddyStreak()
     {
-        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
-        {
-            return 0;
-        }
+        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
 
         int currentStreak = 1;
         int daysWorkedOutInCurrentWeek = 0;
@@ -50,22 +46,13 @@ public class WorkoutBuddy
 
         foreach (Workout workout in User.Workouts)
         {
-            if (IsWorkoutInCurrentWeek(workout))
-            {
-                daysWorkedOutInCurrentWeek++;
-            }
+            if (IsWorkoutInCurrentWeek(workout)) daysWorkedOutInCurrentWeek++;
 
             if (IsWorkoutInNextWeek(workout))
             {
-                if (UserHasReachedGoal())
-                {
-                    currentStreak++;
-                }
+                if (UserHasReachedGoal()) currentStreak++;
 
-                if (UserHasNotReachedGoal())
-                {
-                    currentStreak = 0;
-                }
+                if (UserHasNotReachedGoal()) currentStreak = 0;
 
                 daysWorkedOutInCurrentWeek = 0;
                 previousWorkoutInCurrentWeek = previousWorkoutInCurrentWeek.AddDays(7);
@@ -95,35 +82,28 @@ public class WorkoutBuddy
         }
     }
 
-    private double GetWorkoutBuddyStrength()
+    private Dictionary<MuscleGroup, double> GetWorkoutBuddyMuscleGroupStats()
     {
         List<Activity> activities = GetActivities();
-        return activities.Where(activity => activity.Data.Type == ExerciseType.Strength)
-            .Aggregate<Activity, double>(0, (current, activity) => current + 1);
-    }
-
-    private double GetWorkoutBuddySpeed()
-    {
-        List<Activity> activities = GetActivities();
-        double workoutBuddySpeed = 0;
+        Dictionary<MuscleGroup, double> muscleGroupStats = new();
         foreach (Activity activity in activities)
         {
-            if (activity.Data.Type == ExerciseType.Cardio)
-            {
-                workoutBuddySpeed += 1;
-            }
+            Dictionary<MuscleGroup, double> exerciseMuscleGroupStats = activity.Exercise.MuscleGroupStats;
+            foreach (KeyValuePair<MuscleGroup, double> muscleGroupStat in exerciseMuscleGroupStats)
+                if (muscleGroupStats.ContainsKey(muscleGroupStat.Key))
+                    muscleGroupStats[muscleGroupStat.Key] += muscleGroupStat.Value;
+                else
+                    muscleGroupStats.Add(muscleGroupStat.Key, muscleGroupStat.Value);
         }
 
-        return workoutBuddySpeed;
+        return muscleGroupStats;
     }
 
     private void SetBuddyAnatomyLevel(BuddyData buddyData)
     {
         List<Exercise> exercises = GetExercises();
         foreach (IBuddyAnatomy buddyAnatomy in buddyData.Anatomy)
-        {
             buddyAnatomy.Level = GetAnatomyLevel(buddyAnatomy.MuscleGroup);
-        }
 
         int GetAnatomyLevel(MuscleGroup anatomyType)
         {

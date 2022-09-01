@@ -4,7 +4,7 @@ using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Api.Controllers;
+namespace FitnessTracker.Api.Controllers.Exercise;
 
 [ApiController]
 [Route("Exercises")]
@@ -33,6 +33,5 @@ public class ExerciseController : ControllerBase
         return !exercisesResponse.IsSuccess
             ? BadRequest(new ErrorResponse(exercisesResponse.Error))
             : Ok(exercisesResponse.Value);
-
     }
 }

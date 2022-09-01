@@ -27,10 +27,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
-        {
-            return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
-        }
+        if (userResult.IsSuccess is false) return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
 
         User user = userResult.Value;
 
@@ -54,10 +51,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                 return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");
         }
 
-        if (dataToReturn.Count == 0)
-        {
-            return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
-        }
+        if (dataToReturn.Count == 0) return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
 
         GetWorkoutGraphDataResponse response = new()
         {
@@ -74,13 +68,9 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
-            {
                 if (activity.Exercise.Name == workoutName)
                 {
-                    if (workout.WeightUnit == weightUnit)
-                    {
-                        weightsForExercise.Add(activity.Data.Weight);
-                    }
+                    if (workout.WeightUnit == weightUnit) weightsForExercise.Add(activity.Data.Weight);
 
                     switch (workout.WeightUnit)
                     {
@@ -92,15 +82,11 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                             break;
                     }
                 }
-            }
         }
 
         Dictionary<int, double> weightsForExerciseAndTime = new();
 
-        for (int i = 0; i < weightsForExercise.Count; i++)
-        {
-            weightsForExerciseAndTime.Add(i, weightsForExercise[i]);
-        }
+        for (int i = 0; i < weightsForExercise.Count; i++) weightsForExerciseAndTime.Add(i, weightsForExercise[i]);
 
         return weightsForExerciseAndTime;
     }
@@ -112,20 +98,14 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
-            {
                 if (activity.Exercise.Name == workoutName)
-                {
                     distancesForExercise.Add(activity.Data.Distance);
-                }
-            }
         }
 
         Dictionary<int, double> distancesForExerciseAndTime = new();
 
         for (int i = 0; i < distancesForExercise.Count; i++)
-        {
             distancesForExerciseAndTime.Add(i, distancesForExercise[i]);
-        }
 
         return distancesForExerciseAndTime;
     }
@@ -137,20 +117,13 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
-            {
                 if (activity.Exercise.Name == workoutName)
-                {
                     repsForExercise.Add(activity.Data.Reps);
-                }
-            }
         }
 
         Dictionary<int, double> repsForExerciseAndTime = new();
 
-        for (int i = 0; i < repsForExercise.Count; i++)
-        {
-            repsForExerciseAndTime.Add(i, repsForExercise[i]);
-        }
+        for (int i = 0; i < repsForExercise.Count; i++) repsForExerciseAndTime.Add(i, repsForExercise[i]);
 
         return repsForExerciseAndTime;
     }
@@ -162,20 +135,13 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
-            {
                 if (activity.Exercise.Name == workoutName)
-                {
                     setsForExercise.Add(activity.Data.Sets);
-                }
-            }
         }
 
         Dictionary<int, double> setsForExerciseAndTime = new();
 
-        for (int i = 0; i < setsForExercise.Count; i++)
-        {
-            setsForExerciseAndTime.Add(i, setsForExercise[i]);
-        }
+        for (int i = 0; i < setsForExercise.Count; i++) setsForExerciseAndTime.Add(i, setsForExercise[i]);
 
         return setsForExerciseAndTime;
     }

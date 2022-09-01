@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Fitness.Exercises;
+namespace FitnessTracker.Models.Fitness.Excercises;
 
 public enum Mechanics
 {

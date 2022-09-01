@@ -1,4 +1,4 @@
-namespace FitnessTracker.Models.Fitness.Exercises;
+namespace FitnessTracker.Models.Fitness.Excercises;
 
 public static class EquipmentExtensions
 {
@@ -6,12 +6,8 @@ public static class EquipmentExtensions
     {
         string cleanedName = name.Trim().ToLower().Replace(" ", "").Replace("-", "");
         foreach (Equipment equipmentType in Enum.GetValues(typeof(Equipment)))
-        {
             if (cleanedName.Contains(equipmentType.ToString().ToLower()))
-            {
                 return equipmentType;
-            }
-        }
 
         return Equipment.Unknown;
     }
