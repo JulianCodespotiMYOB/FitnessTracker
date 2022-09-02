@@ -4,7 +4,7 @@ using FitnessTracker.Domain;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 

@@ -18,7 +18,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")!);
+        optionsBuilder.UseNpgsql(
+            "Host=db.prulbxxcrnwticvwjnjw.supabase.co;Database=postgres;Username=postgres;Password=iLikeTrains100!");
         optionsBuilder.EnableSensitiveDataLogging();
     }
 }

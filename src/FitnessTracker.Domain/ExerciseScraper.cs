@@ -1,6 +1,6 @@
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness;
-using FitnessTracker.Models.Fitness.Excercises;
+using FitnessTracker.Models.Fitness.Exercises;
 using HtmlAgilityPack;
 
 namespace FitnessTracker.Domain;
@@ -38,7 +38,7 @@ public static class ExerciseScraper
                     string cleanUrl = "https://www.jefit.com/exercises/" + url;
                     doc = web.Load(cleanUrl);
                     IEnumerable<string> exerciseName = url.Split('/').Skip(1);
-                    string excerciseNameClean = string.Join("/", exerciseName).Replace("-", " ");
+                    string exerciseNameClean = string.Join("/", exerciseName).Replace("-", " ");
                     int j = 3;
                     int k = 3;
                     for (int i = 0; i < 10; i++)
@@ -84,7 +84,7 @@ public static class ExerciseScraper
 
                     Exercise exercise = new()
                     {
-                        Name = excerciseNameClean,
+                        Name = exerciseNameClean,
                         MainMuscleGroup = MuscleGroupExtensions.FromName(mainMuscleGroup.InnerText),
                         OtherMuscleGroups = otherMuscleGroups.InnerText is null
                             ? new List<MuscleGroup>()
