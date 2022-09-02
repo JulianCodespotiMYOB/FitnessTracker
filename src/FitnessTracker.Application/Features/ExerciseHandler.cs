@@ -4,6 +4,7 @@ using FitnessTracker.Domain;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness;
 using FitnessTracker.Models.Fitness.Exercises;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -36,9 +37,10 @@ public class ExerciseHandler : IExerciseService
             };
 
         List<Exercise> exercises = _applicationDbContext.Exercises.ToList();
-        _cache.Set(ExercisesCacheKey, exercises);
+        List<Exercise> filteredExercises = exercises.Where(x => x.MainMuscleGroup != MuscleGroup.Unknown).ToList();
+        _cache.Set(ExercisesCacheKey, filteredExercises);
 
-        GetExercisesResponse response = new(exercises);
+        GetExercisesResponse response = new(filteredExercises);
         return Result<GetExercisesResponse>.Success(response);
     }
 
