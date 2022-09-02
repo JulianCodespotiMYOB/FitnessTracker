@@ -5,6 +5,7 @@ using FitnessTracker.Contracts.Responses.Workouts;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness.GraphData;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 using Microsoft.Extensions.Logging;
@@ -31,118 +32,129 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
 
         User user = userResult.Value;
 
-        Dictionary<int, double> dataToReturn = new();
+        GetWorkoutGraphDataResponse response;
 
         switch (request.WorkoutGraphType)
         {
             case WorkoutGraphType.Weight:
-                dataToReturn = GetExerciseWeightDataAndTime(user, request.ExerciseName, request.WeightUnit);
+                response = GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps);
                 break;
             case WorkoutGraphType.Distance:
-                dataToReturn = GetExerciseDistanceDataAndTime(user, request.ExerciseName);
+                response = GetDistanceGraphData(user, request.ExerciseName);
                 break;
             case WorkoutGraphType.Reps:
-                dataToReturn = GetExerciseRepsDataAndTime(user, request.ExerciseName);
+                response = GetRepsGraphData(user, request.ExerciseName);
                 break;
             case WorkoutGraphType.Sets:
-                dataToReturn = GetExerciseSetsDataAndTime(user, request.ExerciseName);
+                response = GetSetsGraphData(user, request.ExerciseName);
                 break;
             default:
                 return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");
         }
 
-        if (dataToReturn.Count == 0) return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
-
-        GetWorkoutGraphDataResponse response = new()
-        {
-            Data = dataToReturn
-        };
+        if (response.GraphData.Count == 0) return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
 
         return Result<GetWorkoutGraphDataResponse>.Success(response);
     }
 
-    private Dictionary<int, double> GetExerciseWeightDataAndTime(User user, string workoutName, WeightUnit weightUnit)
+    private GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit,
+        int reps)
     {
-        List<double> weightsForExercise = new();
+        List<WorkoutGraphData> graphData = new();
+        int increment = 0;
 
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
-                if (activity.Exercise.Name == workoutName)
+                if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
                 {
-                    if (workout.WeightUnit == weightUnit) weightsForExercise.Add(activity.Data.Weight);
-
-                    switch (workout.WeightUnit)
+                    double weight = workout.WeightUnit switch
                     {
-                        case WeightUnit.Kilograms when weightUnit == WeightUnit.Pounds:
-                            weightsForExercise.Add(activity.Data.Weight * 2.20462);
-                            break;
-                        case WeightUnit.Pounds when weightUnit == WeightUnit.Kilograms:
-                            weightsForExercise.Add(activity.Data.Weight / 2.20462);
-                            break;
-                    }
+                        WeightUnit.Kilograms when weightUnit == WeightUnit.Pounds => activity.Data.Weight * 2.20462,
+                        WeightUnit.Pounds when weightUnit == WeightUnit.Kilograms => activity.Data.Weight / 2.20462,
+                        _ => activity.Data.Weight
+                    };
+                    graphData.Add(new WorkoutGraphData
+                    {
+                        ExerciseMetaData = weight,
+                        TimeOfExercise = workout.Time,
+                        XAxis = increment++
+                    });
                 }
         }
 
-        Dictionary<int, double> weightsForExerciseAndTime = new();
-
-        for (int i = 0; i < weightsForExercise.Count; i++) weightsForExerciseAndTime.Add(i, weightsForExercise[i]);
-
-        return weightsForExerciseAndTime;
+        return new GetWorkoutGraphDataResponse
+        {
+            GraphData = graphData
+        };
     }
 
-    private Dictionary<int, double> GetExerciseDistanceDataAndTime(User user, string workoutName)
+    private GetWorkoutGraphDataResponse GetDistanceGraphData(User user, string workoutName)
     {
-        List<double> distancesForExercise = new();
+        List<WorkoutGraphData> graphData = new();
+        int increment = 0;
 
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
                 if (activity.Exercise.Name == workoutName)
-                    distancesForExercise.Add(activity.Data.Distance);
+                    graphData.Add(new WorkoutGraphData
+                    {
+                        ExerciseMetaData = activity.Data.Distance,
+                        TimeOfExercise = workout.Time,
+                        XAxis = increment++
+                    });
         }
 
-        Dictionary<int, double> distancesForExerciseAndTime = new();
-
-        for (int i = 0; i < distancesForExercise.Count; i++)
-            distancesForExerciseAndTime.Add(i, distancesForExercise[i]);
-
-        return distancesForExerciseAndTime;
+        return new GetWorkoutGraphDataResponse
+        {
+            GraphData = graphData
+        };
     }
 
-    private Dictionary<int, double> GetExerciseRepsDataAndTime(User user, string workoutName)
+    private GetWorkoutGraphDataResponse GetRepsGraphData(User user, string workoutName)
     {
-        List<double> repsForExercise = new();
+        List<WorkoutGraphData> graphData = new();
+        int increment = 0;
 
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
                 if (activity.Exercise.Name == workoutName)
-                    repsForExercise.Add(activity.Data.Reps);
+                    graphData.Add(new WorkoutGraphData
+                    {
+                        ExerciseMetaData = activity.Data.Reps,
+                        TimeOfExercise = workout.Time,
+                        XAxis = increment++
+                    });
         }
 
-        Dictionary<int, double> repsForExerciseAndTime = new();
-
-        for (int i = 0; i < repsForExercise.Count; i++) repsForExerciseAndTime.Add(i, repsForExercise[i]);
-
-        return repsForExerciseAndTime;
+        return new GetWorkoutGraphDataResponse
+        {
+            GraphData = graphData
+        };
     }
 
-    private Dictionary<int, double> GetExerciseSetsDataAndTime(User user, string workoutName)
+    private GetWorkoutGraphDataResponse GetSetsGraphData(User user, string workoutName)
     {
-        List<double> setsForExercise = new();
+        List<WorkoutGraphData> graphData = new();
+        int increment = 0;
 
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
                 if (activity.Exercise.Name == workoutName)
-                    setsForExercise.Add(activity.Data.Sets);
+                    graphData.Add(new WorkoutGraphData
+                    {
+                        ExerciseMetaData = activity.Data.Sets,
+                        TimeOfExercise = workout.Time,
+                        XAxis = increment++
+                    });
         }
 
-        Dictionary<int, double> setsForExerciseAndTime = new();
-
-        for (int i = 0; i < setsForExercise.Count; i++) setsForExerciseAndTime.Add(i, setsForExercise[i]);
-
-        return setsForExerciseAndTime;
+        return new GetWorkoutGraphDataResponse
+        {
+            GraphData = graphData
+        };
     }
 }

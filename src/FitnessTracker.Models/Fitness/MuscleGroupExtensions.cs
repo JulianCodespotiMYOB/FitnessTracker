@@ -1,5 +1,3 @@
-using FitnessTracker.Models.Fitness.Workouts;
-
 namespace FitnessTracker.Models.Fitness;
 
 public static class MuscleGroupExtensions
@@ -45,9 +43,8 @@ public static class MuscleGroupExtensions
             if (muscleGroup == mainMuscleGroup) score += 100;
 
             if (detailedMuscleGroup is not null)
-            {
-                if (MuscleGroupContainsDetailedMuscleGroup(muscleGroup, detailedMuscleGroup.Value)) score += 50;
-            }
+                if (MuscleGroupContainsDetailedMuscleGroup(muscleGroup, detailedMuscleGroup.Value))
+                    score += 50;
 
             if (otherMuscleGroups != null && otherMuscleGroups.Contains(muscleGroup)) score += 25;
 

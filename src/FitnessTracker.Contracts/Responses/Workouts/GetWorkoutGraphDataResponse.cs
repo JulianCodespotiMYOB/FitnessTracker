@@ -1,6 +1,8 @@
+using FitnessTracker.Models.Fitness.GraphData;
+
 namespace FitnessTracker.Contracts.Responses.Workouts;
 
 public class GetWorkoutGraphDataResponse
 {
-    public Dictionary<int, double> Data { get; set; }
+    public List<WorkoutGraphData> GraphData { get; set; }
 }

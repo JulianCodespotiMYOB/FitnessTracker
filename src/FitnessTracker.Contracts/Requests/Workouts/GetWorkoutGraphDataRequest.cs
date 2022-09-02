@@ -9,4 +9,5 @@ public class GetWorkoutGraphDataRequest
     public WeightUnit WeightUnit { get; set; } = WeightUnit.Kilograms;
     public WorkoutGraphType WorkoutGraphType { get; set; }
     public string ExerciseName { get; set; }
+    public int Reps { get; set; }
 }
