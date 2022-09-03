@@ -12,6 +12,7 @@ public static class UserHelper
         ILogger logger)
     {
         User? user = await context.Users
+            .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Data)
@@ -34,6 +35,7 @@ public static class UserHelper
         ILogger logger)
     {
         User? user = await context.Users
+            .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Data)

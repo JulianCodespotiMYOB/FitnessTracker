@@ -17,4 +17,5 @@ public class User
     public int Age { get; set; }
     public List<Workout> Workouts { get; set; } = new();
     public WorkoutBuddy WorkoutBuddy { get; set; }
+    public UserSettings UserSettings { get; set; }
 }

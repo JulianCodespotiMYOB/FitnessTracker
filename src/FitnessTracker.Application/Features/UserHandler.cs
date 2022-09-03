@@ -1,4 +1,5 @@
 using FitnessTracker.Application.Common;
+using FitnessTracker.Contracts.Requests.Authorization;
 using FitnessTracker.Contracts.Responses.Authorization;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services;
@@ -21,16 +22,16 @@ public class UserHandler : IAuthorizationService
         _logger = logger;
     }
 
-    public async Task<Result<LoginResponse>> LoginAsync(LoginParameters loginParameters)
+    public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)
     {
         Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(loginParameters.Email, _applicationDbContext, _logger);
+            await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
 
         if (user.IsSuccess is false) return Result<LoginResponse>.Failure(user.Error);
 
-        if (!user.Value.Password.Equals(loginParameters.Password))
+        if (!user.Value.Password.Equals(request.Password))
         {
-            string message = $"Password for user with email {loginParameters.Email} is incorrect.";
+            string message = $"Password for user with email {request.Email} is incorrect.";
             _logger.LogError(message);
             return Result<LoginResponse>.Failure(message);
         }
@@ -39,18 +40,23 @@ public class UserHandler : IAuthorizationService
         return Result<LoginResponse>.Success(response);
     }
 
-    public async Task<Result<RegisterResponse>> RegisterAsync(RegistrationParameters registrationParameters)
+    public async Task<Result<RegisterResponse>> RegisterAsync(RegisterRequest request)
     {
         Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(registrationParameters.Email, _applicationDbContext, _logger);
+            await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
         if (user.IsSuccess) return Result<RegisterResponse>.Failure(user.Error);
 
-        User newUser = registrationParameters.Adapt<User>();
+        User newUser = request.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy
         {
-            Name = registrationParameters.BuddyName,
-            Description = registrationParameters.BuddyDescription,
-            IconId = registrationParameters.BuddyIconId
+            Name = request.BuddyName,
+            Description = request.BuddyDescription,
+            IconId = request.BuddyIconId
+        };
+        newUser.UserSettings = new UserSettings
+        {
+            MeasurementUnit = request.MeasurementUnit,
+            WeightUnit = request.WeightUnit
         };
 
         await _applicationDbContext.Users.AddAsync(newUser);

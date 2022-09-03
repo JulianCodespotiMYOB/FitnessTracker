@@ -27,12 +27,21 @@ public class WorkoutHandler : IWorkoutService
         if (userResult.IsSuccess is false) return Result<RecordWorkoutResponse>.Failure("User not found");
 
         User user = userResult.Value;
-        user.Workouts.Add(request.Workout);
+        Workout workout = new()
+        {
+            Activities = request.Activities,
+            Completed = request.Completed,
+            Time = request.Time,
+            Name = request.Name,
+            User = user
+        };
+
+        user.Workouts.Add(workout);
         await _applicationDbContext.SaveChangesAsync();
 
         RecordWorkoutResponse response = new()
         {
-            Id = request.Workout.Id
+            Id = workout.Id
         };
 
         return Result<RecordWorkoutResponse>.Success(response);
