@@ -1,4 +1,4 @@
-﻿using FitnessTracker.Models.Fitness;
+﻿using FitnessTracker.Models.Fitness.Enums;
 
 namespace FitnessTracker.Models.Buddy.Anatomy;
 

@@ -1,11 +1,20 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FitnessTracker.Application.Features;
-using FitnessTracker.Contracts.Requests.Authorization;
-using FitnessTracker.Contracts.Requests.Workouts;
+using FitnessTracker.Application.Features.Exercises;
+using FitnessTracker.Application.Features.Users;
+using FitnessTracker.Application.Features.WorkoutGraphData;
+using FitnessTracker.Application.Features.WorkoutNames;
+using FitnessTracker.Application.Features.Workouts;
+using FitnessTracker.Contracts.Requests.Users;
+using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
+using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces.Infrastructure;
-using FitnessTracker.Interfaces.Services;
+using FitnessTracker.Interfaces.Services.Authorization;
+using FitnessTracker.Interfaces.Services.Exercises;
+using FitnessTracker.Interfaces.Services.WorkoutGraphData;
+using FitnessTracker.Interfaces.Services.WorkoutNames;
+using FitnessTracker.Interfaces.Services.Workouts;
 using FluentValidation;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

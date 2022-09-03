@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.Models.Buddy.Anatomy;
 using FitnessTracker.Models.Buddy.Anatomy.Parts;
-using FitnessTracker.Models.Fitness;
+using FitnessTracker.Models.Fitness.Enums;
 
 namespace FitnessTracker.Models.Buddy;
 

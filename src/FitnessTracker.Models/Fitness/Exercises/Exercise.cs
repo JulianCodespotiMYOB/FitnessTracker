@@ -1,3 +1,6 @@
+using FitnessTracker.Models.Fitness.Enums;
+using FitnessTracker.Models.Fitness.Extensions;
+
 namespace FitnessTracker.Models.Fitness.Exercises;
 
 public class Exercise
