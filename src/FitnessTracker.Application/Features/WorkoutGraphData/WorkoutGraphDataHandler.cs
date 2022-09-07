@@ -53,7 +53,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                 return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");
         }
 
-        if (response.GraphData.Count == 0) 
+        if (response.GraphData.Count == 0)
         {
             return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
         }
@@ -61,7 +61,8 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         return Result<GetWorkoutGraphDataResponse>.Success(response);
     }
 
-    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit, int reps)
+    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit,
+        int reps)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -69,6 +70,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
+            {
                 if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
                 {
                     double weight = workout.WeightUnit switch
@@ -84,6 +86,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                         XAxis = increment++
                     });
                 }
+            }
         }
 
         return new GetWorkoutGraphDataResponse
@@ -100,13 +103,17 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
+            {
                 if (activity.Exercise.Name == workoutName)
+                {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
                         ExerciseMetaData = activity.Data.Distance,
                         TimeOfExercise = workout.Time,
                         XAxis = increment++
                     });
+                }
+            }
         }
 
         return new GetWorkoutGraphDataResponse
@@ -123,13 +130,17 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
+            {
                 if (activity.Exercise.Name == workoutName)
+                {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
                         ExerciseMetaData = activity.Data.Reps,
                         TimeOfExercise = workout.Time,
                         XAxis = increment++
                     });
+                }
+            }
         }
 
         return new GetWorkoutGraphDataResponse
@@ -142,17 +153,21 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
-            
+
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)
+            {
                 if (activity.Exercise.Name == workoutName)
+                {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
                         ExerciseMetaData = activity.Data.Sets,
                         TimeOfExercise = workout.Time,
                         XAxis = increment++
                     });
+                }
+            }
         }
 
         return new GetWorkoutGraphDataResponse

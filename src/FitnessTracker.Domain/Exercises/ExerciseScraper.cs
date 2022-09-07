@@ -22,7 +22,10 @@ public static class ExerciseScraper
             listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
             HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
 
-            if (nextButtonLink is null) break;
+            if (nextButtonLink is null)
+            {
+                break;
+            }
 
             url = nextButtonLink.Attributes["href"].Value;
             string cleanUrl = string.Concat("https://www.jefit.com/exercises", url.AsSpan(1));
@@ -33,6 +36,7 @@ public static class ExerciseScraper
         foreach (HtmlNodeCollection linksToExercise in listOfLinksToExercises)
         {
             foreach (HtmlNode? linkToExercise in linksToExercise)
+            {
                 try
                 {
                     url = linkToExercise.Attributes["href"].Value;
@@ -48,7 +52,10 @@ public static class ExerciseScraper
                             doc.DocumentNode.SelectSingleNode(
                                 $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{i}]/div[2]/p[1]");
 
-                        if (mainMuscleGroupTest is null) continue;
+                        if (mainMuscleGroupTest is null)
+                        {
+                            continue;
+                        }
 
                         j = i;
                         for (int p = 0; p < 10; p++)
@@ -57,7 +64,10 @@ public static class ExerciseScraper
                                 doc.DocumentNode.SelectSingleNode(
                                     $"//*[@id=\"page\"]/div/div[3]/div/div[1]/div[3]/div[{p}]/div[2]/p[4]");
 
-                            if (typeTest is null) continue;
+                            if (typeTest is null)
+                            {
+                                continue;
+                            }
 
                             k = p;
                             break;
@@ -102,6 +112,7 @@ public static class ExerciseScraper
                 {
                     Console.WriteLine(e);
                 }
+            }
 
             ;
         }

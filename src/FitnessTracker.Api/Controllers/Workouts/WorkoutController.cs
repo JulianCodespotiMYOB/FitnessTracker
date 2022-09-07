@@ -78,7 +78,9 @@ public class WorkoutController : ControllerBase
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
         if (!validationResult.IsValid)
+        {
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
+        }
 
         Result<UpdateWorkoutResponse> updateWorkoutResponse =
             await _workoutService.UpdateWorkout(request, workoutId, userId);

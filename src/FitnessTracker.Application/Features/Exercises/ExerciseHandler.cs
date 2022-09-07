@@ -31,11 +31,13 @@ public class ExerciseHandler : IExerciseService
     public Result<GetExercisesResponse> GetExercises()
     {
         if (_cache.TryGetValue(ExercisesCacheKey, out List<Exercise>? cachedExercises))
+        {
             return cachedExercises switch
             {
                 null => Result<GetExercisesResponse>.Failure("Failed to load exercises."),
                 _ => Result<GetExercisesResponse>.Success(new GetExercisesResponse(cachedExercises))
             };
+        }
 
         List<Exercise> exercises = _applicationDbContext.Exercises.ToList();
         List<Exercise> filteredExercises = exercises.Where(x => x.MainMuscleGroup != MuscleGroup.Unknown).ToList();
@@ -53,7 +55,10 @@ public class ExerciseHandler : IExerciseService
         stopwatch.Stop();
         _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
 
-        if (!exercises.IsSuccess) return Result<PostExercisesResponse>.Failure(exercises.Error);
+        if (!exercises.IsSuccess)
+        {
+            return Result<PostExercisesResponse>.Failure(exercises.Error);
+        }
 
         IEnumerable<Exercise> data = exercises.Value.DistinctBy(x => x.Name);
         //remove all exercises from db 

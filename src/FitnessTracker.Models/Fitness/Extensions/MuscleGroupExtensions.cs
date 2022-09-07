@@ -6,26 +6,40 @@ public static class MuscleGroupExtensions
 {
     public static MuscleGroup FromName(string? name)
     {
-        if (name is null) return MuscleGroup.Unknown;
+        if (name is null)
+        {
+            return MuscleGroup.Unknown;
+        }
 
         string cleanedName = name.Trim().ToLower().Replace(" ", "");
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
+        {
             if (cleanedName.Contains(muscleGroup.ToString().ToLower()))
+            {
                 return muscleGroup;
+            }
+        }
 
         return MuscleGroup.Unknown;
     }
 
     public static DetailedMuscleGroup? FromNameDetailed(string? name)
     {
-        if (name is null) return null;
+        if (name is null)
+        {
+            return null;
+        }
 
         string cleanedName = name.Trim().ToLower().Replace(" ", "");
 
         foreach (DetailedMuscleGroup muscleGroup in Enum.GetValues(typeof(DetailedMuscleGroup)))
+        {
             if (cleanedName.Contains(muscleGroup.ToString().ToLower()))
+            {
                 return muscleGroup;
+            }
+        }
 
         return null;
     }
@@ -38,17 +52,30 @@ public static class MuscleGroupExtensions
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
         {
-            if (muscleGroup == MuscleGroup.Unknown) continue;
+            if (muscleGroup == MuscleGroup.Unknown)
+            {
+                continue;
+            }
 
             double score = 0;
 
-            if (muscleGroup == mainMuscleGroup) score += 100;
+            if (muscleGroup == mainMuscleGroup)
+            {
+                score += 100;
+            }
 
             if (detailedMuscleGroup is not null)
+            {
                 if (MuscleGroupContainsDetailedMuscleGroup(muscleGroup, detailedMuscleGroup.Value))
+                {
                     score += 50;
+                }
+            }
 
-            if (otherMuscleGroups != null && otherMuscleGroups.Contains(muscleGroup)) score += 25;
+            if (otherMuscleGroups != null && otherMuscleGroups.Contains(muscleGroup))
+            {
+                score += 25;
+            }
 
             muscleGroupScore.Add(muscleGroup, score);
         }

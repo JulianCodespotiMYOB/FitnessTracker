@@ -25,7 +25,7 @@ public class UserHandler : IAuthorizationService
     public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)
     {
         Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess is false) 
+        if (user.IsSuccess is false)
         {
             return Result<LoginResponse>.Failure(user.Error);
         }
@@ -54,7 +54,7 @@ public class UserHandler : IAuthorizationService
         User newUser = request.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy
         {
-            Name = request.BuddyName,
+            Name = request.BuddyName
         };
 
         newUser.UserSettings = new UserSettings

@@ -38,7 +38,10 @@ public class WorkoutBuddy
 
     private int GetWorkoutBuddyStreak()
     {
-        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal) return 0;
+        if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
+        {
+            return 0;
+        }
 
         int currentStreak = 1;
         int daysWorkedOutInCurrentWeek = 0;
@@ -46,13 +49,22 @@ public class WorkoutBuddy
 
         foreach (Workout workout in User.Workouts)
         {
-            if (IsWorkoutInCurrentWeek(workout)) daysWorkedOutInCurrentWeek++;
+            if (IsWorkoutInCurrentWeek(workout))
+            {
+                daysWorkedOutInCurrentWeek++;
+            }
 
             if (IsWorkoutInNextWeek(workout))
             {
-                if (UserHasReachedGoal()) currentStreak++;
+                if (UserHasReachedGoal())
+                {
+                    currentStreak++;
+                }
 
-                if (UserHasNotReachedGoal()) currentStreak = 0;
+                if (UserHasNotReachedGoal())
+                {
+                    currentStreak = 0;
+                }
 
                 daysWorkedOutInCurrentWeek = 0;
                 previousWorkoutInCurrentWeek = previousWorkoutInCurrentWeek.AddDays(7);
@@ -90,10 +102,16 @@ public class WorkoutBuddy
         {
             Dictionary<MuscleGroup, double> exerciseMuscleGroupStats = activity.Exercise.MuscleGroupStats;
             foreach (KeyValuePair<MuscleGroup, double> muscleGroupStat in exerciseMuscleGroupStats)
+            {
                 if (muscleGroupStats.ContainsKey(muscleGroupStat.Key))
+                {
                     muscleGroupStats[muscleGroupStat.Key] += muscleGroupStat.Value;
+                }
                 else
+                {
                     muscleGroupStats.Add(muscleGroupStat.Key, muscleGroupStat.Value);
+                }
+            }
         }
 
         return muscleGroupStats;

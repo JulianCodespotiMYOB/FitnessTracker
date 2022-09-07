@@ -55,9 +55,13 @@ builder.Services.AddScoped<IExerciseService, ExerciseHandler>();
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
+{
     app.UseDeveloperExceptionPage();
+}
 else
+{
     app.UseHttpsRedirection();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
