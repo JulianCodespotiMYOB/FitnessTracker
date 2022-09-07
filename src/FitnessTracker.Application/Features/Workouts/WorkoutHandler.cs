@@ -41,11 +41,11 @@ public class WorkoutHandler : IWorkoutService
             Activities = request.Activities,
             Completed = request.Completed,
             Time = request.Time,
+            Past = request.Past,
             Name = request.Name,
             User = user
         };
 
-        user.Workouts.Add(workout);
         await _applicationDbContext.SaveChangesAsync();
 
         RecordWorkoutResponse response = new()

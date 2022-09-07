@@ -113,8 +113,6 @@ public static class ExerciseScraper
                     Console.WriteLine(e);
                 }
             }
-
-            ;
         }
 
         List<Exercise> exercisesWithDuplicates = exercises.GroupBy(x => x.Name).Select(x => x.First()).ToList();
