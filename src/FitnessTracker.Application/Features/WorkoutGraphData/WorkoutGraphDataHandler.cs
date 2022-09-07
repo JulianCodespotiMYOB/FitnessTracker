@@ -28,12 +28,13 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         int userId)
     {
         Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false) return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
+        if (userResult.IsSuccess is false)
+        {
+            return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
+        }
 
         User user = userResult.Value;
-
         GetWorkoutGraphDataResponse response;
-
         switch (request.WorkoutGraphType)
         {
             case WorkoutGraphType.Weight:
@@ -52,13 +53,15 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                 return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");
         }
 
-        if (response.GraphData.Count == 0) return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
+        if (response.GraphData.Count == 0) 
+        {
+            return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
+        }
 
         return Result<GetWorkoutGraphDataResponse>.Success(response);
     }
 
-    private GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit,
-        int reps)
+    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit, int reps)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -89,7 +92,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         };
     }
 
-    private GetWorkoutGraphDataResponse GetDistanceGraphData(User user, string workoutName)
+    private static GetWorkoutGraphDataResponse GetDistanceGraphData(User user, string workoutName)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -112,7 +115,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         };
     }
 
-    private GetWorkoutGraphDataResponse GetRepsGraphData(User user, string workoutName)
+    private static GetWorkoutGraphDataResponse GetRepsGraphData(User user, string workoutName)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -135,11 +138,11 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         };
     }
 
-    private GetWorkoutGraphDataResponse GetSetsGraphData(User user, string workoutName)
+    private static GetWorkoutGraphDataResponse GetSetsGraphData(User user, string workoutName)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
-
+            
         foreach (Workout workout in user.Workouts)
         {
             foreach (Activity activity in workout.Activities)

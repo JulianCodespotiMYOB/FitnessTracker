@@ -24,7 +24,7 @@ public static class UserHelper
 
         if (user is null)
         {
-            logger.LogError($"User with id {userId} not found");
+            logger.LogError($"User with the id {userId} was not found");
             return Result<User>.Failure("User not found");
         }
 
@@ -43,11 +43,11 @@ public static class UserHelper
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
-            .FirstOrDefaultAsync(u => u.Email == userEmail);
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
 
         if (user is null)
         {
-            logger.LogError($"User with id {userEmail} not found");
+            logger.LogError($"User with the email {userEmail} was not found");
             return Result<User>.Failure("User not found");
         }
 

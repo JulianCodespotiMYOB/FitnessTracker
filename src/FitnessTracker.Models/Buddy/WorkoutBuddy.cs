@@ -11,7 +11,7 @@ public class WorkoutBuddy
     public int Id { get; set; }
     public User User { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string Description { get; set; } = "No description";
     public int IconId { get; set; }
     public BuddyData Data => GetWorkoutBuddyData();
 
@@ -102,8 +102,11 @@ public class WorkoutBuddy
     private void SetBuddyAnatomyLevel(BuddyData buddyData)
     {
         List<Exercise> exercises = GetExercises();
+
         foreach (IBuddyAnatomy buddyAnatomy in buddyData.Anatomy)
+        {
             buddyAnatomy.Level = GetAnatomyLevel(buddyAnatomy.MuscleGroup);
+        }
 
         int GetAnatomyLevel(MuscleGroup anatomyType)
         {

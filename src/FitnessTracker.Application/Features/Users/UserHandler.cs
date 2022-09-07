@@ -24,10 +24,11 @@ public class UserHandler : IAuthorizationService
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)
     {
-        Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
-
-        if (user.IsSuccess is false) return Result<LoginResponse>.Failure(user.Error);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
+        if (user.IsSuccess is false) 
+        {
+            return Result<LoginResponse>.Failure(user.Error);
+        }
 
         if (!user.Value.Password.Equals(request.Password))
         {
@@ -42,17 +43,20 @@ public class UserHandler : IAuthorizationService
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegisterRequest request)
     {
-        Result<User> user =
-            await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess) return Result<RegisterResponse>.Failure(user.Error);
+        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
+        if (user.IsSuccess)
+        {
+            string message = $"User with email {request.Email} already exists.";
+            _logger.LogError(message);
+            return Result<RegisterResponse>.Failure(message);
+        }
 
         User newUser = request.Adapt<User>();
         newUser.WorkoutBuddy = new WorkoutBuddy
         {
             Name = request.BuddyName,
-            Description = request.BuddyDescription,
-            IconId = request.BuddyIconId
         };
+
         newUser.UserSettings = new UserSettings
         {
             MeasurementUnit = request.MeasurementUnit,
