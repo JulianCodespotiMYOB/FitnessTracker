@@ -82,8 +82,7 @@ public class WorkoutController : ControllerBase
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        Result<UpdateWorkoutResponse> updateWorkoutResponse =
-            await _workoutService.UpdateWorkout(request, workoutId, userId);
+        Result<UpdateWorkoutResponse> updateWorkoutResponse = await _workoutService.UpdateWorkout(request, workoutId, userId);
         return updateWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(updateWorkoutResponse.Error))
             : Ok(updateWorkoutResponse.Value);

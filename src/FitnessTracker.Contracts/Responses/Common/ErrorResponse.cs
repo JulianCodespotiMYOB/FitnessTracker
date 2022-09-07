@@ -2,6 +2,8 @@ namespace FitnessTracker.Contracts.Responses.Common;
 
 public record ErrorResponse
 {
+    public IEnumerable<string> Errors { get; }
+
     public ErrorResponse(IEnumerable<string> errors)
     {
         Errors = errors;
@@ -11,6 +13,4 @@ public record ErrorResponse
     {
         Errors = new[] { error ?? "An unknown error has occured." };
     }
-
-    public IEnumerable<string> Errors { get; init; }
 }
