@@ -29,11 +29,4 @@
         <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj"/>
         <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Assets\*.*">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
 </Project>
