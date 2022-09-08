@@ -24,13 +24,12 @@ public class WorkoutNamesHandler : IWorkoutNamesService
 
     public async Task<Result<GetWorkoutNamesResponse>> GetWorkoutNames(int userId, GetWorkoutNamesRequest request)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<GetWorkoutNamesResponse>.Failure("User not found");
         }
 
-        User user = userResult.Value;
         List<string> workoutNames = user.Workouts.Select(w => w.Name).ToList();
 
         workoutNames = request.Order switch

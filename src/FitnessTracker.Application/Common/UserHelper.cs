@@ -8,10 +8,9 @@ namespace FitnessTracker.Application.Common;
 
 public static class UserHelper
 {
-    public static async Task<Result<User>> GetUserFromDatabaseById(int userId, IApplicationDbContext context,
-        ILogger logger)
+    public static async Task<User?> GetUserFromDatabaseById(int userId, IApplicationDbContext context)
     {
-        User? user = await context.Users
+        return await context.Users
             .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
@@ -21,20 +20,11 @@ public static class UserHelper
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
             .FirstOrDefaultAsync(u => u.Id == userId);
-
-        if (user is null)
-        {
-            logger.LogError($"User with the id {userId} was not found");
-            return Result<User>.Failure("User not found");
-        }
-
-        return Result<User>.Success(user);
     }
 
-    public static async Task<Result<User>> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context,
-        ILogger logger)
+    public static async Task<User?> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context)
     {
-        User? user = await context.Users
+        return await context.Users
             .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
@@ -44,14 +34,6 @@ public static class UserHelper
             .ThenInclude(a => a.Exercise)
             .Include(u => u.WorkoutBuddy)
             .FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
-
-        if (user is null)
-        {
-            logger.LogError($"User with the email {userEmail} was not found");
-            return Result<User>.Failure("User not found");
-        }
-
-        return Result<User>.Success(user);
     }
 
     public static async Task<Result<IEnumerable<User>>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext,

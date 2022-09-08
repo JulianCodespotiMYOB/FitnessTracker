@@ -29,13 +29,12 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<RecordWorkoutResponse>> RecordWorkout(RecordWorkoutRequest request, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<RecordWorkoutResponse>.Failure("User not found");
         }
 
-        User user = userResult.Value;
         Workout workout = new()
         {
             Activities = request.Activities,
@@ -43,9 +42,9 @@ public class WorkoutHandler : IWorkoutService
             Time = request.Time,
             Past = request.Past,
             Name = request.Name,
-            User = user
         };
 
+        user.Workouts.Add(workout);
         await _applicationDbContext.SaveChangesAsync();
 
         RecordWorkoutResponse response = new()
@@ -58,15 +57,15 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<GetWorkoutsResponse>> GetWorkouts(int userId, GetWorkoutsRequest request)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<GetWorkoutsResponse>.Failure("User not found");
         }
 
         GetWorkoutsResponse response = new()
         {
-            Workouts = userResult.Value.Workouts
+            Workouts = user.Workouts
         };
 
         if (request.Name is not null)
@@ -79,13 +78,11 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<GetWorkoutResponse>> GetWorkout(int workoutId, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<GetWorkoutResponse>.Failure("User not found");
         }
-
-        User? user = userResult.Value;
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
@@ -103,13 +100,12 @@ public class WorkoutHandler : IWorkoutService
     public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId,
         int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<UpdateWorkoutResponse>.Failure("User not found");
         }
 
-        User user = userResult.Value;
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
@@ -131,13 +127,11 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<DeleteWorkoutResponse>.Failure("User not found");
         }
-
-        User? user = userResult.Value;
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)

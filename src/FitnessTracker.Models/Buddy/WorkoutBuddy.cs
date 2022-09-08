@@ -11,8 +11,6 @@ public class WorkoutBuddy
     public int Id { get; set; }
     public User User { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; } = "No description";
-    public int IconId { get; set; }
     public BuddyData Data => GetWorkoutBuddyData();
 
     private BuddyData GetWorkoutBuddyData()

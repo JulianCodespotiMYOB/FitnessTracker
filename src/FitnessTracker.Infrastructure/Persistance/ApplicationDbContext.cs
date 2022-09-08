@@ -1,6 +1,7 @@
 using System.Reflection;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Exercise> Exercises { get; set; } = null!;
+    public DbSet<Workout> Workouts { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -24,27 +24,27 @@ public class UserHandler : IAuthorizationService
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext);
+        if (user is null)
         {
-            return Result<LoginResponse>.Failure(user.Error);
+            return Result<LoginResponse>.Failure("User not found");
         }
 
-        if (!user.Value.Password.Equals(request.Password))
+        if (!user.Password.Equals(request.Password))
         {
             string message = $"Password for user with email {request.Email} is incorrect.";
             _logger.LogError(message);
             return Result<LoginResponse>.Failure(message);
         }
 
-        LoginResponse response = new(user.Value);
+        LoginResponse response = new(user);
         return Result<LoginResponse>.Success(response);
     }
 
     public async Task<Result<RegisterResponse>> RegisterAsync(RegisterRequest request)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext, _logger);
-        if (user.IsSuccess)
+        User? user = await UserHelper.GetUserFromDatabaseByEmail(request.Email, _applicationDbContext);
+        if (user is not null)
         {
             string message = $"User with email {request.Email} already exists.";
             _logger.LogError(message);
@@ -72,10 +72,10 @@ public class UserHandler : IAuthorizationService
 
     public async Task<Result<GetUserResponse>> GetUserAsync(int id)
     {
-        Result<User> user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext, _logger);
-        return user.IsSuccess
-            ? Result<GetUserResponse>.Success(new GetUserResponse(user.Value))
-            : Result<GetUserResponse>.Failure(user.Error);
+        User? user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext);
+        return user is not null
+            ? Result<GetUserResponse>.Success(new GetUserResponse(user))
+            : Result<GetUserResponse>.Failure("User not found");
     }
 
     public async Task<Result<GetUsersResponse>> GetUsersAsync()

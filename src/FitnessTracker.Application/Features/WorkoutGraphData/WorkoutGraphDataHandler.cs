@@ -27,13 +27,12 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
     public async Task<Result<GetWorkoutGraphDataResponse>> GetWorkoutGraphData(GetWorkoutGraphDataRequest request,
         int userId)
     {
-        Result<User> userResult = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext, _logger);
-        if (userResult.IsSuccess is false)
+        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
+        if (user is null)
         {
             return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
         }
 
-        User user = userResult.Value;
         GetWorkoutGraphDataResponse response;
         switch (request.WorkoutGraphType)
         {
@@ -61,8 +60,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         return Result<GetWorkoutGraphDataResponse>.Success(response);
     }
 
-    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit,
-        int reps)
+    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit, int reps)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -73,12 +71,13 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             {
                 if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
                 {
-                    double weight = workout.WeightUnit switch
+                    double weight = weightUnit switch
                     {
                         WeightUnit.Kilograms when weightUnit == WeightUnit.Pounds => activity.Data.Weight * 2.20462,
                         WeightUnit.Pounds when weightUnit == WeightUnit.Kilograms => activity.Data.Weight / 2.20462,
                         _ => activity.Data.Weight
                     };
+
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
                         ExerciseMetaData = weight,
