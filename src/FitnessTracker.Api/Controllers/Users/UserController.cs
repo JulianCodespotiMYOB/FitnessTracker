@@ -1,7 +1,7 @@
 using FitnessTracker.Contracts.Requests.Users;
 using FitnessTracker.Contracts.Responses.Common;
 using FitnessTracker.Contracts.Responses.Users;
-using FitnessTracker.Interfaces.Services.Authorization;
+using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Common;
 using FluentValidation;
 using FluentValidation.Results;
@@ -14,11 +14,11 @@ namespace FitnessTracker.Api.Controllers.Users;
 [Route("Users")]
 public class UserController : ControllerBase
 {
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IUserService _userService;
 
-    public UserController(IAuthorizationService authorizationService)
+    public UserController(IUserService userService)
     {
-        _authorizationService = authorizationService;
+        _userService = userService;
     }
 
     [HttpPost("Login")]
@@ -31,7 +31,7 @@ public class UserController : ControllerBase
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        Result<LoginResponse> loginResponse = await _authorizationService.LoginAsync(request.Adapt<LoginRequest>());
+        Result<LoginResponse> loginResponse = await _userService.LoginAsync(request);
         return !loginResponse.IsSuccess
             ? BadRequest(new ErrorResponse(loginResponse.Error))
             : Ok(loginResponse.Value);
@@ -47,8 +47,7 @@ public class UserController : ControllerBase
             return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        Result<RegisterResponse> registerResponse =
-            await _authorizationService.RegisterAsync(request.Adapt<RegisterRequest>());
+        Result<RegisterResponse> registerResponse = await _userService.RegisterAsync(request);
         return !registerResponse.IsSuccess
             ? BadRequest(new ErrorResponse(registerResponse.Error))
             : Ok(registerResponse.Value);
@@ -57,7 +56,7 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser(int id)
     {
-        Result<GetUserResponse> user = await _authorizationService.GetUserAsync(id);
+        Result<GetUserResponse> user = await _userService.GetUserAsync(id);
         return !user.IsSuccess
             ? BadRequest(new ErrorResponse(user.Error))
             : Ok(user.Value);
@@ -66,9 +65,18 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
-        Result<GetUsersResponse> users = await _authorizationService.GetUsersAsync();
+        Result<GetUsersResponse> users = await _userService.GetUsersAsync();
         return !users.IsSuccess
             ? BadRequest(new ErrorResponse(users.Error))
             : Ok(users.Value);
+    }
+
+    [HttpPut("{id}/Settings")]
+    public async Task<IActionResult> UpdateSettings(int id, [FromBody] UpdateSettingsRequest request)
+    {
+        Result<UpdateSettingsResponse> setSettingsResponse = await _userService.SetSettingsAsync(id, request);
+        return !setSettingsResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(setSettingsResponse.Error))
+            : Ok(setSettingsResponse.Value);
     }
 }

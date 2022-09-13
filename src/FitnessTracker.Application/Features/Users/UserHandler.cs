@@ -2,7 +2,7 @@ using FitnessTracker.Application.Common;
 using FitnessTracker.Contracts.Requests.Users;
 using FitnessTracker.Contracts.Responses.Users;
 using FitnessTracker.Interfaces.Infrastructure;
-using FitnessTracker.Interfaces.Services.Authorization;
+using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Users;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Users;
 
-public class UserHandler : IAuthorizationService
+public class UserHandler : IUserService
 {
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly ILogger _logger;
@@ -84,5 +84,32 @@ public class UserHandler : IAuthorizationService
         return users.IsSuccess
             ? Result<GetUsersResponse>.Success(new GetUsersResponse(users.Value))
             : Result<GetUsersResponse>.Failure(users.Error);
+    }
+
+    public async Task<Result<UpdateSettingsResponse>> SetSettingsAsync(int id, UpdateSettingsRequest request)
+    {
+        User? user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext);
+        if (user is null)
+        {
+            return Result<UpdateSettingsResponse>.Failure("User not found");
+        }
+        
+        if (request.WeightUnit is not null)
+        {
+            user.UserSettings.WeightUnit = request.WeightUnit.Value;
+        }
+
+        if (request.MeasurementUnit is not null)
+        {
+            user.UserSettings.MeasurementUnit = request.MeasurementUnit.Value;
+        }
+
+        if (request.DarkMode is not null)
+        {
+            user.UserSettings.DarkMode = request.DarkMode.Value;
+        }
+
+        await _applicationDbContext.SaveChangesAsync();
+        return Result<UpdateSettingsResponse>.Success(new UpdateSettingsResponse(user.UserSettings));
     }
 }

@@ -10,8 +10,8 @@ using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces.Infrastructure;
-using FitnessTracker.Interfaces.Services.Authorization;
 using FitnessTracker.Interfaces.Services.Exercises;
+using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Interfaces.Services.WorkoutGraphData;
 using FitnessTracker.Interfaces.Services.WorkoutNames;
 using FitnessTracker.Interfaces.Services.Workouts;
@@ -49,7 +49,7 @@ builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutReq
 builder.Services.AddScoped<IWorkoutService, WorkoutHandler>();
 builder.Services.AddScoped<IWorkoutNamesService, WorkoutNamesHandler>();
 builder.Services.AddScoped<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
-builder.Services.AddScoped<IAuthorizationService, UserHandler>();
+builder.Services.AddScoped<IUserService, UserHandler>();
 builder.Services.AddScoped<IExerciseService, ExerciseHandler>();
 
 WebApplication app = builder.Build();
