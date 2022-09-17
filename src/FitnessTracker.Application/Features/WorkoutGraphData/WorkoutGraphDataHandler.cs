@@ -33,24 +33,14 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
         }
 
-        GetWorkoutGraphDataResponse response;
-        switch (request.WorkoutGraphType)
+        GetWorkoutGraphDataResponse response = request.WorkoutGraphType switch
         {
-            case WorkoutGraphType.Weight:
-                response = GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps);
-                break;
-            case WorkoutGraphType.Distance:
-                response = GetDistanceGraphData(user, request.ExerciseName);
-                break;
-            case WorkoutGraphType.Reps:
-                response = GetRepsGraphData(user, request.ExerciseName);
-                break;
-            case WorkoutGraphType.Sets:
-                response = GetSetsGraphData(user, request.ExerciseName);
-                break;
-            default:
-                return Result<GetWorkoutGraphDataResponse>.Failure("Invalid workout graph type");
-        }
+            WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps),
+            WorkoutGraphType.Distance => GetDistanceGraphData(user, request.ExerciseName),
+            WorkoutGraphType.Reps => GetRepsGraphData(user, request.ExerciseName),
+            WorkoutGraphType.Sets => GetSetsGraphData(user, request.ExerciseName),
+            _ => new GetWorkoutGraphDataResponse()
+        };
 
         if (response.GraphData.Count == 0)
         {
@@ -69,7 +59,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
+                if (activity.Exercise.Name.ToLower().Trim() == workoutName && activity.Data.Reps == reps)
                 {
                     double weight = weightUnit switch
                     {
@@ -103,7 +93,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name == workoutName)
+                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
@@ -130,7 +120,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name == workoutName)
+                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
@@ -157,7 +147,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name == workoutName)
+                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {

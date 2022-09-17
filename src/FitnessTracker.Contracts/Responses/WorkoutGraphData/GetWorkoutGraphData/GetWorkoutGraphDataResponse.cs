@@ -2,5 +2,5 @@ namespace FitnessTracker.Contracts.Responses.WorkoutGraphData.GetWorkoutGraphDat
 
 public class GetWorkoutGraphDataResponse
 {
-    public List<Models.Fitness.GraphData.WorkoutGraphData> GraphData { get; set; }
+    public List<Models.Fitness.GraphData.WorkoutGraphData> GraphData { get; set; } = new();
 }
