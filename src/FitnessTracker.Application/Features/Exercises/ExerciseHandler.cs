@@ -47,7 +47,7 @@ public class ExerciseHandler : IExerciseService
         return Result<GetExercisesResponse>.Success(response);
     }
 
-    public Result<PostExercisesResponse> PostExercises()
+    public async Task<Result<PostExercisesResponse>> PostExercisesAsync()
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
@@ -62,13 +62,13 @@ public class ExerciseHandler : IExerciseService
         }
 
         IEnumerable<Exercise> data = exercises.Value
-            .DistinctBy(x => x.Name.Trim().ToLower())
             .Where(x => x.MainMuscleGroup != MuscleGroup.Unknown)
+            .DistinctBy(x => x.Name.Trim().ToLower())
             .ToList();
 
         _applicationDbContext.Exercises.RemoveRange(_applicationDbContext.Exercises);
-        _applicationDbContext.Exercises.AddRange(data);
-        _applicationDbContext.SaveChangesAsync();
+        await _applicationDbContext.Exercises.AddRangeAsync(data);
+        await _applicationDbContext.SaveChangesAsync();
 
         PostExercisesResponse response = new(stopwatch.ElapsedMilliseconds);
         return Result<PostExercisesResponse>.Success(response);

@@ -32,9 +32,9 @@ public class ExerciseController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(PostExercisesResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
-    public IActionResult PostExercises()
+    public async Task<IActionResult> PostExercisesAsync()
     {
-        Result<PostExercisesResponse> exercisesResponse = _exerciseService.PostExercises();
+        Result<PostExercisesResponse> exercisesResponse = await _exerciseService.PostExercisesAsync();
         return !exercisesResponse.IsSuccess
             ? BadRequest(new ErrorResponse(exercisesResponse.Error))
             : Ok(exercisesResponse.Value);
