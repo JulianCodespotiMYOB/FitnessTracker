@@ -53,6 +53,7 @@ public class ExerciseHandler : IExerciseService
         stopwatch.Start();
         Result<List<Exercise>> exercises = ExerciseScraper.ScrapeExercises();
         stopwatch.Stop();
+
         _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
 
         if (!exercises.IsSuccess)
@@ -60,8 +61,11 @@ public class ExerciseHandler : IExerciseService
             return Result<PostExercisesResponse>.Failure(exercises.Error);
         }
 
-        IEnumerable<Exercise> data = exercises.Value.DistinctBy(x => x.Name);
-        //remove all exercises from db 
+        IEnumerable<Exercise> data = exercises.Value
+            .DistinctBy(x => x.Name.Trim().ToLower())
+            .Where(x => x.MainMuscleGroup != MuscleGroup.Unknown)
+            .ToList();
+
         _applicationDbContext.Exercises.RemoveRange(_applicationDbContext.Exercises);
         _applicationDbContext.Exercises.AddRange(data);
         _applicationDbContext.SaveChangesAsync();

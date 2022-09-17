@@ -19,17 +19,24 @@ public static class ExerciseScraper
 
         while (nextPageExists)
         {
-            listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
-            HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
+            try 
+            {
+                listOfLinksToExercises.Add(doc.DocumentNode.SelectNodes("//a[@style='color:#0E709A;']"));
+                HtmlNode? nextButtonLink = doc.DocumentNode.SelectSingleNode("//a[@rel=\"next\"]");
 
-            if (nextButtonLink is null)
+                if (nextButtonLink is null)
+                {
+                    break;
+                }
+
+                url = nextButtonLink.Attributes["href"].Value;
+                string cleanUrl = string.Concat("https://www.jefit.com/exercises", url.AsSpan(1));
+                doc = web.Load(cleanUrl);
+            } 
+            catch (Exception e)
             {
                 break;
             }
-
-            url = nextButtonLink.Attributes["href"].Value;
-            string cleanUrl = string.Concat("https://www.jefit.com/exercises", url.AsSpan(1));
-            doc = web.Load(cleanUrl);
         }
 
         List<Exercise> exercises = new();
@@ -115,7 +122,6 @@ public static class ExerciseScraper
             }
         }
 
-        List<Exercise> exercisesWithDuplicates = exercises.GroupBy(x => x.Name).Select(x => x.First()).ToList();
-        return Result<List<Exercise>>.Success(exercisesWithDuplicates);
+        return Result<List<Exercise>>.Success(exercises);
     }
 }
