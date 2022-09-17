@@ -8,6 +8,7 @@ using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Users;
 using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
+using FitnessTracker.Contracts.Responses.Common;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.Exercises;
@@ -16,14 +17,27 @@ using FitnessTracker.Interfaces.Services.WorkoutGraphData;
 using FitnessTracker.Interfaces.Services.WorkoutNames;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(opts =>
+builder.Services.AddControllers()
+.AddJsonOptions(opts =>
 {
     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
     opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        ErrorResponse errors = new(context.ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
+        BadRequestObjectResult result = new(errors);
+        result.ContentTypes.Add("application/problem+json");
+        result.ContentTypes.Add("application/problem+xml");
+        return result;
+    };
 });
 
 builder.Services.AddCors(opts =>

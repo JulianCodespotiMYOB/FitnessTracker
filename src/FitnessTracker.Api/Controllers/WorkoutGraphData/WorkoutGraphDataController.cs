@@ -19,6 +19,8 @@ public class WorkoutGraphDataController : ControllerBase
     }
 
     [HttpGet("{userId:int}/WorkoutGraphData")]
+    [ProducesResponseType(typeof(GetWorkoutGraphDataResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetWorkoutNames(
         [FromRoute] int userId,
         [FromQuery] GetWorkoutGraphDataRequest request

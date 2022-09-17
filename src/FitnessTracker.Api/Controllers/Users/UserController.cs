@@ -22,6 +22,8 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("Login")]
+    [ProducesResponseType(typeof(LoginResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request,
         [FromServices] IValidator<LoginRequest> validator)
     {
@@ -38,6 +40,8 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("Register")]
+    [ProducesResponseType(typeof(RegisterResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request,
         [FromServices] IValidator<RegisterRequest> validator)
     {
@@ -54,6 +58,8 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(GetUserResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetUser(int id)
     {
         Result<GetUserResponse> user = await _userService.GetUserAsync(id);
@@ -63,6 +69,8 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetUsersResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetUsers()
     {
         Result<GetUsersResponse> users = await _userService.GetUsersAsync();
@@ -72,6 +80,8 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}/Settings")]
+    [ProducesResponseType(typeof(UpdateSettingsResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> UpdateSettings(int id, [FromBody] UpdateSettingsRequest request)
     {
         Result<UpdateSettingsResponse> setSettingsResponse = await _userService.SetSettingsAsync(id, request);

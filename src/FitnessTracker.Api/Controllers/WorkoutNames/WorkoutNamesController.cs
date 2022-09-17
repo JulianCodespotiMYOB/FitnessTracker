@@ -19,6 +19,8 @@ public class WorkoutNamesController : ControllerBase
     }
 
     [HttpGet("{userId:int}/WorkoutNames")]
+    [ProducesResponseType(typeof(GetWorkoutNamesResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetWorkoutNames(
         [FromRoute] int userId,
         [FromQuery] GetWorkoutNamesRequest request

@@ -26,6 +26,8 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpPost("{userId:int}/Workouts")]
+    [ProducesResponseType(typeof(RecordWorkoutResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
         [FromRoute] int userId,
@@ -45,6 +47,8 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpGet("{userId:int}/Workouts/{workoutId:int}")]
+    [ProducesResponseType(typeof(GetWorkoutResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId
@@ -57,6 +61,8 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpGet("{userId:int}/Workouts")]
+    [ProducesResponseType(typeof(GetWorkoutsResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetWorkouts(
         [FromRoute] int userId,
         [FromQuery] GetWorkoutsRequest request
@@ -69,6 +75,8 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpPut("{userId:int}/Workouts/{workoutId:int}")]
+    [ProducesResponseType(typeof(UpdateWorkoutResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> UpdateWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId,
@@ -89,6 +97,8 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpDelete("{userId:int}/Workouts/{workoutId:int}")]
+    [ProducesResponseType(typeof(DeleteWorkoutResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> DeleteWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId

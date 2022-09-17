@@ -19,6 +19,8 @@ public class ExerciseController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetExercisesResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public IActionResult GetExercises()
     {
         Result<GetExercisesResponse> exercisesResponse = _exerciseService.GetExercises();
@@ -28,6 +30,8 @@ public class ExerciseController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(PostExercisesResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     public IActionResult PostExercises()
     {
         Result<PostExercisesResponse> exercisesResponse = _exerciseService.PostExercises();
