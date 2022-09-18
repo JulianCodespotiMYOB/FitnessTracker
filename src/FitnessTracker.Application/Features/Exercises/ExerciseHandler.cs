@@ -63,10 +63,10 @@ public class ExerciseHandler : IExerciseService
 
         IEnumerable<Exercise> data = exercises.Value
             .Where(x => x.MainMuscleGroup != MuscleGroup.Unknown)
-            .DistinctBy(x => x.Name.Trim().ToLower())
+            .Where(x => !_applicationDbContext.Exercises.Any(y => y.Name == x.Name))
+            .DistinctBy(x => x.Name)
             .ToList();
 
-        _applicationDbContext.Exercises.RemoveRange(_applicationDbContext.Exercises);
         await _applicationDbContext.Exercises.AddRangeAsync(data);
         await _applicationDbContext.SaveChangesAsync();
 
