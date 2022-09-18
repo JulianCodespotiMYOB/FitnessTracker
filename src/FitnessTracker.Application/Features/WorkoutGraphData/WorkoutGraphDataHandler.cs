@@ -33,8 +33,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
         }
 
-        string exerciseName = request.ExerciseName.Trim().ToLower();
-
+        string exerciseName = request.ExerciseName;
         GetWorkoutGraphDataResponse response = request.WorkoutGraphType switch
         {
             WorkoutGraphType.Weight => GetWeightGraphData(user, exerciseName, request.WeightUnit, request.Reps),
@@ -61,7 +60,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name.ToLower().Trim() == workoutName && activity.Data.Reps == reps)
+                if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
                 {
                     double weight = weightUnit switch
                     {
@@ -95,7 +94,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
+                if (activity.Exercise.Name == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
@@ -122,7 +121,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
+                if (activity.Exercise.Name == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
@@ -149,7 +148,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name.ToLower().Trim() == workoutName)
+                if (activity.Exercise.Name == workoutName)
                 {
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
