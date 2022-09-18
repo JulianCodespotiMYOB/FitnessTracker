@@ -33,17 +33,16 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
         }
 
-        string exerciseName = request.ExerciseName;
         GetWorkoutGraphDataResponse response = request.WorkoutGraphType switch
         {
-            WorkoutGraphType.Weight => GetWeightGraphData(user, exerciseName, request.WeightUnit, request.Reps),
-            WorkoutGraphType.Distance => GetDistanceGraphData(user, exerciseName),
-            WorkoutGraphType.Reps => GetRepsGraphData(user, exerciseName),
-            WorkoutGraphType.Sets => GetSetsGraphData(user, exerciseName),
+            WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps),
+            WorkoutGraphType.Distance => GetDistanceGraphData(user, request.ExerciseName),
+            WorkoutGraphType.Reps => GetRepsGraphData(user, request.ExerciseName),
+            WorkoutGraphType.Sets => GetSetsGraphData(user, request.ExerciseName),
             _ => new GetWorkoutGraphDataResponse()
         };
 
-        if (response.GraphData.Count == 0)
+        if (!response.GraphData.Any())
         {
             return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
         }
