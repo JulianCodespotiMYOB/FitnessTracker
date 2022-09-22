@@ -24,31 +24,22 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
     }
 
 
-    public async Task<Result<GetWorkoutGraphDataResponse>> GetWorkoutGraphData(GetWorkoutGraphDataRequest request,
-        int userId)
-    {
-        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
-        if (user is null)
-        {
-            return Result<GetWorkoutGraphDataResponse>.Failure("User not found");
-        }
-
-        GetWorkoutGraphDataResponse response = request.WorkoutGraphType switch
-        {
-            WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps),
-            WorkoutGraphType.Distance => GetDistanceGraphData(user, request.ExerciseName),
-            WorkoutGraphType.Reps => GetRepsGraphData(user, request.ExerciseName),
-            WorkoutGraphType.Sets => GetSetsGraphData(user, request.ExerciseName),
-            _ => new GetWorkoutGraphDataResponse()
-        };
-
-        if (!response.GraphData.Any())
-        {
-            return Result<GetWorkoutGraphDataResponse>.Failure("No data found");
-        }
-
-        return Result<GetWorkoutGraphDataResponse>.Success(response);
-    }
+    public async Task<Result<GetWorkoutGraphDataResponse>> GetWorkoutGraphData(GetWorkoutGraphDataRequest request, int userId) 
+        => (await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext))
+            .ToEither<User, string>()
+            .Map(user => request.WorkoutGraphType switch
+                {
+                    WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps),
+                    WorkoutGraphType.Distance => GetDistanceGraphData(user, request.ExerciseName),
+                    WorkoutGraphType.Reps => GetRepsGraphData(user, request.ExerciseName),
+                    WorkoutGraphType.Sets => GetSetsGraphData(user, request.ExerciseName),
+                    _ => new GetWorkoutGraphDataResponse()
+                },
+                _ => "User not found")
+            .Match(
+                response => response.GraphData.Any() ? Result<GetWorkoutGraphDataResponse>.Success(response) : Result<GetWorkoutGraphDataResponse>.Failure("No data found"),
+                error => Result<GetWorkoutGraphDataResponse>.Failure(error)
+            );
 
     private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit, int reps)
     {
