@@ -19,4 +19,14 @@ public class Result<T>
     {
         return new Result<T> { Error = error };
     }
+
+    public Result<TT> Map<TT>(Func<T, TT> map)
+    {
+        return IsSuccess ? Result<TT>.Success(map(Value!)) : Result<TT>.Failure(Error);
+    }
+
+    public TT Match<TT>(Func<T, TT> success, Func<string?, TT> failure)
+    {
+        return IsSuccess ? success(Value!) : failure(Error);
+    }
 }

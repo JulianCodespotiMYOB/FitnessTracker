@@ -49,28 +49,29 @@ public class ExerciseHandler : IExerciseService
 
     public async Task<Result<PostExercisesResponse>> PostExercisesAsync()
     {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        Result<List<Exercise>> exercises = ExerciseScraper.ScrapeExercises();
-        stopwatch.Stop();
+        Timed<Result<List<Exercise>>> exercises = Timed<Result<List<Exercise>>>.Record(ExerciseScraper.ScrapeExercises);
 
-        _logger.LogInformation($"Scraped exercises in {stopwatch.ElapsedMilliseconds}ms.");
-
-        if (!exercises.IsSuccess)
-        {
-            return Result<PostExercisesResponse>.Failure(exercises.Error);
-        }
-
-        IEnumerable<Exercise> data = exercises.Value
-            .Where(x => x.MainMuscleGroup != MuscleGroup.Unknown)
-            .Where(x => !_applicationDbContext.Exercises.Any(y => y.Name == x.Name))
-            .DistinctBy(x => x.Name)
-            .ToList();
-
-        await _applicationDbContext.Exercises.AddRangeAsync(data);
-        await _applicationDbContext.SaveChangesAsync();
-
-        PostExercisesResponse response = new(stopwatch.ElapsedMilliseconds);
-        return Result<PostExercisesResponse>.Success(response);
+        return await exercises.Result
+            .Map(
+                data =>
+                {
+                    IEnumerable<Exercise> filteredData = data.Where(x => x.MainMuscleGroup != MuscleGroup.Unknown)
+                        .Where(x => !_applicationDbContext.Exercises.Any(y => y.Name == x.Name))
+                        .DistinctBy(x => x.Name);
+                    return filteredData;
+                })
+            .Match(
+                async data =>
+                {
+                    _applicationDbContext.Exercises.AddRange(data);
+                    await _applicationDbContext.SaveChangesAsync();
+                    return Result<PostExercisesResponse>.Success(new PostExercisesResponse(exercises.Time));
+                },
+                error =>
+                {
+                    _logger.LogError($"Failed to scrape exercises. Error: {error}");
+                    return Task.FromResult(Result<PostExercisesResponse>.Failure(error));
+                }
+            );
     }
 }
