@@ -5,6 +5,7 @@ using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 using Mapster;
 using Microsoft.Extensions.Logging;
@@ -97,6 +98,15 @@ public class UserHandler : IUserService
         if (request.WeightUnit is not null)
         {
             user.UserSettings.WeightUnit = request.WeightUnit.Value;
+            foreach (Activity activity in user.Workouts.SelectMany(workout => workout.Activities))
+            {
+                activity.Data.Weight = request.WeightUnit.Value switch
+                {
+                    WeightUnit.Kilograms => activity.Data.Weight * 0.45359237,
+                    WeightUnit.Pounds => activity.Data.Weight * 2.20462262,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
         }
 
         if (request.MeasurementUnit is not null)
