@@ -95,28 +95,21 @@ public class UserHandler : IUserService
             return Result<UpdateSettingsResponse>.Failure("User not found");
         }
         
-        if (request.WeightUnit is not null)
+        user.UserSettings.WeightUnit = request.WeightUnit;
+        user.UserSettings.MeasurementUnit = request.MeasurementUnit;
+        user.UserSettings.DarkMode = request.DarkMode;
+
+        if (user.UserSettings.WeightUnit != request.WeightUnit)
         {
-            user.UserSettings.WeightUnit = request.WeightUnit.Value;
             foreach (Activity activity in user.Workouts.SelectMany(workout => workout.Activities))
             {
-                activity.Data.Weight = request.WeightUnit.Value switch
+                activity.Data.Weight = request.WeightUnit switch
                 {
                     WeightUnit.Kilograms => activity.Data.Weight * 0.45359237,
                     WeightUnit.Pounds => activity.Data.Weight * 2.20462262,
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-        }
-
-        if (request.MeasurementUnit is not null)
-        {
-            user.UserSettings.MeasurementUnit = request.MeasurementUnit.Value;
-        }
-
-        if (request.DarkMode is not null)
-        {
-            user.UserSettings.DarkMode = request.DarkMode.Value;
         }
 
         await _applicationDbContext.SaveChangesAsync();
