@@ -87,17 +87,23 @@ public class UserHandler : IUserService
             : Result<GetUsersResponse>.Failure(users.Error);
     }
 
-    public async Task<Result<UpdateSettingsResponse>> SetSettingsAsync(int id, UpdateSettingsRequest request)
+    public async Task<Result<UpdateUserResponse>> UpdateUserAsync(int id, UpdateUserRequest request)
     {
         User? user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext);
         if (user is null)
         {
-            return Result<UpdateSettingsResponse>.Failure("User not found");
+            return Result<UpdateUserResponse>.Failure("User not found");
         }
         
         user.UserSettings.WeightUnit = request.WeightUnit;
         user.UserSettings.MeasurementUnit = request.MeasurementUnit;
         user.UserSettings.DarkMode = request.DarkMode;
+        user.Username = request.Username;
+        user.Email = request.Email;
+        user.WeeklyWorkoutAmountGoal = request.WeeklyWorkoutAmountGoal;
+        user.Height = request.Height;
+        user.Weight = request.Weight;
+        user.Age = request.Age;
 
         if (user.UserSettings.WeightUnit != request.WeightUnit)
         {
@@ -113,6 +119,6 @@ public class UserHandler : IUserService
         }
 
         await _applicationDbContext.SaveChangesAsync();
-        return Result<UpdateSettingsResponse>.Success(new UpdateSettingsResponse(user.UserSettings));
+        return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));
     }
 }

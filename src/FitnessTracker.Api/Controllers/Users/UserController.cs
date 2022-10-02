@@ -79,14 +79,14 @@ public class UserController : ControllerBase
             : Ok(users.Value);
     }
 
-    [HttpPut("{id}/Settings")]
-    [ProducesResponseType(typeof(UpdateSettingsResponse), 200)]
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(UpdateUserResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
-    public async Task<IActionResult> UpdateSettings(int id, [FromBody] UpdateSettingsRequest request)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequest request)
     {
-        Result<UpdateSettingsResponse> setSettingsResponse = await _userService.SetSettingsAsync(id, request);
-        return !setSettingsResponse.IsSuccess
-            ? BadRequest(new ErrorResponse(setSettingsResponse.Error))
-            : Ok(setSettingsResponse.Value);
+        Result<UpdateUserResponse> updateUserResponse = await _userService.UpdateUserAsync(id, request);
+        return !updateUserResponse.IsSuccess
+            ? BadRequest(new ErrorResponse(updateUserResponse.Error))
+            : Ok(updateUserResponse.Value);
     }
 }

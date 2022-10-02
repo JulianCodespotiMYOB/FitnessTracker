@@ -10,5 +10,5 @@ public interface IUserService
     public Task<Result<RegisterResponse>> RegisterAsync(RegisterRequest registrationParameters);
     public Task<Result<GetUserResponse>> GetUserAsync(int id);
     public Task<Result<GetUsersResponse>> GetUsersAsync();
-    public Task<Result<UpdateSettingsResponse>> SetSettingsAsync(int id, UpdateSettingsRequest request);
+    public Task<Result<UpdateUserResponse>> UpdateUserAsync(int id, UpdateUserRequest request);
 }
