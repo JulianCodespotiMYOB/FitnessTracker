@@ -12,7 +12,6 @@ public class Data
     public int? Sets { get; set; }
     public double? Weight { get; set; }
     public double TargetDistance { get; set; }
-    public double TargetDuration { get; set; }
     public int TargetReps { get; set; }
     public int TargetSets { get; set; }
     public double TargetWeight { get; set; }

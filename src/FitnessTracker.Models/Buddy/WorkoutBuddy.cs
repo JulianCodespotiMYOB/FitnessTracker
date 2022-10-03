@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Models.Buddy.Anatomy;
+using FitnessTracker.Models.Fitness.Datas;
 using FitnessTracker.Models.Fitness.Enums;
 using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
@@ -18,7 +19,7 @@ public class WorkoutBuddy
         BuddyData buddyData = new();
         buddyData.Streak = GetWorkoutBuddyStreak();
         buddyData.MuscleGroupStats = GetWorkoutBuddyMuscleGroupStats();
-
+        SetBuddyOverallLevels(buddyData);
         SetBuddyAnatomyLevel(buddyData);
 
         return buddyData;
@@ -103,17 +104,68 @@ public class WorkoutBuddy
             {
                 if (muscleGroupStats.ContainsKey(muscleGroupStat.Key))
                 {
-                    muscleGroupStats[muscleGroupStat.Key] += muscleGroupStat.Value;
+                    muscleGroupStats[muscleGroupStat.Key] += muscleGroupStat.Value * GetPercentageOfTargetReachedInActivity(activity.Data);
                 }
                 else
                 {
-                    muscleGroupStats.Add(muscleGroupStat.Key, muscleGroupStat.Value);
+                    muscleGroupStats.Add(muscleGroupStat.Key, muscleGroupStat.Value * GetPercentageOfTargetReachedInActivity(activity.Data));
                 }
             }
         }
 
         return muscleGroupStats;
     }
+
+    private double GetPercentageOfTargetReachedInActivity(Data activityData)
+    {
+        switch (activityData.Type)
+        {
+            case ExerciseType.Cardio:
+                if (activityData.Distance is not null)
+                {
+                    return (activityData.Distance / activityData.TargetDistance).Value;
+                }
+
+                return 0;
+            case ExerciseType.Strength or ExerciseType.Powerlifting or ExerciseType.OlympicWeightLifting:
+                if (activityData.Weight is not null && activityData.Reps is not null && activityData.Sets is not null)
+                {
+                    return (activityData.Weight * activityData.Reps * activityData.Sets / activityData.TargetWeight / activityData.TargetReps / activityData.TargetSets).Value;
+                }
+                return 0;
+            default: return 0;
+        }
+    }
+    
+    private void SetBuddyOverallLevels(BuddyData buddyData)
+    {
+        List<Activity> activities = GetActivities();
+        double powerliftingLevel = 0;
+        double weightLiftingLevel = 0;
+        double bodyBuildingLevel = 0;
+        
+        foreach (Activity activity in activities)
+        {
+            switch (activity.Data.Reps)
+            {
+                case < 5:
+                    powerliftingLevel++;
+                    break;
+                case <= 12:
+                    weightLiftingLevel++;
+                    break;
+                case > 12:
+                    bodyBuildingLevel++;
+                    break;
+            }
+        }
+        buddyData.BodybuildingLevel = bodyBuildingLevel;
+        buddyData.PowerliftingLevel = powerliftingLevel;
+        buddyData.WeightliftingLevel = weightLiftingLevel;
+        buddyData.Level = (bodyBuildingLevel + powerliftingLevel + weightLiftingLevel) / 3;
+    }
+    
+    
 
     private void SetBuddyAnatomyLevel(BuddyData buddyData)
     {

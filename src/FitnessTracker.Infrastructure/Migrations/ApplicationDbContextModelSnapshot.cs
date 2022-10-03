@@ -59,9 +59,6 @@ namespace FitnessTracker.Infrastructure.Migrations
                     b.Property<double>("TargetDistance")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("TargetDuration")
-                        .HasColumnType("double precision");
-
                     b.Property<int>("TargetReps")
                         .HasColumnType("integer");
 
