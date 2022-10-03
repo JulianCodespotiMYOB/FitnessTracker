@@ -44,23 +44,38 @@ namespace FitnessTracker.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Distance")
+                    b.Property<double?>("Distance")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("Duration")
+                    b.Property<double?>("Duration")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("Reps")
+                    b.Property<int?>("Reps")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Sets")
+                    b.Property<int?>("Sets")
                         .HasColumnType("integer");
+
+                    b.Property<double>("TargetDistance")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TargetDuration")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("TargetReps")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TargetSets")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TargetWeight")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
+                    b.Property<double?>("Weight")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
