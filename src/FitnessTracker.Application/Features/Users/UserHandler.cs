@@ -94,16 +94,6 @@ public class UserHandler : IUserService
         {
             return Result<UpdateUserResponse>.Failure("User not found");
         }
-        
-        user.UserSettings.WeightUnit = request.WeightUnit;
-        user.UserSettings.MeasurementUnit = request.MeasurementUnit;
-        user.UserSettings.DarkMode = request.DarkMode;
-        user.Username = request.Username;
-        user.Email = request.Email;
-        user.WeeklyWorkoutAmountGoal = request.WeeklyWorkoutAmountGoal;
-        user.Height = request.Height;
-        user.Weight = request.Weight;
-        user.Age = request.Age;
 
         if (user.UserSettings.WeightUnit != request.WeightUnit)
         {
@@ -117,6 +107,16 @@ public class UserHandler : IUserService
                 };
             }
         }
+
+        user.UserSettings.WeightUnit = request.WeightUnit;
+        user.UserSettings.MeasurementUnit = request.MeasurementUnit;
+        user.UserSettings.DarkMode = request.DarkMode;
+        user.Username = request.Username;
+        user.Email = request.Email;
+        user.WeeklyWorkoutAmountGoal = request.WeeklyWorkoutAmountGoal;
+        user.Height = request.Height;
+        user.Weight = request.Weight;
+        user.Age = request.Age;
 
         await _applicationDbContext.SaveChangesAsync();
         return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));
