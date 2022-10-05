@@ -6,6 +6,7 @@ namespace FitnessTracker.Models.Users;
 public class User
 {
     public int Id { get; set; }
+    public Image? Avatar { get; set; }
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string Email { get; set; } = null!;

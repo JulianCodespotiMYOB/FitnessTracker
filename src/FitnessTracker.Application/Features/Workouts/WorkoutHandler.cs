@@ -97,8 +97,7 @@ public class WorkoutHandler : IWorkoutService
         return Result<GetWorkoutResponse>.Success(response);
     }
 
-    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId,
-        int userId)
+    public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
     {
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
@@ -115,6 +114,9 @@ public class WorkoutHandler : IWorkoutService
         workout.Past = request.Workout.Past;
         workout.Completed = request.Workout.Completed;
         workout.Time = request.Workout.Time;
+        workout.Activities = request.Workout.Activities;
+        workout.Name = request.Workout.Name;
+
         await _applicationDbContext.SaveChangesAsync();
 
         UpdateWorkoutResponse response = new()

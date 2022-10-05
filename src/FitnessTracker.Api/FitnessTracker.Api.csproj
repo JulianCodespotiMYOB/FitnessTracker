@@ -7,18 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.1.0"/>
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0"/>
-        <PackageReference Include="Mapster" Version="7.3.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <PackageReference Include="AWS.Logger.AspNetCore" Version="3.3.0" />
+        <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.2.113" />
+        <PackageReference Include="FluentValidation" Version="11.1.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
+        <PackageReference Include="Mapster" Version="7.3.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FitnessTracker.Infrastructure\FitnessTracker.Infrastructure.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Application\FitnessTracker.Application.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj"/>
-        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Infrastructure\FitnessTracker.Infrastructure.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Interfaces\FitnessTracker.Interfaces.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Application\FitnessTracker.Application.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Contracts\FitnessTracker.Contracts.csproj" />
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj" />
     </ItemGroup>
 
 </Project>

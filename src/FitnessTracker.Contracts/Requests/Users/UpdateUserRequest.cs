@@ -1,4 +1,5 @@
 using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Contracts.Requests.Users;
 
@@ -13,4 +14,5 @@ public class UpdateUserRequest
     public WeightUnit WeightUnit { get; set; }
     public MeasurementUnit MeasurementUnit { get; set; }
     public bool DarkMode { get; set; }
+    public Image? Avatar { get; set; }
 }

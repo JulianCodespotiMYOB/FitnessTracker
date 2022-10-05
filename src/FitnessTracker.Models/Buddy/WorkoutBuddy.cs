@@ -125,7 +125,6 @@ public class WorkoutBuddy
                 {
                     return (activityData.Distance / activityData.TargetDistance).Value;
                 }
-
                 return 0;
             case ExerciseType.Strength or ExerciseType.Powerlifting or ExerciseType.OlympicWeightLifting:
                 if (activityData.Weight is not null && activityData.Reps is not null && activityData.Sets is not null)

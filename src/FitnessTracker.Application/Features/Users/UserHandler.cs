@@ -117,6 +117,7 @@ public class UserHandler : IUserService
         user.Height = request.Height;
         user.Weight = request.Weight;
         user.Age = request.Age;
+        user.Avatar = request.Avatar;
 
         await _applicationDbContext.SaveChangesAsync();
         return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));

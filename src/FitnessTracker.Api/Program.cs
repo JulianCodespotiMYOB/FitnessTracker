@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AWS.Logger;
 using FitnessTracker.Application.Features.Exercises;
 using FitnessTracker.Application.Features.Users;
 using FitnessTracker.Application.Features.WorkoutGraphData;
@@ -20,6 +21,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.AddAWSProvider(new AWSLoggerConfig("FitnessTracker"));
 
 builder.Services.AddControllers()
 .AddJsonOptions(opts =>
