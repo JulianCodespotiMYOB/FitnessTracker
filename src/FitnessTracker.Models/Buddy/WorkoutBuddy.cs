@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Models.Buddy.Anatomy;
+using FitnessTracker.Models.Buddy.Enums;
 using FitnessTracker.Models.Fitness.Datas;
 using FitnessTracker.Models.Fitness.Enums;
 using FitnessTracker.Models.Fitness.Exercises;
@@ -17,10 +18,11 @@ public class WorkoutBuddy
     private BuddyData GetWorkoutBuddyData()
     {
         BuddyData buddyData = new();
-        buddyData.Streak = GetWorkoutBuddyStreak();
-        buddyData.MuscleGroupStats = GetWorkoutBuddyMuscleGroupStats();
+        SetWorkoutBuddyStreak(buddyData);
+        SetWorkoutBuddyMuscleGroupStats(buddyData);
         SetBuddyOverallLevels(buddyData);
         SetBuddyAnatomyLevel(buddyData);
+        SetBuddyAchievements(buddyData);
 
         return buddyData;
     }
@@ -35,11 +37,11 @@ public class WorkoutBuddy
         return User.Workouts.SelectMany(workout => workout.Activities).ToList();
     }
 
-    private int GetWorkoutBuddyStreak()
+    private void SetWorkoutBuddyStreak(BuddyData buddyData)
     {
         if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
         {
-            return 0;
+            return;
         }
 
         int currentStreak = 1;
@@ -70,7 +72,7 @@ public class WorkoutBuddy
             }
         }
 
-        return currentStreak;
+        buddyData.Streak = currentStreak;
 
         bool IsWorkoutInNextWeek(Workout workout)
         {
@@ -93,7 +95,7 @@ public class WorkoutBuddy
         }
     }
 
-    private Dictionary<MuscleGroup, double> GetWorkoutBuddyMuscleGroupStats()
+    private void SetWorkoutBuddyMuscleGroupStats(BuddyData buddyData)
     {
         List<Activity> activities = GetActivities();
         Dictionary<MuscleGroup, double> muscleGroupStats = new();
@@ -112,8 +114,7 @@ public class WorkoutBuddy
                 }
             }
         }
-
-        return muscleGroupStats;
+        buddyData.MuscleGroupStats = muscleGroupStats;
     }
 
     private double GetPercentageOfTargetReachedInActivity(Data activityData)
@@ -158,10 +159,10 @@ public class WorkoutBuddy
                     break;
             }
         }
-        buddyData.BodybuildingLevel = bodyBuildingLevel;
-        buddyData.PowerliftingLevel = powerliftingLevel;
-        buddyData.WeightliftingLevel = weightLiftingLevel;
-        buddyData.Level = bodyBuildingLevel + powerliftingLevel + weightLiftingLevel;
+        buddyData.LevelStats.Add(StrengthLevelTypes.Bodybuilding, bodyBuildingLevel);
+        buddyData.LevelStats.Add(StrengthLevelTypes.Powerlifting, powerliftingLevel);
+        buddyData.LevelStats.Add(StrengthLevelTypes.Weightlifting, weightLiftingLevel);
+        buddyData.LevelStats.Add(StrengthLevelTypes.Overall, powerliftingLevel + weightLiftingLevel + bodyBuildingLevel);
     }
     
     
@@ -179,5 +180,121 @@ public class WorkoutBuddy
         {
             return exercises.Count(exercise => exercise.MainMuscleGroup == anatomyType);
         }
+    }
+    
+    private void SetBuddyAchievements(BuddyData buddyData)
+    {
+        List<Achievement> acquiredAchievements = new();
+        List<Achievement> achievements = Achievements.GetAll();
+        
+        foreach (Achievement achievement in achievements)
+        {
+            bool isEligibleForAchievement = achievement switch
+            {
+                StreakAchievement streakAchievement => IsEligibleForStreakAchievement(streakAchievement, buddyData.Streak),
+                WeightAchievement weightAchievement => IsEligibleForWeightAchievement(weightAchievement),
+                DistanceAchievement distanceAchievement => IsEligibleForDistanceAchievement(distanceAchievement),
+                SetsAchievement setsAchievement => IsEligibleForSetsAchievement(setsAchievement),
+                RepsAchievement repsAchievement => IsEligibleForRepsAchievement(repsAchievement),
+                LevelAchievement levelAchievement => IsEligibleForLevelAchievement(levelAchievement, buddyData.LevelStats),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            if (isEligibleForAchievement)
+            {
+                acquiredAchievements.Add(achievement);
+            }
+        }
+        buddyData.Achievements = acquiredAchievements;
+    }
+    
+    private bool IsEligibleForStreakAchievement(StreakAchievement achievement, int streak)
+    {
+        if (streak >= achievement.TargetStreak)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private bool IsEligibleForWeightAchievement(WeightAchievement achievement)
+    {
+        List<Activity> activities = GetActivities();
+        foreach (Activity activity in activities)
+        {
+            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
+            {
+                if (activity.Data.Weight >= achievement.TargetWeight)
+                {
+                    return true;
+                }
+            }
+            else if (activity.Data.Weight >= achievement.TargetWeight)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool IsEligibleForLevelAchievement(LevelAchievement achievement, Dictionary<StrengthLevelTypes, double> levelStats)
+    {
+        if (levelStats[achievement.TargetStrengthLevelType] >= achievement.TargetLevel)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private bool IsEligibleForDistanceAchievement(DistanceAchievement achievement)
+    {
+        List<Activity> activities = GetActivities();
+        foreach (Activity activity in activities)
+        {
+            if (activity.Data.Distance >= achievement.TargetDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool IsEligibleForSetsAchievement(SetsAchievement achievement)
+    {
+        List<Activity> activities = GetActivities();
+        foreach (Activity activity in activities)
+        {
+            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
+            {
+                if (activity.Data.Sets >= achievement.TargetSets)
+                {
+                    return true;
+                }
+            }
+            else if (activity.Data.Sets >= achievement.TargetSets)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool IsEligibleForRepsAchievement(RepsAchievement achievement)
+    {
+        List<Activity> activities = GetActivities();
+        foreach (Activity activity in activities)
+        {
+            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
+            {
+                if (activity.Data.Reps >= achievement.TargetReps)
+                {
+                    return true;
+                }
+            }
+            else if (activity.Data.Reps >= achievement.TargetReps)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
