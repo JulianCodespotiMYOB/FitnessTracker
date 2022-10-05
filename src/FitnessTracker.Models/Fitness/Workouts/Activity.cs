@@ -1,4 +1,5 @@
 using FitnessTracker.Models.Fitness.Datas;
+using FitnessTracker.Models.Fitness.Enums;
 using FitnessTracker.Models.Fitness.Exercises;
 
 namespace FitnessTracker.Models.Fitness.Workouts;

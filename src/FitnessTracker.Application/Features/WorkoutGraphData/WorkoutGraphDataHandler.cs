@@ -29,7 +29,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             .ToEither<User, string>()
             .Map(user => request.WorkoutGraphType switch
                 {
-                    WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.WeightUnit, request.Reps),
+                    WorkoutGraphType.Weight => GetWeightGraphData(user, request.ExerciseName, request.Reps),
                     WorkoutGraphType.Distance => GetDistanceGraphData(user, request.ExerciseName),
                     WorkoutGraphType.Reps => GetRepsGraphData(user, request.ExerciseName),
                     WorkoutGraphType.Sets => GetSetsGraphData(user, request.ExerciseName),
@@ -41,7 +41,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
                 error => Result<GetWorkoutGraphDataResponse>.Failure(error)
             );
 
-    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, WeightUnit weightUnit, int reps)
+    private static GetWorkoutGraphDataResponse GetWeightGraphData(User user, string workoutName, int reps)
     {
         List<Models.Fitness.GraphData.WorkoutGraphData> graphData = new();
         int increment = 0;
@@ -50,20 +50,11 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         {
             foreach (Activity activity in workout.Activities)
             {
-                if (activity.Exercise.Name == workoutName && activity.Data.Reps == reps)
+                if (activity.Exercise.Name == workoutName && (activity.Data?.Reps ?? 0) == reps && activity.Data?.Weight != null)
                 {
-                    double? weight = weightUnit switch
-                    {
-                        WeightUnit.Kilograms => activity.Data.Weight * 0.453592,
-                        WeightUnit.Pounds => activity.Data.Weight * 2.20462,
-                        _ => null
-                    };
-                    
-                    if (weight == null) continue;
-
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {
-                        ExerciseMetaData = weight.Value,
+                        ExerciseMetaData = activity.Data.Weight.Value,
                         TimeOfExercise = workout.Time,
                         XAxis = increment++
                     });
