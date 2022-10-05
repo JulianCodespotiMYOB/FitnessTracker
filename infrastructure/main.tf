@@ -57,7 +57,7 @@ resource "aws_eip" "elastic_ip" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${local.repository}"
+  bucket = "${local.repository}-kfc-bucket"
   tags   = local.tags
 }
 
