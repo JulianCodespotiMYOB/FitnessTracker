@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddAWSProvider();
+
 builder.Services.AddControllers()
 .AddJsonOptions(opts =>
 {
