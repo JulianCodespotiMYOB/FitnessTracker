@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.AddAWSProvider(new AWSLoggerConfig( "FitnessTracker"));
+builder.Logging.AddAWSProvider(new AWSLoggerConfig("FitnessTracker"));
 
 builder.Services.AddControllers()
 .AddJsonOptions(opts =>
