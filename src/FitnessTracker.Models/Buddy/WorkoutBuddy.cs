@@ -162,7 +162,7 @@ public class WorkoutBuddy
         buddyData.BodybuildingLevel = bodyBuildingLevel;
         buddyData.PowerliftingLevel = powerliftingLevel;
         buddyData.WeightliftingLevel = weightLiftingLevel;
-        buddyData.Level = (bodyBuildingLevel + powerliftingLevel + weightLiftingLevel) / 3;
+        buddyData.Level = bodyBuildingLevel + powerliftingLevel + weightLiftingLevel;
     }
     
     
