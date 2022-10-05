@@ -1,4 +1,5 @@
 using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Contracts.Requests.Users;
 
@@ -16,4 +17,5 @@ public class RegisterRequest
     public string BuddyName { get; set; } = default!;
     public WeightUnit WeightUnit { get; set; } = default!;
     public MeasurementUnit MeasurementUnit { get; set; } = default!;
+    public Image? Avatar { get; set; }
 }
