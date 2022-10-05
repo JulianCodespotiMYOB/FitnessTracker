@@ -56,8 +56,9 @@ resource "aws_eip" "elastic_ip" {
   instance = aws_instance.app_server.id
 }
 
-output "server_ip" {
-  value = aws_eip.elastic_ip.public_ip
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${local.repository}"
+  tags   = local.tags
 }
 
 resource "aws_instance" "app_server" {
@@ -78,10 +79,13 @@ resource "aws_instance" "app_server" {
                 aws ecr get-login-password --region ${local.region} | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com
 
                 docker pull $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
-                docker run -e CONNECTION_STRING="${var.CONNECTION_STRING}" -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
+                docker run -e CONNECTION_STRING="${var.CONNECTION_STRING}" -e BUCKET="${bucket.bucket_domain_name}" -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 EOT
 
   user_data_replace_on_change = true
   tags = local.tags
 }
 
+output "server_ip" {
+  value = aws_eip.elastic_ip.public_ip
+}

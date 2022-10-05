@@ -42,7 +42,8 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     [ProducesResponseType(typeof(RegisterResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request,
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterRequest request, 
         [FromServices] IValidator<RegisterRequest> validator)
     {
         ValidationResult validationResult = await validator.ValidateAsync(request);
