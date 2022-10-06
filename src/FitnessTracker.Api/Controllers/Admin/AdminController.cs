@@ -22,6 +22,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
+    [Route("SeedExercises")]
     [ProducesResponseType(typeof(PostExercisesResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> SeedExercises()
@@ -33,6 +34,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
+    [Route("GetAllUsers")]
     [ProducesResponseType(typeof(GetUsersResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetAllUsers()
