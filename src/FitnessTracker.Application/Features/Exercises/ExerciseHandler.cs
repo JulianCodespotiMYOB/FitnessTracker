@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using FitnessTracker.Contracts.Responses.Exercises.GetExercises;
 using FitnessTracker.Contracts.Responses.Exercises.PostExercises;
 using FitnessTracker.Domain.Exercises;

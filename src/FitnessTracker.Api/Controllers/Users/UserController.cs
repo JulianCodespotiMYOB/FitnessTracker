@@ -1,11 +1,14 @@
 using FitnessTracker.Contracts.Requests.Users;
+using FitnessTracker.Contracts.Requests.WorkoutGraphData.GetWorkoutGraphData;
+using FitnessTracker.Contracts.Requests.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Contracts.Responses.Common;
 using FitnessTracker.Contracts.Responses.Users;
+using FitnessTracker.Contracts.Responses.WorkoutGraphData.GetWorkoutGraphData;
+using FitnessTracker.Contracts.Responses.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Common;
 using FluentValidation;
 using FluentValidation.Results;
-using Mapster;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Api.Controllers.Users;
@@ -15,10 +18,14 @@ namespace FitnessTracker.Api.Controllers.Users;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IWorkoutNamesService _workoutNamesService;
+    private readonly IWorkoutGraphDataService _workoutGraphDataService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IWorkoutNamesService workoutNamesService, IWorkoutGraphDataService workoutGraphDataService)
     {
         _userService = userService;
+        _workoutNamesService = workoutNamesService;
+        _workoutGraphDataService = workoutGraphDataService;
     }
 
     [HttpPost("Login")]
@@ -69,17 +76,6 @@ public class UserController : ControllerBase
             : Ok(user.Value);
     }
 
-    [HttpGet]
-    [ProducesResponseType(typeof(GetUsersResponse), 200)]
-    [ProducesResponseType(typeof(ErrorResponse), 400)]
-    public async Task<IActionResult> GetUsers()
-    {
-        Result<GetUsersResponse> users = await _userService.GetUsersAsync();
-        return !users.IsSuccess
-            ? BadRequest(new ErrorResponse(users.Error))
-            : Ok(users.Value);
-    }
-
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(UpdateUserResponse), 200)]
     [ProducesResponseType(typeof(ErrorResponse), 400)]
@@ -89,5 +85,33 @@ public class UserController : ControllerBase
         return !updateUserResponse.IsSuccess
             ? BadRequest(new ErrorResponse(updateUserResponse.Error))
             : Ok(updateUserResponse.Value);
+    }
+
+    [HttpGet("{id}/WorkoutNames")]
+    [ProducesResponseType(typeof(GetWorkoutNamesResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
+    public async Task<IActionResult> GetWorkoutNames(
+        [FromRoute] int id,
+        [FromQuery] GetWorkoutNamesRequest request
+    )
+    {
+        Result<GetWorkoutNamesResponse> getWorkoutNamesResponse = await _workoutNamesService.GetWorkoutNames(id, request);
+        return getWorkoutNamesResponse.IsSuccess is false
+            ? BadRequest(new ErrorResponse(getWorkoutNamesResponse.Error))
+            : Ok(getWorkoutNamesResponse.Value);
+    }
+
+    [HttpGet("{id}/WorkoutGraphData")]
+    [ProducesResponseType(typeof(GetWorkoutGraphDataResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
+    public async Task<IActionResult> GetWorkoutNames(
+        [FromRoute] int id,
+        [FromQuery] GetWorkoutGraphDataRequest request
+    )
+    {
+        Result<GetWorkoutGraphDataResponse> getWorkoutGraphDataResponse = await _workoutGraphDataService.GetWorkoutGraphData(request, id);
+        return getWorkoutGraphDataResponse.IsSuccess is false
+            ? BadRequest(new ErrorResponse(getWorkoutGraphDataResponse.Error))
+            : Ok(getWorkoutGraphDataResponse.Value);
     }
 }

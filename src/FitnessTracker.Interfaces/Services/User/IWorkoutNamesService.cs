@@ -2,7 +2,7 @@ using FitnessTracker.Contracts.Requests.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Contracts.Responses.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Models.Common;
 
-namespace FitnessTracker.Interfaces.Services.WorkoutNames;
+namespace FitnessTracker.Interfaces.Services.User;
 
 public interface IWorkoutNamesService
 {

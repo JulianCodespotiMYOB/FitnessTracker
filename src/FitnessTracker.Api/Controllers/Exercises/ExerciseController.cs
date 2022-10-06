@@ -1,6 +1,5 @@
 using FitnessTracker.Contracts.Responses.Common;
 using FitnessTracker.Contracts.Responses.Exercises.GetExercises;
-using FitnessTracker.Contracts.Responses.Exercises.PostExercises;
 using FitnessTracker.Interfaces.Services.Exercises;
 using FitnessTracker.Models.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +23,6 @@ public class ExerciseController : ControllerBase
     public IActionResult GetExercises()
     {
         Result<GetExercisesResponse> exercisesResponse = _exerciseService.GetExercises();
-        return !exercisesResponse.IsSuccess
-            ? BadRequest(new ErrorResponse(exercisesResponse.Error))
-            : Ok(exercisesResponse.Value);
-    }
-
-    [HttpPost]
-    [ProducesResponseType(typeof(PostExercisesResponse), 200)]
-    [ProducesResponseType(typeof(ErrorResponse), 400)]
-    public async Task<IActionResult> PostExercisesAsync()
-    {
-        Result<PostExercisesResponse> exercisesResponse = await _exerciseService.PostExercisesAsync();
         return !exercisesResponse.IsSuccess
             ? BadRequest(new ErrorResponse(exercisesResponse.Error))
             : Ok(exercisesResponse.Value);

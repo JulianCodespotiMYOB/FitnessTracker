@@ -1,16 +1,15 @@
 using FitnessTracker.Application.Common;
-using FitnessTracker.Application.Features.Users;
 using FitnessTracker.Contracts.Requests.WorkoutGraphData.Enums;
 using FitnessTracker.Contracts.Requests.WorkoutGraphData.GetWorkoutGraphData;
 using FitnessTracker.Contracts.Responses.WorkoutGraphData.GetWorkoutGraphData;
 using FitnessTracker.Interfaces.Infrastructure;
-using FitnessTracker.Interfaces.Services.WorkoutGraphData;
+using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Features.WorkoutGraphData;
+namespace FitnessTracker.Application.Features.Users;
 
 public class WorkoutGraphDataHandler : IWorkoutGraphDataService
 {
@@ -22,7 +21,6 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
         _applicationDbContext = applicationDbContext;
         _logger = logger;
     }
-
 
     public async Task<Result<GetWorkoutGraphDataResponse>> GetWorkoutGraphData(GetWorkoutGraphDataRequest request, int userId) 
         => (await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext))

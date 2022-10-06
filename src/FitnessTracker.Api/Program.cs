@@ -1,10 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using AWS.Logger;
 using FitnessTracker.Application.Features.Exercises;
 using FitnessTracker.Application.Features.Users;
-using FitnessTracker.Application.Features.WorkoutGraphData;
-using FitnessTracker.Application.Features.WorkoutNames;
 using FitnessTracker.Application.Features.Workouts;
 using FitnessTracker.Contracts.Requests.Users;
 using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
@@ -14,8 +11,6 @@ using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.Exercises;
 using FitnessTracker.Interfaces.Services.User;
-using FitnessTracker.Interfaces.Services.WorkoutGraphData;
-using FitnessTracker.Interfaces.Services.WorkoutNames;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +55,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); });
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(ServiceLifetime.Scoped);
 builder.Services.AddMemoryCache();
-builder.Services.AddHealthChecks();
 
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
