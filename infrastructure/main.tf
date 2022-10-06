@@ -77,11 +77,6 @@ resource "aws_instance" "app_server" {
                 docker pull $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 docker run -e CONNECTION_STRING="${var.CONNECTION_STRING}" -e BUCKET="${aws_s3_bucket.bucket.bucket_domain_name}" -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 EOT
-  lifecycle {
-    ignore_changes = [
-      user_data
-    ]
-  }
   tags = local.tags
 }
 
