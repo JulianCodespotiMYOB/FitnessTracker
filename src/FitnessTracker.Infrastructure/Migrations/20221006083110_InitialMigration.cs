@@ -19,11 +19,15 @@ namespace FitnessTracker.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    Distance = table.Column<double>(type: "double precision", nullable: false),
-                    Duration = table.Column<double>(type: "double precision", nullable: false),
-                    Reps = table.Column<int>(type: "integer", nullable: false),
-                    Sets = table.Column<int>(type: "integer", nullable: false),
-                    Weight = table.Column<int>(type: "integer", nullable: false)
+                    Distance = table.Column<double>(type: "double precision", nullable: true),
+                    Duration = table.Column<double>(type: "double precision", nullable: true),
+                    Reps = table.Column<int>(type: "integer", nullable: true),
+                    Sets = table.Column<int>(type: "integer", nullable: true),
+                    Weight = table.Column<double>(type: "double precision", nullable: true),
+                    TargetDistance = table.Column<double>(type: "double precision", nullable: false),
+                    TargetReps = table.Column<int>(type: "integer", nullable: false),
+                    TargetSets = table.Column<int>(type: "integer", nullable: false),
+                    TargetWeight = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,11 +54,27 @@ namespace FitnessTracker.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Bytes = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    FileExtension = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AvatarId = table.Column<int>(type: "integer", nullable: true),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
@@ -66,6 +86,11 @@ namespace FitnessTracker.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Image_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Image",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -176,6 +201,11 @@ namespace FitnessTracker.Infrastructure.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_AvatarId",
+                table: "Users",
+                column: "AvatarId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workouts_UserId",
                 table: "Workouts",
                 column: "UserId");
@@ -204,6 +234,9 @@ namespace FitnessTracker.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Image");
         }
     }
 }

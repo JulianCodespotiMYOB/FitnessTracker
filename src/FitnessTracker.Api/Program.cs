@@ -22,8 +22,6 @@ using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.AddAWSProvider(new AWSLoggerConfig("FitnessTracker"));
-
 builder.Services.AddControllers()
 .AddJsonOptions(opts =>
 {
@@ -51,6 +49,11 @@ builder.Services.AddCors(opts =>
         corsBuilder.AllowAnyHeader();
         corsBuilder.AllowAnyMethod();
     });
+});
+
+builder.Services.AddLogging(config => {
+    config.AddAWSProvider(builder.Configuration.GetAWSLoggingConfigSection());
+    config.SetMinimumLevel(LogLevel.Trace);
 });
 
 builder.Services.AddEndpointsApiExplorer();
