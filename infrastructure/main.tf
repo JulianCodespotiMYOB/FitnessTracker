@@ -78,6 +78,7 @@ resource "aws_instance" "app_server" {
                 docker run -e CONNECTION_STRING="${var.CONNECTION_STRING}" -e BUCKET="${aws_s3_bucket.bucket.bucket_domain_name}" -p 80:80 $ACCOUNT_ID.dkr.ecr.${local.region}.amazonaws.com/${local.repository}:latest
                 EOT
   tags = local.tags
+  user_data_replace_on_change = true
 }
 
 resource "aws_eip" "elastic_ip" {
