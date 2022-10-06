@@ -159,10 +159,13 @@ public class WorkoutBuddy
                     break;
             }
         }
-        buddyData.LevelStats.Add(StrengthLevelTypes.Bodybuilding, bodyBuildingLevel);
-        buddyData.LevelStats.Add(StrengthLevelTypes.Powerlifting, powerliftingLevel);
-        buddyData.LevelStats.Add(StrengthLevelTypes.Weightlifting, weightLiftingLevel);
-        buddyData.LevelStats.Add(StrengthLevelTypes.Overall, powerliftingLevel + weightLiftingLevel + bodyBuildingLevel);
+        buddyData.LevelStats = new()
+        {
+            { StrengthLevelTypes.Bodybuilding, bodyBuildingLevel },
+            { StrengthLevelTypes.Powerlifting, powerliftingLevel },
+            { StrengthLevelTypes.Weightlifting, weightLiftingLevel },
+            { StrengthLevelTypes.Overall , powerliftingLevel + weightLiftingLevel + bodyBuildingLevel }
+        };
     }
     
     
