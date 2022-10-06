@@ -185,7 +185,7 @@ public class WorkoutBuddy
     private void SetBuddyAchievements(BuddyData buddyData)
     {
         List<Achievement> acquiredAchievements = new();
-        List<Achievement> achievements = Achievements.GetAll();
+        List<Achievement> achievements = Achievements.AllAchievements;
         
         foreach (Achievement achievement in achievements)
         {
@@ -199,11 +199,13 @@ public class WorkoutBuddy
                 LevelAchievement levelAchievement => IsEligibleForLevelAchievement(levelAchievement, buddyData.LevelStats),
                 _ => throw new ArgumentOutOfRangeException()
             };
+
             if (isEligibleForAchievement)
             {
                 acquiredAchievements.Add(achievement);
             }
         }
+
         buddyData.Achievements = acquiredAchievements;
     }
     
