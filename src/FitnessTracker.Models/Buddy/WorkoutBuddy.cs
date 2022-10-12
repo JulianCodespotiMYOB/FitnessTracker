@@ -98,11 +98,11 @@ public class WorkoutBuddy
     private void SetWorkoutBuddyMuscleGroupStats(BuddyData buddyData)
     {
         List<Activity> activities = GetActivities();
-        Dictionary<MuscleGroup, double> muscleGroupStats = new();
+        Dictionary<MuscleGroup, decimal> muscleGroupStats = new();
         foreach (Activity activity in activities)
         {
-            Dictionary<MuscleGroup, double> exerciseMuscleGroupStats = activity.Exercise.MuscleGroupStats;
-            foreach (KeyValuePair<MuscleGroup, double> muscleGroupStat in exerciseMuscleGroupStats)
+            Dictionary<MuscleGroup, decimal> exerciseMuscleGroupStats = activity.Exercise.MuscleGroupStats;
+            foreach (KeyValuePair<MuscleGroup, decimal> muscleGroupStat in exerciseMuscleGroupStats)
             {
                 if (muscleGroupStats.ContainsKey(muscleGroupStat.Key))
                 {
@@ -117,7 +117,7 @@ public class WorkoutBuddy
         buddyData.MuscleGroupStats = muscleGroupStats;
     }
 
-    private double GetPercentageOfTargetReachedInActivity(Data activityData)
+    private decimal GetPercentageOfTargetReachedInActivity(Data activityData)
     {
         switch (activityData.Type)
         {
@@ -140,9 +140,9 @@ public class WorkoutBuddy
     private void SetBuddyOverallLevels(BuddyData buddyData)
     {
         List<Activity> activities = GetActivities();
-        double powerliftingLevel = 0;
-        double weightLiftingLevel = 0;
-        double bodyBuildingLevel = 0;
+        decimal powerliftingLevel = 0;
+        decimal weightLiftingLevel = 0;
+        decimal bodyBuildingLevel = 0;
         
         foreach (Activity activity in activities)
         {
@@ -241,7 +241,7 @@ public class WorkoutBuddy
         return false;
     }
     
-    private bool IsEligibleForLevelAchievement(LevelAchievement achievement, Dictionary<StrengthLevelTypes, double> levelStats)
+    private bool IsEligibleForLevelAchievement(LevelAchievement achievement, Dictionary<StrengthLevelTypes, decimal> levelStats)
     {
         if (levelStats[achievement.TargetStrengthLevelType] >= achievement.TargetLevel)
         {

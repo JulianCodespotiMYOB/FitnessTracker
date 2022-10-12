@@ -77,7 +77,7 @@ public class WorkoutGraphDataHandler : IWorkoutGraphDataService
             {
                 if (activity.Exercise.Name == workoutName)
                 {
-                    double? distance = activity.Data.Distance;
+                    decimal? distance = activity.Data.Distance;
                     if (distance == null) continue;
                     graphData.Add(new Models.Fitness.GraphData.WorkoutGraphData
                     {

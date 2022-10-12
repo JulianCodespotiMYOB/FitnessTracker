@@ -44,11 +44,11 @@ public static class MuscleGroupExtensions
         return null;
     }
 
-    public static Dictionary<MuscleGroup, double> GetMuscleGroupScore(MuscleGroup mainMuscleGroup,
+    public static Dictionary<MuscleGroup, decimal> GetMuscleGroupScore(MuscleGroup mainMuscleGroup,
         DetailedMuscleGroup? detailedMuscleGroup,
         List<MuscleGroup>? otherMuscleGroups)
     {
-        Dictionary<MuscleGroup, double> muscleGroupScore = new();
+        Dictionary<MuscleGroup, decimal> muscleGroupScore = new();
 
         foreach (MuscleGroup muscleGroup in Enum.GetValues(typeof(MuscleGroup)))
         {
@@ -57,7 +57,7 @@ public static class MuscleGroupExtensions
                 continue;
             }
 
-            double score = 0;
+            decimal score = 0;
 
             if (muscleGroup == mainMuscleGroup)
             {

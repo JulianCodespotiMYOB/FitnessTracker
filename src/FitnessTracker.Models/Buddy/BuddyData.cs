@@ -9,8 +9,8 @@ namespace FitnessTracker.Models.Buddy;
 public class BuddyData
 {
     public int Id { get; set; }
-    public Dictionary<MuscleGroup, double> MuscleGroupStats { get; set; }
-    public Dictionary<StrengthLevelTypes, double> LevelStats { get; set; }
+    public Dictionary<MuscleGroup, decimal> MuscleGroupStats { get; set; }
+    public Dictionary<StrengthLevelTypes, decimal> LevelStats { get; set; }
     public int Streak { get; set; } = 0;
     public List<Achievement> Achievements { get; set; }
 

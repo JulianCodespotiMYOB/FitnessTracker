@@ -101,8 +101,8 @@ public class UserHandler : IUserService
             {
                 activity.Data.Weight = request.WeightUnit switch
                 {
-                    WeightUnit.Kilograms => activity.Data.Weight * 0.45359237,
-                    WeightUnit.Pounds => activity.Data.Weight * 2.20462262,
+                    WeightUnit.Kilograms => activity.Data.Weight * 0.45359237m,
+                    WeightUnit.Pounds => activity.Data.Weight * 2.20462262m,
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }

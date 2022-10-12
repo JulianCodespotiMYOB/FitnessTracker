@@ -12,14 +12,14 @@ public abstract class Achievement
 
 public class WeightAchievement : Achievement
 {
-    public double TargetWeight { get; set; }
+    public decimal TargetWeight { get; set; }
     public MuscleGroup TargetMuscleGroup { get; set; }
     public bool HasTargetMuscleGroup => TargetMuscleGroup != MuscleGroup.Unknown;
 }
 
 public class DistanceAchievement : Achievement
 {
-    public double TargetDistance { get; set; }
+    public decimal TargetDistance { get; set; }
 }
 
 public class SetsAchievement : Achievement
@@ -38,7 +38,7 @@ public class RepsAchievement : Achievement
 
 public class LevelAchievement : Achievement
 {
-    public double TargetLevel { get; set; }
+    public decimal TargetLevel { get; set; }
     public StrengthLevelTypes TargetStrengthLevelType { get; set; }
 }
 
