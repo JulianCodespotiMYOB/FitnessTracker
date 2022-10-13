@@ -99,11 +99,21 @@ public class UserHandler : IUserService
         {
             foreach (Activity activity in user.Workouts.SelectMany(workout => workout.Activities))
             {
-                activity.Data.Weight = request.WeightUnit switch
+                if (activity.Data.Weight is not null)
                 {
-                    WeightUnit.Kilograms => activity.Data.Weight * 0.45359237m,
-                    WeightUnit.Pounds => activity.Data.Weight * 2.20462262m,
-                    _ => throw new ArgumentOutOfRangeException()
+                    activity.Data.Weight = request.WeightUnit switch
+                    {
+                        WeightUnit.Kilograms => WeightUnit.Kilograms.Convert(activity.Data.Weight.Value),
+                        WeightUnit.Pounds => WeightUnit.Pounds.Convert(activity.Data.Weight.Value),
+                        _ => throw new ArgumentOutOfRangeException(nameof(request.WeightUnit), request.WeightUnit, null)
+                    };
+                }
+
+                activity.Data.TargetWeight = request.WeightUnit switch
+                {
+                    WeightUnit.Kilograms => WeightUnit.Kilograms.Convert(activity.Data.TargetWeight),
+                    WeightUnit.Pounds => WeightUnit.Pounds.Convert(activity.Data.TargetWeight),
+                    _ => throw new ArgumentOutOfRangeException(nameof(request.WeightUnit), request.WeightUnit, null)
                 };
             }
         }
