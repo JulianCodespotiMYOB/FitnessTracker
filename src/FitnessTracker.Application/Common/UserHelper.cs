@@ -11,6 +11,7 @@ public static class UserHelper
     public static async Task<User?> GetUserFromDatabaseById(int userId, IApplicationDbContext context)
     {
         return await context.Users
+            .Include(u => u.Avatar)
             .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
@@ -25,6 +26,7 @@ public static class UserHelper
     public static async Task<User?> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context)
     {
         return await context.Users
+            .Include(u => u.Avatar)
             .Include(u => u.UserSettings)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
