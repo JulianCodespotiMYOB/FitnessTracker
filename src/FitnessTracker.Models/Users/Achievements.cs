@@ -48,7 +48,20 @@ public static class Achievements
                 },
                 TargetStreak = 15,
                 Title = "15 Day Streak"
-            }
+            },
+            new StreakAchievement()
+            {
+                Rewards = new List<Reward>()
+                {
+                    new Experience()
+                    {
+                        Amount = 400,
+                        StrengthLevel = StrengthLevelTypes.Bodybuilding
+                    }
+                },
+                TargetStreak = 20,
+                Title = "20 Day Streak"
+            },
         };
     }
 }
