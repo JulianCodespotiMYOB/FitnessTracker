@@ -79,13 +79,8 @@ public class UserHandler : IUserService
             : Result<GetUserResponse>.Failure("User not found");
     }
 
-    public async Task<Result<GetUsersResponse>> GetUsersAsync()
-    {
-        Result<IEnumerable<User>> users = await UserHelper.GetUsersFromDatabase(_applicationDbContext, _logger);
-        return users.IsSuccess
-            ? Result<GetUsersResponse>.Success(new GetUsersResponse(users.Value))
-            : Result<GetUsersResponse>.Failure(users.Error);
-    }
+    public async Task<GetUsersResponse> GetUsersAsync() =>
+        new(await UserHelper.GetUsersFromDatabase(_applicationDbContext));
 
     public async Task<Result<UpdateUserResponse>> UpdateUserAsync(int id, UpdateUserRequest request)
     {

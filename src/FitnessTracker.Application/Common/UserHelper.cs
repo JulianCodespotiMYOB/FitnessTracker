@@ -38,25 +38,25 @@ public static class UserHelper
             .FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
     }
 
-    public static async Task<Result<IEnumerable<User>>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext,
-        ILogger logger)
+    public static async Task<IEnumerable<User>> GetUsersFromDatabase(IApplicationDbContext applicationDbContext)
     {
-        List<User>? users = await applicationDbContext.Users
-            .Include(u => u.Workouts)
-            .ThenInclude(w => w.Activities)
-            .ThenInclude(a => a.Data)
-            .Include(u => u.Workouts)
-            .ThenInclude(w => w.Activities)
-            .ThenInclude(a => a.Exercise)
-            .Include(u => u.WorkoutBuddy)
-            .ToListAsync();
-
-        if (users is null)
+        try
         {
-            logger.LogError("Users not found");
-            return Result<IEnumerable<User>>.Failure("Users not found");
+            return await applicationDbContext.Users
+                .Include(u => u.Avatar)
+                .Include(u => u.UserSettings)
+                .Include(u => u.Workouts)
+                .ThenInclude(w => w.Activities)
+                .ThenInclude(a => a.Data)
+                .Include(u => u.Workouts)
+                .ThenInclude(w => w.Activities)
+                .ThenInclude(a => a.Exercise)
+                .Include(u => u.WorkoutBuddy)
+                .ToListAsync();
         }
-
-        return Result<IEnumerable<User>>.Success(users);
+        catch (Exception e)
+        {
+            return new List<User>();
+        }
     }
 }
