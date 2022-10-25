@@ -39,9 +39,7 @@ public class AdminController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> GetAllUsers()
     {
-        Result<GetUsersResponse> users = await _userService.GetUsersAsync();
-        return !users.IsSuccess
-            ? BadRequest(new ErrorResponse(users.Error))
-            : Ok(users.Value);
+        GetUsersResponse users = await _userService.GetUsersAsync();
+        return Ok(users);
     }
 }
