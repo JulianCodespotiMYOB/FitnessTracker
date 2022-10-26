@@ -187,10 +187,10 @@ public class WorkoutBuddy
     
     private void SetBuddyAchievements(BuddyData buddyData)
     {
-        List<Achievement> acquiredAchievements = new();
-        List<Achievement> achievements = Achievements.AllAchievements;
+        List<IAchievement> acquiredAchievements = new();
+        List<IAchievement> achievements = Achievements.AllAchievements;
         
-        foreach (Achievement achievement in achievements)
+        foreach (IAchievement achievement in achievements)
         {
             bool isEligibleForAchievement = achievement switch
             {

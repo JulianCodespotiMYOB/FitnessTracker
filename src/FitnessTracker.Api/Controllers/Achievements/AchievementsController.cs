@@ -8,7 +8,7 @@ namespace FitnessTracker.Api.Controllers.Exercises;
 public class AchievementsController : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(List<Achievement>), 200)]
+    [ProducesResponseType(typeof(List<IAchievement>), 200)]
     public IActionResult GetAllAchievements()
     {
         return Ok(Achievements.AllAchievements);

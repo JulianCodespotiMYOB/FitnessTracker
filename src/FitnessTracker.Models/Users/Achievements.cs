@@ -4,7 +4,7 @@ namespace FitnessTracker.Models.Users;
 
 public static class Achievements
 {
-    public static List<Achievement> AllAchievements { get; }
+    public static List<IAchievement> AllAchievements { get; }
 
     static Achievements()
     {
@@ -12,7 +12,7 @@ public static class Achievements
         {
             new StreakAchievement()
             {
-                Rewards = new List<Reward>()
+                Rewards = new List<IReward>()
                 {
                     new Experience()
                     {
@@ -21,11 +21,12 @@ public static class Achievements
                     }
                 },
                 TargetStreak = 5,
-                Title = "5 Day Streak"
+                Title = "5 Day Streak",
+                Description = "You've been working out for 5 days in a row! Keep it up!"
             },
             new StreakAchievement()
             {
-                Rewards = new List<Reward>()
+                Rewards = new List<IReward>()
                 {
                     new Experience()
                     {
@@ -34,11 +35,12 @@ public static class Achievements
                     }
                 },
                 TargetStreak = 10,
-                Title = "10 Day Streak"
+                Title = "10 Day Streak",
+                Description = "You've been working out for 10 days in a row! Keep it up!"
             },
             new StreakAchievement()
             {
-                Rewards = new List<Reward>()
+                Rewards = new List<IReward>()
                 {
                     new Experience()
                     {
@@ -47,11 +49,12 @@ public static class Achievements
                     }
                 },
                 TargetStreak = 15,
-                Title = "15 Day Streak"
+                Title = "15 Day Streak",
+                Description = "You've been working out for 15 days in a row! Keep it up!"
             },
             new StreakAchievement()
             {
-                Rewards = new List<Reward>()
+                Rewards = new List<IReward>()
                 {
                     new Experience()
                     {
@@ -60,11 +63,12 @@ public static class Achievements
                     }
                 },
                 TargetStreak = 20,
-                Title = "20 Day Streak"
+                Title = "20 Day Streak",
+                Description = "You've been working out for 20 days in a row! Keep it up!"
             },
             new StreakAchievement()
             {
-                Rewards = new List<Reward>()
+                Rewards = new List<IReward>()
                 {
                     new Experience()
                     {
@@ -73,7 +77,8 @@ public static class Achievements
                     }
                 },
                 TargetStreak = 25,
-                Title = "25 Day Streak"
+                Title = "25 Day Streak",
+                Description = "You've been working out for 25 days in a row! Keep it up!"
             },
         };
     }
