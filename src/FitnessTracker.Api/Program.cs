@@ -48,7 +48,7 @@ builder.Services.AddCors(opts =>
 
 builder.Services.AddLogging(config => {
     config.AddAWSProvider(builder.Configuration.GetAWSLoggingConfigSection());
-    config.SetMinimumLevel(LogLevel.Trace);
+    config.SetMinimumLevel(LogLevel.Information);
 });
 
 builder.Services.AddEndpointsApiExplorer();
