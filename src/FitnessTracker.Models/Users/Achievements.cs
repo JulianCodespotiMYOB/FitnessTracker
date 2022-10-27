@@ -1,4 +1,5 @@
 using FitnessTracker.Models.Buddy.Enums;
+using FitnessTracker.Models.Fitness.Enums;
 
 namespace FitnessTracker.Models.Users;
 
@@ -79,6 +80,20 @@ public static class Achievements
                 TargetStreak = 25,
                 Title = "25 Day Streak",
                 Description = "You've been working out for 25 days in a row! Keep it up!"
+            },
+            new WeightAchievement()
+            {
+                Rewards = new List<IReward>()
+                {
+                    new Title()
+                    {
+                        Name = "Iron Chest"
+                    }
+                },
+                TargetWeight = 100,
+                TargetMuscleGroup = MuscleGroup.Chest,
+                Title = "100 lbs",
+                Description = "You've lifted 100 lbs! Keep it up!"
             },
         };
     }
