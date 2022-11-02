@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.Models.Buddy;
-using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,5 +16,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne(u => u.UserSettings)
             .WithOne(us => us.User)
             .HasForeignKey<UserSettings>(us => us.Id);
+
+        builder.HasOne(u => u.Avatar);
     }
 }

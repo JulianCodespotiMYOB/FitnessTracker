@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Exercise> Exercises { get; set; } = null!;
     public DbSet<Workout> Workouts { get; set; } = null!;
+    public DbSet<Image> Images { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

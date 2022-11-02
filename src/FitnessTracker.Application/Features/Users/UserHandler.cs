@@ -113,6 +113,9 @@ public class UserHandler : IUserService
             }
         }
 
+        int imageId = request.Avatar?.Id ?? -1;
+        Image? existingImage = _applicationDbContext.Images.FirstOrDefault(i => i.Id == imageId);
+
         user.UserSettings.WeightUnit = request.WeightUnit;
         user.UserSettings.MeasurementUnit = request.MeasurementUnit;
         user.UserSettings.DarkMode = request.DarkMode;
@@ -122,7 +125,7 @@ public class UserHandler : IUserService
         user.Height = request.Height;
         user.Weight = request.Weight;
         user.Age = request.Age;
-        user.Avatar = request.Avatar;
+        user.Avatar = existingImage ?? request.Avatar;
 
         await _applicationDbContext.SaveChangesAsync();
         return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));

@@ -10,6 +10,6 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; set; }
     DbSet<Exercise> Exercises { get; set; }
     DbSet<Workout> Workouts { get; set; }
-
+    DbSet<Image> Images { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
