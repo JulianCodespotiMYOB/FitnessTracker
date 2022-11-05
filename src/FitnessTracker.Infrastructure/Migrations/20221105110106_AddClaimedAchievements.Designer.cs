@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FitnessTracker.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessTracker.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221105110106_AddClaimedAchievements")]
+    partial class AddClaimedAchievements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,31 +202,6 @@ namespace FitnessTracker.Infrastructure.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.Users.Reward", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RewardType")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Rewards");
-
-                    b.HasDiscriminator<int>("RewardType");
-
-                    b.UseTphMappingStrategy();
-                });
-
             modelBuilder.Entity("FitnessTracker.Models.Users.User", b =>
                 {
                     b.Property<int>("Id")
@@ -291,46 +269,6 @@ namespace FitnessTracker.Infrastructure.Migrations
                     b.ToTable("UserSettings");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.Users.Badge", b =>
-                {
-                    b.HasBaseType("FitnessTracker.Models.Users.Reward");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasDiscriminator().HasValue(2);
-                });
-
-            modelBuilder.Entity("FitnessTracker.Models.Users.Experience", b =>
-                {
-                    b.HasBaseType("FitnessTracker.Models.Users.Reward");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StrengthLevel")
-                        .HasColumnType("integer");
-
-                    b.HasDiscriminator().HasValue(0);
-                });
-
-            modelBuilder.Entity("FitnessTracker.Models.Users.Title", b =>
-                {
-                    b.HasBaseType("FitnessTracker.Models.Users.Reward");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasDiscriminator().HasValue(1);
-                });
-
             modelBuilder.Entity("FitnessTracker.Models.Buddy.WorkoutBuddy", b =>
                 {
                     b.HasOne("FitnessTracker.Models.Users.User", "User")
@@ -372,13 +310,6 @@ namespace FitnessTracker.Infrastructure.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.Users.Reward", b =>
-                {
-                    b.HasOne("FitnessTracker.Models.Users.User", null)
-                        .WithMany("Inventory")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("FitnessTracker.Models.Users.User", b =>
                 {
                     b.HasOne("FitnessTracker.Models.Users.Image", "Avatar")
@@ -399,17 +330,6 @@ namespace FitnessTracker.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.Users.Badge", b =>
-                {
-                    b.HasOne("FitnessTracker.Models.Users.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Workouts.Workout", b =>
                 {
                     b.Navigation("Activities");
@@ -417,8 +337,6 @@ namespace FitnessTracker.Infrastructure.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.Users.User", b =>
                 {
-                    b.Navigation("Inventory");
-
                     b.Navigation("UserSettings")
                         .IsRequired();
 

@@ -7,6 +7,7 @@ using FitnessTracker.Contracts.Responses.WorkoutGraphData.GetWorkoutGraphData;
 using FitnessTracker.Contracts.Responses.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Users;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -113,5 +114,29 @@ public class UserController : ControllerBase
         return getWorkoutGraphDataResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutGraphDataResponse.Error))
             : Ok(getWorkoutGraphDataResponse.Value);
+    }
+
+    [HttpGet("{id}/Achievements")]
+    [ProducesResponseType(typeof(List<IUserAchievement>), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
+    public async Task<IActionResult> GetUserAchievementsAsync(int id)
+    {
+        Result<GetUserResponse> user = await _userService.GetUserAsync(id);
+        return user.Match<IActionResult>(
+            success => Ok(success.User.WorkoutBuddy.Data.UserAchievements),
+            failure => BadRequest(new ErrorResponse(failure))
+        );
+    }
+
+    [HttpPost("{id}/RecordAchievement/{achievementId}")]
+    [ProducesResponseType(typeof(RecordAchievementResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
+    public async Task<IActionResult> RecordAchievement(int id, int achievementId)
+    {
+        Result<RecordAchievementResponse> recordAchievementResponse = await _userService.RecordAchievementAsync(id, achievementId);
+        return recordAchievementResponse.Match<IActionResult>(
+            success => Ok(success),
+            failure => BadRequest(new ErrorResponse(failure))
+        );
     }
 }

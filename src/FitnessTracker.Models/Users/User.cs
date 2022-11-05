@@ -17,4 +17,6 @@ public class User
     public List<Workout> Workouts { get; set; } = new();
     public WorkoutBuddy WorkoutBuddy { get; set; } = null!;
     public UserSettings UserSettings { get; set; } = null!;
+    public List<int> ClaimedAchievements { get; set; } = new();
+    public List<Reward> Inventory { get; set; } = new();
 }

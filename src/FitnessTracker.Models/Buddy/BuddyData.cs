@@ -12,7 +12,7 @@ public class BuddyData
     public Dictionary<MuscleGroup, decimal> MuscleGroupStats { get; set; }
     public Dictionary<StrengthLevelTypes, decimal> LevelStats { get; set; }
     public int Streak { get; set; } = 0;
-    public List<IAchievement> Achievements { get; set; }
+    public List<IUserAchievement> UserAchievements { get; set; }
 
     public List<IBuddyAnatomy> Anatomy { get; set; } = new()
     {

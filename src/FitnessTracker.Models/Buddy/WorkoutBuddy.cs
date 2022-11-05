@@ -187,119 +187,34 @@ public class WorkoutBuddy
     
     private void SetBuddyAchievements(BuddyData buddyData)
     {
-        List<IAchievement> acquiredAchievements = new();
+        List<int> claimedAchievements = User.ClaimedAchievements;
+        List<IUserAchievement> acquiredAchievements = new();
         List<IAchievement> achievements = Achievements.AllAchievements;
         
         foreach (IAchievement achievement in achievements)
         {
-            bool isEligibleForAchievement = achievement switch
+            if (claimedAchievements.Contains(achievement.Id))
             {
-                StreakAchievement streakAchievement => IsEligibleForStreakAchievement(streakAchievement, buddyData.Streak),
-                WeightAchievement weightAchievement => IsEligibleForWeightAchievement(weightAchievement),
-                DistanceAchievement distanceAchievement => IsEligibleForDistanceAchievement(distanceAchievement),
-                SetsAchievement setsAchievement => IsEligibleForSetsAchievement(setsAchievement),
-                RepsAchievement repsAchievement => IsEligibleForRepsAchievement(repsAchievement),
-                LevelAchievement levelAchievement => IsEligibleForLevelAchievement(levelAchievement, buddyData.LevelStats),
-                _ => throw new ArgumentOutOfRangeException()
+                continue;
+            }
+
+            IUserAchievement? userAchievement = achievement switch
+            {
+                StreakAchievement streakAchievement => new StreakUserAchievement(streakAchievement, buddyData.Streak),
+                WeightAchievement weightAchievement => new WeightUserAchievement(weightAchievement, GetActivities()),
+                DistanceAchievement distanceAchievement => new DistanceUserAchievement(distanceAchievement, GetActivities()),
+                SetsAchievement setsAchievement => new SetsUserAchievement(setsAchievement, GetActivities()),
+                RepsAchievement repsAchievement => new RepsUserAchievement(repsAchievement, GetActivities()),
+                LevelAchievement levelAchievement => new LevelUserAchievement(levelAchievement, buddyData.LevelStats),
+                _ => null
             };
 
-            if (isEligibleForAchievement)
+            if (userAchievement is not null)
             {
-                acquiredAchievements.Add(achievement);
+                acquiredAchievements.Add(userAchievement);
             }
         }
 
-        buddyData.Achievements = acquiredAchievements;
-    }
-    
-    private bool IsEligibleForStreakAchievement(StreakAchievement achievement, int streak)
-    {
-        if (streak >= achievement.TargetStreak)
-        {
-            return true;
-        }
-        return false;
-    }
-    
-    private bool IsEligibleForWeightAchievement(WeightAchievement achievement)
-    {
-        List<Activity> activities = GetActivities();
-        foreach (Activity activity in activities)
-        {
-            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
-            {
-                if (activity.Data.Weight >= achievement.TargetWeight)
-                {
-                    return true;
-                }
-            }
-            else if (activity.Data.Weight >= achievement.TargetWeight)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private bool IsEligibleForLevelAchievement(LevelAchievement achievement, Dictionary<StrengthLevelTypes, decimal> levelStats)
-    {
-        if (levelStats[achievement.TargetStrengthLevelType] >= achievement.TargetLevel)
-        {
-            return true;
-        }
-        return false;
-    }
-    
-    private bool IsEligibleForDistanceAchievement(DistanceAchievement achievement)
-    {
-        List<Activity> activities = GetActivities();
-        foreach (Activity activity in activities)
-        {
-            if (activity.Data.Distance >= achievement.TargetDistance)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private bool IsEligibleForSetsAchievement(SetsAchievement achievement)
-    {
-        List<Activity> activities = GetActivities();
-        foreach (Activity activity in activities)
-        {
-            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
-            {
-                if (activity.Data.Sets >= achievement.TargetSets)
-                {
-                    return true;
-                }
-            }
-            else if (activity.Data.Sets >= achievement.TargetSets)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private bool IsEligibleForRepsAchievement(RepsAchievement achievement)
-    {
-        List<Activity> activities = GetActivities();
-        foreach (Activity activity in activities)
-        {
-            if (achievement.HasTargetMuscleGroup && activity.Exercise.MainMuscleGroup == achievement.TargetMuscleGroup)
-            {
-                if (activity.Data.Reps >= achievement.TargetReps)
-                {
-                    return true;
-                }
-            }
-            else if (activity.Data.Reps >= achievement.TargetReps)
-            {
-                return true;
-            }
-        }
-        return false;
+        buddyData.UserAchievements = acquiredAchievements;
     }
 }

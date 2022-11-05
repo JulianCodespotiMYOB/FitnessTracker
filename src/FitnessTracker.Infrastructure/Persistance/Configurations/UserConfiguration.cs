@@ -18,5 +18,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey<UserSettings>(us => us.Id);
 
         builder.HasOne(u => u.Avatar);
+
+        builder.Property(u => u.ClaimedAchievements)
+            .HasDefaultValue(new List<int>());
     }
 }

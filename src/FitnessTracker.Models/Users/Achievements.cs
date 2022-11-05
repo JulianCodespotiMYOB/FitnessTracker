@@ -13,10 +13,12 @@ public static class Achievements
         {
             new StreakAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 0,
+                Rewards = new List<Reward>()
                 {
                     new Experience()
                     {
+                        Id = 0,
                         Amount = 100,
                         StrengthLevel = StrengthLevelTypes.Bodybuilding
                     }
@@ -27,10 +29,12 @@ public static class Achievements
             },
             new StreakAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 1,
+                Rewards = new List<Reward>()
                 {
                     new Experience()
                     {
+                        Id = 1,
                         Amount = 200,
                         StrengthLevel = StrengthLevelTypes.Bodybuilding
                     }
@@ -41,10 +45,12 @@ public static class Achievements
             },
             new StreakAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 2,
+                Rewards = new List<Reward>()
                 {
                     new Experience()
                     {
+                        Id = 2,
                         Amount = 300,
                         StrengthLevel = StrengthLevelTypes.Bodybuilding
                     }
@@ -55,10 +61,12 @@ public static class Achievements
             },
             new StreakAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 3,
+                Rewards = new List<Reward>()
                 {
                     new Experience()
                     {
+                        Id = 3,
                         Amount = 400,
                         StrengthLevel = StrengthLevelTypes.Bodybuilding
                     }
@@ -69,10 +77,12 @@ public static class Achievements
             },
             new StreakAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 4,
+                Rewards = new List<Reward>()
                 {
                     new Experience()
                     {
+                        Id = 4,
                         Amount = 500,
                         StrengthLevel = StrengthLevelTypes.Bodybuilding
                     }
@@ -83,16 +93,18 @@ public static class Achievements
             },
             new WeightAchievement()
             {
-                Rewards = new List<IReward>()
+                Id = 5,
+                Rewards = new List<Reward>()
                 {
                     new Title()
                     {
+                        Id = 5,
                         Name = "Iron Chest"
                     }
                 },
                 TargetWeight = 100,
                 TargetMuscleGroup = MuscleGroup.Chest,
-                Title = "100 lbs",
+                Title = "100 lbs bench press",
                 Description = "You've lifted 100 lbs! Keep it up!"
             },
         };

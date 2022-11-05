@@ -11,4 +11,5 @@ public interface IUserService
     public Task<Result<GetUserResponse>> GetUserAsync(int id);
     public Task<GetUsersResponse> GetUsersAsync();
     public Task<Result<UpdateUserResponse>> UpdateUserAsync(int id, UpdateUserRequest request);
+    public Task<Result<RecordAchievementResponse>> RecordAchievementAsync(int id, int achievementId);
 }

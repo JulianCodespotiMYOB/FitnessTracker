@@ -1,3 +1,4 @@
+using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 

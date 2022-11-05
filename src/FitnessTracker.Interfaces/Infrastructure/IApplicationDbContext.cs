@@ -11,5 +11,6 @@ public interface IApplicationDbContext
     DbSet<Exercise> Exercises { get; set; }
     DbSet<Workout> Workouts { get; set; }
     DbSet<Image> Images { get; set; }
+    DbSet<Reward> Rewards { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
