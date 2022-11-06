@@ -19,14 +19,16 @@ namespace FitnessTracker.Api.Controllers.Users;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IAchievementService _achievementService;
     private readonly IWorkoutNamesService _workoutNamesService;
     private readonly IWorkoutGraphDataService _workoutGraphDataService;
 
-    public UserController(IUserService userService, IWorkoutNamesService workoutNamesService, IWorkoutGraphDataService workoutGraphDataService)
+    public UserController(IUserService userService, IWorkoutNamesService workoutNamesService, IWorkoutGraphDataService workoutGraphDataService, IAchievementService achievementService)
     {
         _userService = userService;
         _workoutNamesService = workoutNamesService;
         _workoutGraphDataService = workoutGraphDataService;
+        _achievementService = achievementService;
     }
 
     [HttpPost("Login")]
@@ -133,7 +135,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> RecordAchievement(int id, int achievementId)
     {
-        Result<RecordAchievementResponse> recordAchievementResponse = await _userService.RecordAchievementAsync(id, achievementId);
+        Result<RecordAchievementResponse> recordAchievementResponse = await _achievementService.RecordAchievementAsync(id, achievementId);
         return recordAchievementResponse.Match<IActionResult>(
             success => Ok(success),
             failure => BadRequest(new ErrorResponse(failure))

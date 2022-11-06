@@ -13,12 +13,14 @@ namespace FitnessTracker.Api.Controllers.Exercises;
 public class AdminController : ControllerBase
 {
     private readonly IExerciseService _exerciseService;
+    private readonly IAchievementService _achievementService;
     private readonly IUserService _userService;
 
-    public AdminController(IExerciseService exerciseService, IUserService userService)
+    public AdminController(IExerciseService exerciseService, IUserService userService, IAchievementService achievementService)
     {
         _exerciseService = exerciseService;
         _userService = userService;
+        _achievementService = achievementService;
     }
 
     [HttpPost]
@@ -41,5 +43,14 @@ public class AdminController : ControllerBase
     {
         GetUsersResponse users = await _userService.GetUsersAsync();
         return Ok(users);
+    }
+
+    [HttpDelete]
+    [Route("Users/{id}/Achievements/{achievementId}")]
+    [ProducesResponseType(200)]
+    public async Task<IActionResult> RemoveAchievement(int id, int achievementId)
+    {
+        await _achievementService.ReverseAchievementAsync(id, achievementId);
+        return Ok();
     }
 }

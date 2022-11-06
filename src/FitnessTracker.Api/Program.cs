@@ -65,6 +65,7 @@ builder.Services.AddScoped<IWorkoutNamesService, WorkoutNamesHandler>();
 builder.Services.AddScoped<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
 builder.Services.AddScoped<IUserService, UserHandler>();
 builder.Services.AddScoped<IExerciseService, ExerciseHandler>();
+builder.Services.AddScoped<IAchievementService, AchievementHandler>();
 
 WebApplication app = builder.Build();
 

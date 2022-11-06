@@ -21,5 +21,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.ClaimedAchievements)
             .HasDefaultValue(new List<int>());
+
+        builder.HasOne(u => u.Title);
+
+        builder.HasOne(u => u.Badge);
     }
 }

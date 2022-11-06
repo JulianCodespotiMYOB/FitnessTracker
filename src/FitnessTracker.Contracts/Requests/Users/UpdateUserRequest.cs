@@ -15,5 +15,6 @@ public class UpdateUserRequest
     public MeasurementUnit MeasurementUnit { get; set; }
     public bool DarkMode { get; set; }
     public Image? Avatar { get; set; }
-    public List<int> ClaimedAchievements { get; set; }
+    public Title? Title { get; set; }
+    public Badge? Badge { get; set; }
 }

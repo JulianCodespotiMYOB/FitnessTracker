@@ -19,4 +19,6 @@ public class User
     public UserSettings UserSettings { get; set; } = null!;
     public List<int> ClaimedAchievements { get; set; } = new();
     public List<Reward> Inventory { get; set; } = new();
+    public Title? Title { get; set; }
+    public Badge? Badge { get; set; }
 }

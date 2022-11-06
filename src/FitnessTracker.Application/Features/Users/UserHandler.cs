@@ -113,8 +113,23 @@ public class UserHandler : IUserService
             }
         }
 
-        int imageId = request.Avatar?.Id ?? -1;
-        Image? existingImage = _applicationDbContext.Images.FirstOrDefault(i => i.Id == imageId);
+        if (_applicationDbContext.Users.Any(u => u.Username.Equals(request.Username) && u.Id != id))
+        {
+            string message = $"Username {request.Username} is already taken.";
+            _logger.LogError(message);
+            return Result<UpdateUserResponse>.Failure(message);
+        }
+
+        if (_applicationDbContext.Users.Any(u => u.Email.Equals(request.Email) && u.Id != id))
+        {
+            string message = $"Email {request.Email} is already taken.";
+            _logger.LogError(message);
+            return Result<UpdateUserResponse>.Failure(message);
+        }
+
+        Image? existingImage = request.Avatar is not null ? _applicationDbContext.Images.FirstOrDefault(i => i.Id == request.Avatar.Id) : null;
+        Title? title = request.Title is not null ? _applicationDbContext.Rewards.FirstOrDefault(t => t.Id == request.Title.Id) as Title : null;
+        Badge? badge = request.Badge is not null ? _applicationDbContext.Rewards.FirstOrDefault(b => b.Id == request.Badge.Id) as Badge : null;
 
         user.UserSettings.WeightUnit = request.WeightUnit;
         user.UserSettings.MeasurementUnit = request.MeasurementUnit;
@@ -126,69 +141,10 @@ public class UserHandler : IUserService
         user.Weight = request.Weight;
         user.Age = request.Age;
         user.Avatar = existingImage ?? request.Avatar;
-        user.ClaimedAchievements = request.ClaimedAchievements;
+        user.Title = title ?? request.Title;
+        user.Badge = badge ?? request.Badge;
 
         await _applicationDbContext.SaveChangesAsync();
         return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));
-    }
-
-    public async Task<Result<RecordAchievementResponse>> RecordAchievementAsync(int id, int achievementId)
-    {
-        User? user = await UserHelper.GetUserFromDatabaseById(id, _applicationDbContext);
-        if (user is null)
-        {
-            return Result<RecordAchievementResponse>.Failure("User not found");
-        }
-
-        if (user.ClaimedAchievements.Any(id => id == achievementId))
-        {
-            return Result<RecordAchievementResponse>.Failure("Achievement already claimed");
-        }
-
-        List<IUserAchievement> userAchievements = user.WorkoutBuddy.Data.UserAchievements;
-        IUserAchievement? achievement = userAchievements.FirstOrDefault(ua => ua.Id == achievementId);
-        if (achievement is null)
-        {
-            return Result<RecordAchievementResponse>.Failure("Achievement not found");
-        }
-
-        if (!achievement.IsCompleted)
-        {
-            return Result<RecordAchievementResponse>.Failure("Achievement not completed");
-        }
-
-        user.ClaimedAchievements.Add(achievement.Id);
-
-        string? errorClaimingRewards = ClaimRewards(achievement.Rewards);
-        if (errorClaimingRewards is not null)
-        {
-            return Result<RecordAchievementResponse>.Failure(errorClaimingRewards);
-        }
-
-        await _applicationDbContext.SaveChangesAsync();
-
-        return Result<RecordAchievementResponse>.Success(new RecordAchievementResponse(achievement.Rewards));
-    }
-
-    private string? ClaimRewards(IEnumerable<Reward> rewards)
-    {
-        foreach (Reward reward in rewards)
-        {
-            switch (reward)
-            {
-                case Title title:
-                    _applicationDbContext.Rewards.Add(title);
-                    break;
-                case Badge badge:
-                    _applicationDbContext.Rewards.Add(badge);
-                    break;
-                case Experience experience:
-                    break;
-                default:
-                    return $"Reward type {reward.GetType()} not supported";
-            }
-        }
-
-        return null;
     }
 }
