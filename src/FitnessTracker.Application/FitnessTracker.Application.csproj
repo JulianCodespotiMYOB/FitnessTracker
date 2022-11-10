@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Bogus" Version="34.0.2" />
         <PackageReference Include="Mapster" Version="7.3.0" />
+        <PackageReference Include="SkiaSharp" Version="2.88.3" />
     </ItemGroup>
 
     <PropertyGroup>

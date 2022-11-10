@@ -7,8 +7,10 @@ using FitnessTracker.Contracts.Requests.Users;
 using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
 using FitnessTracker.Contracts.Responses.Common;
+using FitnessTracker.Domain.MuscleGroupImages;
 using FitnessTracker.Infrastructure.Persistance;
 using FitnessTracker.Interfaces.Infrastructure;
+using FitnessTracker.Interfaces.Services;
 using FitnessTracker.Interfaces.Services.Exercises;
 using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Interfaces.Services.Workouts;
@@ -61,6 +63,7 @@ builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValida
 builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
 builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutRequestValidator>();
 builder.Services.AddScoped<IWorkoutService, WorkoutHandler>();
+builder.Services.AddScoped<IMuscleGroupImagesService, MuscleGroupImageGenerator>();
 builder.Services.AddScoped<IWorkoutNamesService, WorkoutNamesHandler>();
 builder.Services.AddScoped<IWorkoutGraphDataService, WorkoutGraphDataHandler>();
 builder.Services.AddScoped<IUserService, UserHandler>();

@@ -22,8 +22,6 @@ public class WorkoutBuddy
         SetWorkoutBuddyMuscleGroupStats(buddyData);
         SetBuddyOverallLevels(buddyData);
         SetBuddyAnatomyLevel(buddyData);
-        SetBuddyAchievements(buddyData);
-
         return buddyData;
     }
 

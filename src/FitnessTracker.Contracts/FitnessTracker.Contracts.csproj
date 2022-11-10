@@ -8,11 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.1.0"/>
+        <PackageReference Include="FluentValidation" Version="11.1.0" />
+        <PackageReference Include="SkiaSharp" Version="2.88.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj"/>
+        <ProjectReference Include="..\FitnessTracker.Models\FitnessTracker.Models.csproj" />
     </ItemGroup>
 
 </Project>

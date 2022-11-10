@@ -100,6 +100,9 @@ namespace FitnessTracker.Infrastructure.Migrations
                     b.Property<int>("Mechanics")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MuscleGroupImageId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -111,6 +114,8 @@ namespace FitnessTracker.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MuscleGroupImageId");
 
                     b.ToTable("Exercises");
                 });
@@ -350,6 +355,17 @@ namespace FitnessTracker.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.Fitness.Exercises.Exercise", b =>
+                {
+                    b.HasOne("FitnessTracker.Models.Users.Image", "MuscleGroupImage")
+                        .WithMany()
+                        .HasForeignKey("MuscleGroupImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MuscleGroupImage");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Fitness.Workouts.Activity", b =>
