@@ -145,6 +145,6 @@ public class UserHandler : IUserService
         user.Badge = badge ?? request.Badge;
 
         await _applicationDbContext.SaveChangesAsync();
-        return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user.UserSettings));
+        return Result<UpdateUserResponse>.Success(new UpdateUserResponse(user));
     }
 }

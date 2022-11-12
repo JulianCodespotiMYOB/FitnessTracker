@@ -2,4 +2,4 @@ using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Contracts.Responses.Users;
 
-public record UpdateUserResponse(UserSettings UserSettings);
+public record UpdateUserResponse(User User);
