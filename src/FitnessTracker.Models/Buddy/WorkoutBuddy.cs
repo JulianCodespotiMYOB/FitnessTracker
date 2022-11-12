@@ -11,35 +11,26 @@ namespace FitnessTracker.Models.Buddy;
 public class WorkoutBuddy
 {
     public int Id { get; set; }
-    public User User { get; set; }
-    public string Name { get; set; }
+    public User User { get; set; } = null!;
+    public string Name { get; set; } = null!;
     public BuddyData Data => GetWorkoutBuddyData();
 
     private BuddyData GetWorkoutBuddyData()
     {
-        BuddyData buddyData = new();
-        SetWorkoutBuddyStreak(buddyData);
-        SetWorkoutBuddyMuscleGroupStats(buddyData);
-        SetBuddyOverallLevels(buddyData);
-        SetBuddyAnatomyLevel(buddyData);
-        return buddyData;
+        var streak = GetWorkoutBuddyStreak();
+        var stats = GetWorkoutBuddyMuscleGroupStats();
+        var levels = GetBuddyOverallLevels();
+        var anatomyLevels = GetBuddyAnatomyLevel();
+        var achievements = GetBuddyAchievements(streak, levels);
+
+        return new BuddyData(streak, stats, levels, anatomyLevels, achievements);
     }
 
-    private List<Exercise> GetExercises()
-    {
-        return (from workout in User.Workouts from activity in workout.Activities select activity.Exercise).ToList();
-    }
-
-    private List<Activity> GetActivities()
-    {
-        return User.Workouts.SelectMany(workout => workout.Activities).ToList();
-    }
-
-    private void SetWorkoutBuddyStreak(BuddyData buddyData)
+    private int GetWorkoutBuddyStreak()
     {
         if (User.Workouts.Count <= User.WeeklyWorkoutAmountGoal)
         {
-            return;
+            return 0;
         }
 
         int currentStreak = 1;
@@ -70,7 +61,7 @@ public class WorkoutBuddy
             }
         }
 
-        buddyData.Streak = currentStreak;
+        return currentStreak;
 
         bool IsWorkoutInNextWeek(Workout workout)
         {
@@ -93,10 +84,11 @@ public class WorkoutBuddy
         }
     }
 
-    private void SetWorkoutBuddyMuscleGroupStats(BuddyData buddyData)
+    private Dictionary<MuscleGroup, decimal> GetWorkoutBuddyMuscleGroupStats()
     {
         List<Activity> activities = GetActivities();
         Dictionary<MuscleGroup, decimal> muscleGroupStats = new();
+
         foreach (Activity activity in activities)
         {
             Dictionary<MuscleGroup, decimal> exerciseMuscleGroupStats = activity.Exercise.MuscleGroupStats;
@@ -112,30 +104,11 @@ public class WorkoutBuddy
                 }
             }
         }
-        buddyData.MuscleGroupStats = muscleGroupStats;
-    }
 
-    private decimal GetPercentageOfTargetReachedInActivity(Data activityData)
-    {
-        switch (activityData.Type)
-        {
-            case ExerciseType.Cardio:
-                if (activityData.Distance is not null)
-                {
-                    return (activityData.Distance / activityData.TargetDistance).Value;
-                }
-                return 0;
-            case ExerciseType.Strength or ExerciseType.Powerlifting or ExerciseType.OlympicWeightLifting:
-                if (activityData.Weight is not null && activityData.Reps is not null && activityData.Sets is not null)
-                {
-                    return (activityData.Weight * activityData.Reps * activityData.Sets / activityData.TargetWeight / activityData.TargetReps / activityData.TargetSets).Value;
-                }
-                return 0;
-            default: return 0;
-        }
+        return muscleGroupStats;
     }
     
-    private void SetBuddyOverallLevels(BuddyData buddyData)
+    private Dictionary<StrengthLevelTypes, decimal> GetBuddyOverallLevels()
     {
         List<Activity> activities = GetActivities();
         decimal powerliftingLevel = 0;
@@ -157,7 +130,8 @@ public class WorkoutBuddy
                     break;
             }
         }
-        buddyData.LevelStats = new()
+
+        return new()
         {
             { StrengthLevelTypes.Bodybuilding, bodyBuildingLevel },
             { StrengthLevelTypes.Powerlifting, powerliftingLevel },
@@ -168,14 +142,18 @@ public class WorkoutBuddy
     
     
 
-    private void SetBuddyAnatomyLevel(BuddyData buddyData)
+    private Dictionary<MuscleGroup, int> GetBuddyAnatomyLevel()
     {
         List<Exercise> exercises = GetExercises();
+        Dictionary<MuscleGroup, int> anatomyLevels = new();
+        IEnumerable<MuscleGroup> muscles = Enum.GetValues(typeof(MuscleGroup)).Cast<MuscleGroup>();
 
-        foreach (IBuddyAnatomy buddyAnatomy in buddyData.Anatomy)
+        foreach (MuscleGroup muscle in muscles)
         {
-            buddyAnatomy.Level = GetAnatomyLevel(buddyAnatomy.MuscleGroup);
+            anatomyLevels[muscle] = GetAnatomyLevel(muscle);
         }
+
+        return anatomyLevels;
 
         int GetAnatomyLevel(MuscleGroup anatomyType)
         {
@@ -183,7 +161,7 @@ public class WorkoutBuddy
         }
     }
     
-    private void SetBuddyAchievements(BuddyData buddyData)
+    private IEnumerable<IUserAchievement> GetBuddyAchievements(int streak, Dictionary<StrengthLevelTypes, decimal> levels)
     {
         List<int> claimedAchievements = User.ClaimedAchievements;
         List<IUserAchievement> acquiredAchievements = new();
@@ -198,12 +176,12 @@ public class WorkoutBuddy
 
             IUserAchievement? userAchievement = achievement switch
             {
-                StreakAchievement streakAchievement => new StreakUserAchievement(streakAchievement, buddyData.Streak),
+                StreakAchievement streakAchievement => new StreakUserAchievement(streakAchievement, streak),
                 WeightAchievement weightAchievement => new WeightUserAchievement(weightAchievement, GetActivities()),
                 DistanceAchievement distanceAchievement => new DistanceUserAchievement(distanceAchievement, GetActivities()),
                 SetsAchievement setsAchievement => new SetsUserAchievement(setsAchievement, GetActivities()),
                 RepsAchievement repsAchievement => new RepsUserAchievement(repsAchievement, GetActivities()),
-                LevelAchievement levelAchievement => new LevelUserAchievement(levelAchievement, buddyData.LevelStats),
+                LevelAchievement levelAchievement => new LevelUserAchievement(levelAchievement, levels),
                 _ => null
             };
 
@@ -213,6 +191,36 @@ public class WorkoutBuddy
             }
         }
 
-        buddyData.UserAchievements = acquiredAchievements;
+        return acquiredAchievements;
+    }
+
+    private List<Exercise> GetExercises()
+    {
+        return (from workout in User.Workouts from activity in workout.Activities select activity.Exercise).ToList();
+    }
+
+    private List<Activity> GetActivities()
+    {
+        return User.Workouts.SelectMany(workout => workout.Activities).ToList();
+    }
+
+    private decimal GetPercentageOfTargetReachedInActivity(Data activityData)
+    {
+        switch (activityData.Type)
+        {
+            case ExerciseType.Cardio:
+                if (activityData.Distance is not null)
+                {
+                    return (activityData.Distance / activityData.TargetDistance).Value;
+                }
+                return 0;
+            case ExerciseType.Strength or ExerciseType.Powerlifting or ExerciseType.OlympicWeightLifting:
+                if (activityData.Weight is not null && activityData.Reps is not null && activityData.Sets is not null)
+                {
+                    return (activityData.Weight * activityData.Reps * activityData.Sets / activityData.TargetWeight / activityData.TargetReps / activityData.TargetSets).Value;
+                }
+                return 0;
+            default: return 0;
+        }
     }
 }
