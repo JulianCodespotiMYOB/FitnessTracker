@@ -7,6 +7,7 @@ using FitnessTracker.Interfaces.Services.Exercises;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Enums;
 using FitnessTracker.Models.Fitness.Exercises;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -40,7 +41,7 @@ public class ExerciseHandler : IExerciseService
             };
         }
 
-        List<Exercise> exercises = _applicationDbContext.Exercises.ToList();
+        List<Exercise> exercises = _applicationDbContext.Exercises.Include(e => e.MuscleGroupImage).ToList();
         List<Exercise> filteredExercises = exercises.Where(x => x.MainMuscleGroup != MuscleGroup.Unknown).ToList();
         _cache.Set(ExercisesCacheKey, filteredExercises);
 
