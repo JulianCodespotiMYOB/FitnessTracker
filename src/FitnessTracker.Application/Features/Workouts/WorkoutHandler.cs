@@ -168,6 +168,7 @@ public class WorkoutHandler : IWorkoutService
     private Result<List<Activity>> MapExercises(IEnumerable<Activity> activities)
     {
         List<Activity> mappedActivities = new();
+
         foreach (Activity activity in activities)
         {
             Exercise? exercise = _applicationDbContext.Exercises.Find(activity.Exercise.Id);
@@ -175,6 +176,9 @@ public class WorkoutHandler : IWorkoutService
             {
                 return Result<List<Activity>>.Failure("Exercise not found");
             }
+
+            Image? existingImage = _applicationDbContext.Images.FirstOrDefault(i => i.Id == (activity.Data.Image == null ? -1 : activity.Data.Image.Id));
+            activity.Data.Image = existingImage ?? activity.Data.Image;
 
             mappedActivities.Add(new Activity
             {
