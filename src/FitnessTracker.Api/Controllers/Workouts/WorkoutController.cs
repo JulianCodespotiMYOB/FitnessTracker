@@ -30,8 +30,7 @@ public class WorkoutController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
-        [FromRoute] int userId,
-        [FromServices] IValidator<RecordWorkoutRequest> validator
+        [FromRoute] int userId
     )
     {
         Result<RecordWorkoutResponse> recordWorkoutResponse = await _workoutService.RecordWorkout(request, userId);
@@ -74,8 +73,7 @@ public class WorkoutController : ControllerBase
     public async Task<IActionResult> UpdateWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId,
-        [FromBody] UpdateWorkoutRequest request,
-        [FromServices] IValidator<UpdateWorkoutRequest> validator
+        [FromBody] UpdateWorkoutRequest request
     )
     {
         Result<UpdateWorkoutResponse> updateWorkoutResponse = await _workoutService.UpdateWorkout(request, workoutId, userId);
