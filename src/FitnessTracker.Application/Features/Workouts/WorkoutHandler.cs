@@ -10,6 +10,7 @@ using FitnessTracker.Contracts.Responses.Workouts.UpdateWorkout;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness.Datas;
 using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
@@ -37,7 +38,7 @@ public class WorkoutHandler : IWorkoutService
             return Result<RecordWorkoutResponse>.Failure("User not found");
         }
 
-        Result<List<Activity>> activities = MapExercises(request.Activities);
+        Result<List<Activity>> activities = MapExercises(request.Activities, true);
         if (!activities.IsSuccess)
         {
             _logger.LogWarning($"Failed to map exercises: {activities.Error}");
@@ -125,7 +126,7 @@ public class WorkoutHandler : IWorkoutService
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
-        Result<List<Activity>> activities = MapExercises(request.Workout.Activities);
+        Result<List<Activity>> activities = MapExercises(request.Workout.Activities, false);
         if (!activities.IsSuccess)
         {
             _logger.LogError($"Failed to map exercises");
@@ -175,7 +176,7 @@ public class WorkoutHandler : IWorkoutService
         return Result<DeleteWorkoutResponse>.Success(response);
     }
 
-    private Result<List<Activity>> MapExercises(IEnumerable<Activity> activities)
+    private Result<List<Activity>> MapExercises(IEnumerable<Activity> activities, bool newWorkout)
     {
         List<Activity> mappedActivities = new();
 
@@ -187,12 +188,19 @@ public class WorkoutHandler : IWorkoutService
                 return Result<List<Activity>>.Failure("Exercise not found");
             }
 
+            Data? existingData = _applicationDbContext.Data.Find(activity.Data.Id);
+            if (existingData is null && !newWorkout)
+            {
+                return Result<List<Activity>>.Failure("Data not found");
+            }
+
+            Data data = existingData ?? activity.Data;
             Image? existingImage = _applicationDbContext.Images.FirstOrDefault(i => i.Id == (activity.Data.Image == null ? -1 : activity.Data.Image.Id));
-            activity.Data.Image = existingImage ?? activity.Data.Image;
+            data.Image = existingImage ?? activity.Data.Image;
 
             mappedActivities.Add(new Activity
             {
-                Data = activity.Data,
+                Data = data ?? activity.Data,
                 Exercise = exercise,
                 Id = activity.Id,
             });
