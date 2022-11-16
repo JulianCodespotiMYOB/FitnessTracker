@@ -33,12 +33,14 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogWarning($"User with id {userId} not found");
             return Result<RecordWorkoutResponse>.Failure("User not found");
         }
 
         Result<List<Activity>> activities = MapExercises(request.Activities);
         if (!activities.IsSuccess)
         {
+            _logger.LogWarning($"Failed to map exercises: {activities.Error}");
             return Result<RecordWorkoutResponse>.Failure(activities.Error);
         }
 
@@ -67,6 +69,7 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<GetWorkoutsResponse>.Failure("User not found");
         }
 
@@ -88,12 +91,14 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<GetWorkoutResponse>.Failure("User not found");
         }
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<GetWorkoutResponse>.Failure("Workout not found");
         }
 
@@ -109,18 +114,21 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<UpdateWorkoutResponse>.Failure("User not found");
         }
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
         Result<List<Activity>> activities = MapExercises(request.Workout.Activities);
         if (!activities.IsSuccess)
         {
+            _logger.LogError($"Failed to map exercises");
             return Result<UpdateWorkoutResponse>.Failure(activities.Error);
         }
 
@@ -145,12 +153,14 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<DeleteWorkoutResponse>.Failure("User not found");
         }
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<DeleteWorkoutResponse>.Failure("Workout not found");
         }
 
