@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<Reward> Rewards { get; set; } = null!;
     public DbSet<Data> Data { get; set; } = null!;
+    public DbSet<Activity> Activities { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
