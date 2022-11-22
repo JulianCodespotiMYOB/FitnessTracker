@@ -38,16 +38,9 @@ public class WorkoutHandler : IWorkoutService
             return Result<RecordWorkoutResponse>.Failure("User not found");
         }
 
-        Result<List<Activity>> activities = await MapExercisesAsync(request.Activities, true);
-        if (!activities.IsSuccess)
-        {
-            _logger.LogWarning($"Failed to map exercises: {activities.Error}");
-            return Result<RecordWorkoutResponse>.Failure(activities.Error);
-        }
-
         Workout workout = new()
         {
-            Activities = activities.Value,
+            Activities = request.Activities,
             Completed = request.Completed,
             Time = request.Time,
             Past = request.Past,
@@ -126,18 +119,11 @@ public class WorkoutHandler : IWorkoutService
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
-        Result<List<Activity>> activities = await MapExercisesAsync(request.Workout.Activities, false);
-        if (!activities.IsSuccess)
-        {
-            _logger.LogError($"Failed to map exercises");
-            return Result<UpdateWorkoutResponse>.Failure(activities.Error);
-        }
-
         workout.Past = request.Workout.Past;
         workout.Completed = request.Workout.Completed;
         workout.Time = request.Workout.Time;
-        workout.Activities = activities.Value;
         workout.Name = request.Workout.Name;
+        workout.Activities = request.Workout.Activities;
 
         await _applicationDbContext.SaveChangesAsync();
 
@@ -174,53 +160,5 @@ public class WorkoutHandler : IWorkoutService
         };
 
         return Result<DeleteWorkoutResponse>.Success(response);
-    }
-
-    // clean this abhorrent thing up
-    private async Task<Result<List<Activity>>> MapExercisesAsync(IEnumerable<Activity> activities, bool newWorkout)
-    {
-        List<Activity> mappedActivities = new();
-
-        foreach (Activity activity in activities)
-        {
-            Activity? currentActivity = await _applicationDbContext.Activities.FindAsync(activity.Id);
-            if (currentActivity is null && !newWorkout)
-            {
-                return Result<List<Activity>>.Failure("Activity not found");
-            }
-            
-            Exercise? exercise = await _applicationDbContext.Exercises.FindAsync(activity.Exercise.Id);
-            if (exercise is null)
-            {
-                return Result<List<Activity>>.Failure("Exercise not found");
-            }
-
-            Data? existingData = await _applicationDbContext.Data.FindAsync(activity.Data.Id);
-            if (existingData is null && !newWorkout)
-            {
-                return Result<List<Activity>>.Failure("Data not found");
-            }
-
-            Data data = existingData ?? activity.Data;
-            Image? existingImage = await _applicationDbContext.Images.FindAsync(activity.Data.Image == null ? -1 : activity.Data.Image.Id);
-            data.Image = existingImage ?? activity.Data.Image;
-
-            if (currentActivity != null)
-            {
-                currentActivity.Exercise = exercise;
-                currentActivity.Data = data;
-                mappedActivities.Add(currentActivity);
-            }
-            else
-            {
-                mappedActivities.Add(new Activity
-                {
-                    Exercise = exercise,
-                    Data = data
-                });
-            }
-        }
-
-        return Result<List<Activity>>.Success(mappedActivities);
     }
 }
