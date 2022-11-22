@@ -122,14 +122,7 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
     {
-        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
-        if (user is null)
-        {
-            _logger.LogError($"User with id {userId} not found");
-            return Result<UpdateWorkoutResponse>.Failure("User not found");
-        }
-
-        Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
+        Workout? workout = await _applicationDbContext.Workouts.FindAsync(workoutId);
         if (workout is null)
         {
             _logger.LogError($"Workout with id {workoutId} not found");
