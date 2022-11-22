@@ -38,9 +38,26 @@ public class WorkoutHandler : IWorkoutService
             return Result<RecordWorkoutResponse>.Failure("User not found");
         }
 
+        List<Activity> activities = new();
+        foreach (ActivityDto activityDto in request.Activities)
+        {
+            Exercise? exercise = await _applicationDbContext.Exercises.FindAsync(activityDto.ExerciseId);
+            if (exercise is null)
+            {
+                _logger.LogWarning($"Exercise with id {activityDto.ExerciseId} not found");
+                return Result<RecordWorkoutResponse>.Failure("Exercise not found");
+            }
+
+            activities.Add(new Activity
+            {
+                Exercise = exercise,
+                Data = activityDto.Data
+            });
+        }
+
         Workout workout = new()
         {
-            Activities = request.Activities,
+            Activities = activities,
             Completed = request.Completed,
             Time = request.Time,
             Past = request.Past,
@@ -119,19 +136,20 @@ public class WorkoutHandler : IWorkoutService
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
-        workout.Past = request.Workout.Past;
-        workout.Completed = request.Workout.Completed;
-        workout.Time = request.Workout.Time;
-        workout.Name = request.Workout.Name;
-        workout.Activities = request.Workout.Activities;
+        workout.Completed = request.Completed;
+        workout.Activities = workout.Activities.Select(a =>
+        {
+            if (request.NewData.ContainsKey(a.Id))
+            {
+                a.Data = request.NewData[a.Id];
+            }
+
+            return a;
+        }).ToList();
 
         await _applicationDbContext.SaveChangesAsync();
 
-        UpdateWorkoutResponse response = new()
-        {
-            Id = request.Workout.Id
-        };
-
+        UpdateWorkoutResponse response = new(workout);
         return Result<UpdateWorkoutResponse>.Success(response);
     }
 

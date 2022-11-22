@@ -1,8 +1,9 @@
-using FitnessTracker.Models.Fitness.Workouts;
+using FitnessTracker.Models.Fitness.Datas;
 
 namespace FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
 
 public class UpdateWorkoutRequest
 {
-    public Workout Workout { get; set; }
+    public Dictionary<int, Data> NewData { get; set; }
+    public bool Completed { get; set; }
 }
