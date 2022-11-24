@@ -14,6 +14,7 @@ using FitnessTracker.Models.Fitness.Datas;
 using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Workouts;
@@ -67,11 +68,7 @@ public class WorkoutHandler : IWorkoutService
         user.Workouts.Add(workout);
         await _applicationDbContext.SaveChangesAsync();
 
-        RecordWorkoutResponse response = new()
-        {
-            Id = workout.Id
-        };
-
+        RecordWorkoutResponse response = new(workout);
         return Result<RecordWorkoutResponse>.Success(response);
     }
 
@@ -122,7 +119,16 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
     {
-        Workout? workout = await _applicationDbContext.Workouts.FindAsync(workoutId);
+        Workout? workout = await _applicationDbContext
+            .Workouts
+            .Include(w => w.Activities)
+            .ThenInclude(a => a.Data)
+            .ThenInclude(d => d.Image)
+            .Include(w => w.Activities)
+            .ThenInclude(a => a.Exercise)
+            .ThenInclude(e => e.MuscleGroupImage)
+            .FirstOrDefaultAsync(w => w.Id == workoutId);
+
         if (workout is null)
         {
             _logger.LogError($"Workout with id {workoutId} not found");
@@ -130,20 +136,23 @@ public class WorkoutHandler : IWorkoutService
         }
 
         workout.Completed = request.Completed;
-        workout.Activities = workout.Activities.Select(a =>
-        {
-            if (request.NewData.ContainsKey(a.Id))
+        workout.Activities = workout.Activities.Select(a => {
+            if (request.NewData.TryGetValue(a.Data.Id, out Data? value) && value is not null)
             {
-                a.Data = request.NewData[a.Id];
+                a.Data = request.NewData[a.Data.Id];
+                value.Id = 0;
+                if (value.Image is not null)
+                {
+                    value.Image.Id = 0;
+                }
+                _applicationDbContext.Activities.Update(a);
             }
 
             return a;
         }).ToList();
 
         await _applicationDbContext.SaveChangesAsync();
-
-        UpdateWorkoutResponse response = new(workout);
-        return Result<UpdateWorkoutResponse>.Success(response);
+        return Result<UpdateWorkoutResponse>.Success(new UpdateWorkoutResponse(workout));
     }
 
     public async Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId)
