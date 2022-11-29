@@ -13,8 +13,11 @@ using FitnessTracker.Domain.Workouts;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FitnessTracker.Models.Common;
+using FitnessTracker.Models.Fitness.Datas;
+using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
+using Microsoft.EntityFrameworkCore;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
@@ -36,12 +39,30 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogWarning($"User with id {userId} not found");
             return Result<RecordWorkoutResponse>.Failure("User not found");
+        }
+
+        List<Activity> activities = new();
+        foreach (ActivityDto activityDto in request.Activities)
+        {
+            Exercise? exercise = await _applicationDbContext.Exercises.FindAsync(activityDto.ExerciseId);
+            if (exercise is null)
+            {
+                _logger.LogWarning($"Exercise with id {activityDto.ExerciseId} not found");
+                return Result<RecordWorkoutResponse>.Failure("Exercise not found");
+            }
+
+            activities.Add(new Activity
+            {
+                Exercise = exercise,
+                Data = activityDto.Data
+            });
         }
 
         Workout workout = new()
         {
-            Activities = request.Activities,
+            Activities = activities,
             Completed = request.Completed,
             Time = request.Time,
             Past = request.Past,
@@ -51,11 +72,7 @@ public class WorkoutHandler : IWorkoutService
         user.Workouts.Add(workout);
         await _applicationDbContext.SaveChangesAsync();
 
-        RecordWorkoutResponse response = new()
-        {
-            Id = workout.Id
-        };
-
+        RecordWorkoutResponse response = new(workout);
         return Result<RecordWorkoutResponse>.Success(response);
     }
 
@@ -64,6 +81,7 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<GetWorkoutsResponse>.Failure("User not found");
         }
 
@@ -85,12 +103,14 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<GetWorkoutResponse>.Failure("User not found");
         }
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<GetWorkoutResponse>.Failure("Workout not found");
         }
 
@@ -103,32 +123,40 @@ public class WorkoutHandler : IWorkoutService
 
     public async Task<Result<UpdateWorkoutResponse>> UpdateWorkout(UpdateWorkoutRequest request, int workoutId, int userId)
     {
-        User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
-        if (user is null)
-        {
-            return Result<UpdateWorkoutResponse>.Failure("User not found");
-        }
+        Workout? workout = await _applicationDbContext
+            .Workouts
+            .Include(w => w.Activities)
+            .ThenInclude(a => a.Data)
+            .ThenInclude(d => d.Image)
+            .Include(w => w.Activities)
+            .ThenInclude(a => a.Exercise)
+            .ThenInclude(e => e.MuscleGroupImage)
+            .FirstOrDefaultAsync(w => w.Id == workoutId);
 
-        Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<UpdateWorkoutResponse>.Failure("Workout not found");
         }
 
-        workout.Past = request.Workout.Past;
-        workout.Completed = request.Workout.Completed;
-        workout.Time = request.Workout.Time;
-        workout.Activities = request.Workout.Activities;
-        workout.Name = request.Workout.Name;
+        workout.Completed = request.Completed;
+        workout.Activities = workout.Activities.Select(a => {
+            if (request.NewData.TryGetValue(a.Data.Id, out Data? value) && value is not null)
+            {
+                a.Data = request.NewData[a.Data.Id];
+                value.Id = 0;
+                if (value.Image is not null)
+                {
+                    value.Image.Id = 0;
+                }
+                _applicationDbContext.Activities.Update(a);
+            }
+
+            return a;
+        }).ToList();
 
         await _applicationDbContext.SaveChangesAsync();
-
-        UpdateWorkoutResponse response = new()
-        {
-            Id = request.Workout.Id
-        };
-
-        return Result<UpdateWorkoutResponse>.Success(response);
+        return Result<UpdateWorkoutResponse>.Success(new UpdateWorkoutResponse(workout));
     }
 
     public async Task<Result<DeleteWorkoutResponse>> DeleteWorkout(int workoutId, int userId)
@@ -136,12 +164,14 @@ public class WorkoutHandler : IWorkoutService
         User? user = await UserHelper.GetUserFromDatabaseById(userId, _applicationDbContext);
         if (user is null)
         {
+            _logger.LogError($"User with id {userId} not found");
             return Result<DeleteWorkoutResponse>.Failure("User not found");
         }
 
         Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == workoutId);
         if (workout is null)
         {
+            _logger.LogError($"Workout with id {workoutId} not found");
             return Result<DeleteWorkoutResponse>.Failure("Workout not found");
         }
 

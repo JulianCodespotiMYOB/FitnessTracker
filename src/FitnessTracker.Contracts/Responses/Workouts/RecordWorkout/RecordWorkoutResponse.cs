@@ -1,6 +1,5 @@
+using FitnessTracker.Models.Fitness.Workouts;
+
 namespace FitnessTracker.Contracts.Responses.Workouts.RecordWorkout;
 
-public class RecordWorkoutResponse
-{
-    public int Id { get; set; }
-}
+public record RecordWorkoutResponse(Workout Workout);

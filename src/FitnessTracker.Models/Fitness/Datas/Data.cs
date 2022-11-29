@@ -1,4 +1,5 @@
 using FitnessTracker.Models.Fitness.Exercises;
+using FitnessTracker.Models.Users;
 
 namespace FitnessTracker.Models.Fitness.Datas;
 
@@ -15,4 +16,6 @@ public class Data
     public int TargetReps { get; set; }
     public int TargetSets { get; set; }
     public decimal TargetWeight { get; set; }
+    public string? Notes { get; set; }
+    public Image? Image { get; set; }
 }

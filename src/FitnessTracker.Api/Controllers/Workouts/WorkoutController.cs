@@ -32,16 +32,9 @@ public class WorkoutController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public async Task<IActionResult> RecordWorkout(
         [FromBody] RecordWorkoutRequest request,
-        [FromRoute] int userId,
-        [FromServices] IValidator<RecordWorkoutRequest> validator
+        [FromRoute] int userId
     )
     {
-        ValidationResult validationResult = await validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
-
         Result<RecordWorkoutResponse> recordWorkoutResponse = await _workoutService.RecordWorkout(request, userId);
         return recordWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(recordWorkoutResponse.Error))
@@ -95,16 +88,9 @@ public class WorkoutController : ControllerBase
     public async Task<IActionResult> UpdateWorkout(
         [FromRoute] int userId,
         [FromRoute] int workoutId,
-        [FromBody] UpdateWorkoutRequest request,
-        [FromServices] IValidator<UpdateWorkoutRequest> validator
+        [FromBody] UpdateWorkoutRequest request
     )
     {
-        ValidationResult validationResult = await validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(new ErrorResponse(validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
-
         Result<UpdateWorkoutResponse> updateWorkoutResponse = await _workoutService.UpdateWorkout(request, workoutId, userId);
         return updateWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(updateWorkoutResponse.Error))

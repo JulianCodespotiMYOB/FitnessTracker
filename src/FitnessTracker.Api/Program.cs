@@ -60,8 +60,6 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddSingleton<IValidator<LoginRequest>, LoginRequestValidator>();
 builder.Services.AddSingleton<IValidator<RegisterRequest>, RegisterRequestValidator>();
-builder.Services.AddSingleton<IValidator<RecordWorkoutRequest>, RecordWorkoutRequestValidator>();
-builder.Services.AddSingleton<IValidator<UpdateWorkoutRequest>, UpdateWorkoutRequestValidator>();
 builder.Services.AddScoped<IWorkoutService, WorkoutHandler>();
 builder.Services.AddScoped<IMuscleGroupImagesService, MuscleGroupImageGenerator>();
 builder.Services.AddScoped<IWorkoutNamesService, WorkoutNamesHandler>();

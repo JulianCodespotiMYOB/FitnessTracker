@@ -1,5 +1,6 @@
 using System.Reflection;
 using FitnessTracker.Interfaces.Infrastructure;
+using FitnessTracker.Models.Fitness.Datas;
 using FitnessTracker.Models.Fitness.Exercises;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
@@ -14,6 +15,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Workout> Workouts { get; set; } = null!;
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<Reward> Rewards { get; set; } = null!;
+    public DbSet<Data> Data { get; set; } = null!;
+    public DbSet<Activity> Activities { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,7 +25,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=db.prulbxxcrnwticvwjnjw.supabase.co;Database=postgres;Username=postgres;Password=iLikeTrains100!");
+        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
         optionsBuilder.EnableSensitiveDataLogging();
     }
 }

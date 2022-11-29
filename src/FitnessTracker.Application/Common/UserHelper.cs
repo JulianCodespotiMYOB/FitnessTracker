@@ -15,9 +15,11 @@ public static class UserHelper
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Data)
+            .ThenInclude(d => d.Image)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Exercise)
+            .ThenInclude(e => e.MuscleGroupImage)
             .Include(u => u.WorkoutBuddy)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
@@ -31,9 +33,11 @@ public static class UserHelper
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Data)
+            .ThenInclude(d => d.Image)
             .Include(u => u.Workouts)
             .ThenInclude(w => w.Activities)
             .ThenInclude(a => a.Exercise)
+            .ThenInclude(e => e.MuscleGroupImage)
             .Include(u => u.WorkoutBuddy)
             .FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
     }
@@ -49,9 +53,11 @@ public static class UserHelper
                 .Include(u => u.Workouts)
                 .ThenInclude(w => w.Activities)
                 .ThenInclude(a => a.Data)
+                .ThenInclude(d => d.Image)
                 .Include(u => u.Workouts)
                 .ThenInclude(w => w.Activities)
                 .ThenInclude(a => a.Exercise)
+                .ThenInclude(e => e.MuscleGroupImage)
                 .Include(u => u.WorkoutBuddy)
                 .ToListAsync();
         }
