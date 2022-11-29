@@ -1,4 +1,5 @@
 using FitnessTracker.Application.Common;
+using FitnessTracker.Application.Features.Users;
 using FitnessTracker.Contracts.Requests.WorkoutNames.Enums;
 using FitnessTracker.Contracts.Requests.WorkoutNames.GetWorkoutNames;
 using FitnessTracker.Contracts.Responses.WorkoutNames.GetWorkoutNames;
@@ -8,7 +9,7 @@ using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Users;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.Application.Features.Users;
+namespace FitnessTracker.Application.Features.Workouts;
 
 public class WorkoutNamesHandler : IWorkoutNamesService
 {

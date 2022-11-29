@@ -3,15 +3,19 @@ using FitnessTracker.Application.Features.Users;
 using FitnessTracker.Contracts.Requests.Workouts.GetWorkouts;
 using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
+using FitnessTracker.Contracts.Requests.WorkoutVolume;
 using FitnessTracker.Contracts.Responses.Workouts.DeleteWorkout;
 using FitnessTracker.Contracts.Responses.Workouts.GetWorkouts;
 using FitnessTracker.Contracts.Responses.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Responses.Workouts.UpdateWorkout;
+using FitnessTracker.Contracts.Responses.WorkoutVolume;
+using FitnessTracker.Domain.Workouts;
 using FitnessTracker.Interfaces.Infrastructure;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FitnessTracker.Models.Common;
 using FitnessTracker.Models.Fitness.Workouts;
 using FitnessTracker.Models.Users;
+using Mapster;
 using Microsoft.Extensions.Logging;
 
 namespace FitnessTracker.Application.Features.Workouts;
@@ -150,5 +154,29 @@ public class WorkoutHandler : IWorkoutService
         };
 
         return Result<DeleteWorkoutResponse>.Success(response);
+    }
+
+    public async Task<Result<GetWorkoutVolumeResponse>> GetWorkoutVolume(GetWorkoutVolumeRequest request)
+    {
+        User? user = await UserHelper.GetUserFromDatabaseById(request.UserId, _applicationDbContext);
+        if (user is null)
+        {
+            return Result<GetWorkoutVolumeResponse>.Failure("User not found");
+        }
+        
+        Workout? workout = user.Workouts.FirstOrDefault(w => w.Id == request.WorkoutId);
+        if (workout is null)
+        {
+            return Result<GetWorkoutVolumeResponse>.Failure("Workout not found");
+        }
+        
+        decimal workoutVolume = ExerciseVolumeCalculator.CalculateVolumeForWorkout(workout);
+        
+        GetWorkoutVolumeResponse workoutVolumeResponse = new()
+        {
+            Volume = workoutVolume
+        };
+        
+        return Result<GetWorkoutVolumeResponse>.Success(workoutVolumeResponse);
     }
 }
