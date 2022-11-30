@@ -25,7 +25,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
+        optionsBuilder.UseNpgsql("Host=db.prulbxxcrnwticvwjnjw.supabase.co;Database=postgres;Username=postgres;Password=iLikeTrains100!", opts => {
+            opts.CommandTimeout(120);
+            opts.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            opts.EnableRetryOnFailure(5);
+        });
         optionsBuilder.EnableSensitiveDataLogging();
     }
 }

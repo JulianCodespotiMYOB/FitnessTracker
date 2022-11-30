@@ -204,23 +204,28 @@ public class WorkoutBuddy
         return User.Workouts.SelectMany(workout => workout.Activities).ToList();
     }
 
-    private decimal GetPercentageOfTargetReachedInActivity(Data activityData)
+    private static decimal GetPercentageOfTargetReachedInActivity(Data activityData)
     {
         switch (activityData.Type)
         {
             case ExerciseType.Cardio:
-                if (activityData.Distance is not null)
+                if (activityData.Distance is not null && activityData.Duration is not null)
                 {
-                    return (activityData.Distance / activityData.TargetDistance).Value;
+                    decimal actual = activityData.Distance.Value * activityData.Duration.Value;
+                    decimal goal = activityData.TargetDistance * activityData.TargetDuration;
+                    return actual > 0 ? actual / goal : 0;
                 }
                 return 0;
             case ExerciseType.Strength or ExerciseType.Powerlifting or ExerciseType.OlympicWeightLifting:
                 if (activityData.Weight is not null && activityData.Reps is not null && activityData.Sets is not null)
                 {
-                    return (activityData.Weight * activityData.Reps * activityData.Sets / activityData.TargetWeight / activityData.TargetReps / activityData.TargetSets).Value;
+                    decimal actual = activityData.Weight.Value * activityData.Reps.Value * activityData.Sets.Value;
+                    decimal goal = activityData.TargetWeight / activityData.TargetReps / activityData.TargetSets;
+                    return actual > 0 ? actual / goal : 0;
                 }
                 return 0;
-            default: return 0;
+            default: 
+                return 0;
         }
     }
 }

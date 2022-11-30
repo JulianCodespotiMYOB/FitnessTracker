@@ -13,6 +13,7 @@ public class Data
     public int? Sets { get; set; }
     public decimal? Weight { get; set; }
     public decimal TargetDistance { get; set; }
+    public decimal TargetDuration { get; set; }
     public int TargetReps { get; set; }
     public int TargetSets { get; set; }
     public decimal TargetWeight { get; set; }
