@@ -1,11 +1,13 @@
 using FitnessTracker.Contracts.Requests.Workouts.GetWorkouts;
 using FitnessTracker.Contracts.Requests.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Requests.Workouts.UpdateWorkout;
+using FitnessTracker.Contracts.Requests.WorkoutVolume;
 using FitnessTracker.Contracts.Responses.Common;
 using FitnessTracker.Contracts.Responses.Workouts.DeleteWorkout;
 using FitnessTracker.Contracts.Responses.Workouts.GetWorkouts;
 using FitnessTracker.Contracts.Responses.Workouts.RecordWorkout;
 using FitnessTracker.Contracts.Responses.Workouts.UpdateWorkout;
+using FitnessTracker.Contracts.Responses.WorkoutVolume;
 using FitnessTracker.Interfaces.Services.Workouts;
 using FitnessTracker.Models.Common;
 using FluentValidation;
@@ -48,6 +50,19 @@ public class WorkoutController : ControllerBase
     )
     {
         Result<GetWorkoutResponse> getWorkoutResponse = await _workoutService.GetWorkout(workoutId, userId);
+        return getWorkoutResponse.IsSuccess is false
+            ? BadRequest(new ErrorResponse(getWorkoutResponse.Error))
+            : Ok(getWorkoutResponse.Value);
+    }
+    
+    [HttpGet("{userId:int}/WorkoutVolume/{workoutId:int}")]
+    [ProducesResponseType(typeof(GetWorkoutVolumeResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
+    public async Task<IActionResult> GetWorkoutVolume(
+        [FromRoute] GetWorkoutVolumeRequest request
+    )
+    {
+        Result<GetWorkoutVolumeResponse> getWorkoutResponse = await _workoutService.GetWorkoutVolume(request);
         return getWorkoutResponse.IsSuccess is false
             ? BadRequest(new ErrorResponse(getWorkoutResponse.Error))
             : Ok(getWorkoutResponse.Value);

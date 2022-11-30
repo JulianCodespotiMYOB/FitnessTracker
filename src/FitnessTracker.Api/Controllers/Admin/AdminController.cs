@@ -6,7 +6,7 @@ using FitnessTracker.Interfaces.Services.User;
 using FitnessTracker.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Api.Controllers.Exercises;
+namespace FitnessTracker.Api.Controllers.Admin;
 
 [ApiController]
 [Route("Admin")]
