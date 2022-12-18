@@ -17,4 +17,5 @@ public class UpdateUserRequest
     public Image? Avatar { get; set; }
     public Title? Title { get; set; }
     public Badge? Badge { get; set; }
+    public List<Max> Maxes { get; set; } = new();
 }

@@ -15,5 +15,5 @@ public class RegisterRequest
     public WeightUnit WeightUnit { get; set; } = default!;
     public MeasurementUnit MeasurementUnit { get; set; } = default!;
     public Image? Avatar { get; set; }
-    public Dictionary<string, Max> Maxes { get; set; } = new();
+    public List<Max> Maxes { get; set; } = new();
 }

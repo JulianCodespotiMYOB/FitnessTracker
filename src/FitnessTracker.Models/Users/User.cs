@@ -14,7 +14,7 @@ public class User
     public decimal Height { get; set; }
     public decimal Weight { get; set; }
     public int Age { get; set; }
-    public Dictionary<string, Max> Maxes { get; set; } = new();
+    public List<Max> Maxes { get; set; } = new();
     public List<Workout> Workouts { get; set; } = new();
     public WorkoutBuddy WorkoutBuddy { get; set; } = null!;
     public UserSettings UserSettings { get; set; } = null!;
@@ -24,4 +24,4 @@ public class User
     public Badge? Badge { get; set; }
 }
 
-public record Max(int Reps, decimal Weight);
+public record Max(int Id, string Exercise, int Reps, decimal Weight);
