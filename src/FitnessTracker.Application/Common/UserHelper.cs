@@ -9,6 +9,7 @@ public static class UserHelper
     public static async Task<User?> GetUserFromDatabaseById(int userId, IApplicationDbContext context)
     {
         return await context.Users
+            .Include(u => u.Maxes)
             .Include(u => u.Inventory)
             .Include(u => u.Avatar)
             .Include(u => u.UserSettings)
@@ -27,6 +28,7 @@ public static class UserHelper
     public static async Task<User?> GetUserFromDatabaseByEmail(string userEmail, IApplicationDbContext context)
     {
         return await context.Users
+            .Include(u => u.Maxes)
             .Include(u => u.Inventory)
             .Include(u => u.Avatar)
             .Include(u => u.UserSettings)
@@ -47,6 +49,7 @@ public static class UserHelper
         try
         {
             return await applicationDbContext.Users
+                .Include(u => u.Maxes)
                 .Include(u => u.Inventory)
                 .Include(u => u.Avatar)
                 .Include(u => u.UserSettings)

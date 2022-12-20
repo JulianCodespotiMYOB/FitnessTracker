@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using FitnessTracker.Models.Buddy;
 using FitnessTracker.Models.Fitness.Workouts;
 
@@ -24,4 +25,10 @@ public class User
     public Badge? Badge { get; set; }
 }
 
-public record Max(int Id, string Exercise, int Reps, decimal Weight);
+public record Max(int Id, string Exercise, int Reps, decimal Weight)
+{
+    [NotMapped]
+    public decimal EstimatedOneRepMax => Weight * (36 / (37 - Reps));
+    [NotMapped]
+    public decimal TrainingMax => EstimatedOneRepMax * 0.9m;
+}
